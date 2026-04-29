@@ -1,6 +1,18 @@
+import re
 import pandas as pd
 
 import config
+
+
+def _normalise_team(name):
+    """Standardise team names so football-data.org and The Odds API names match."""
+    name = str(name).strip()
+    name = name.replace('&', 'and')
+    name = re.sub(r'^AFC\s+', '', name)       # "AFC Bournemouth" → "Bournemouth"
+    name = re.sub(r'\s+AFC$', '', name)       # "Sunderland AFC" → "Sunderland"
+    name = re.sub(r'\s+FC$', '', name)        # "Arsenal FC" → "Arsenal"
+    name = re.sub(r'\s+SC$', '', name)
+    return name.strip()
 
 
 def implied_prob(decimal_odds):
@@ -32,21 +44,30 @@ def kelly_stake(model_prob, decimal_odds, bankroll, max_fraction):
 
 
 def find_value_bets(predictions_df, odds_df):
-    odds = odds_df.copy()
+    preds = predictions_df.copy()
+    odds  = odds_df.copy()
 
     # normalise commence_time → date for merging
     if 'commence_time' in odds.columns:
         odds['date'] = pd.to_datetime(odds['commence_time'], utc=True).dt.date
 
-    merged = predictions_df.merge(
+    # add normalised name columns for matching
+    preds['_home'] = preds['home_team'].map(_normalise_team)
+    preds['_away'] = preds['away_team'].map(_normalise_team)
+    odds['_home']  = odds['home_team'].map(_normalise_team)
+    odds['_away']  = odds['away_team'].map(_normalise_team)
+
+    merged = preds.merge(
         odds,
-        on=['home_team', 'away_team'],
+        on=['_home', '_away'],
         how='inner',
         suffixes=('', '_odds'),
     )
 
     if merged.empty:
         print("find_value_bets: no matching fixtures between predictions and odds.")
+        print("  Sample prediction teams:", preds['_home'].tolist()[:5])
+        print("  Sample odds teams:      ", odds['_home'].tolist()[:5])
         return pd.DataFrame()
 
     rows = []
@@ -71,8 +92,8 @@ def find_value_bets(predictions_df, odds_df):
             )
             rows.append({
                 'date':             row.get('date', row.get('date_odds', '')),
-                'home_team':        row['home_team'],
-                'away_team':        row['away_team'],
+                'home_team':        _normalise_team(row['home_team']),
+                'away_team':        _normalise_team(row['away_team']),
                 'market':           market,
                 'model_prob':       round(model_prob, 4),
                 'bookmaker_odds':   round(odds_val, 3),
