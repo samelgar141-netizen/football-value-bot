@@ -1,5 +1,5 @@
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 
 import pandas as pd
 
@@ -11,7 +11,7 @@ def _header():
     print()
     print("=" * 70)
     print(f"  FOOTBALL VALUE BOT — weekly run")
-    print(f"  {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}")
+    print(f"  {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}")
     print("=" * 70)
     print()
 
