@@ -21,7 +21,7 @@ def _get_api_key():
 def fetch_results():
     key = _get_api_key()
     url = f'https://api.football-data.org/v4/competitions/{config.LEAGUE_ID}/matches'
-    params = {'season': config.SEASON[:4], 'status': 'FINISHED'}
+    params = {'season': '20' + config.SEASON[:2], 'status': 'FINISHED'}
     headers = {'X-Auth-Token': key}
 
     response = requests.get(url, headers=headers, params=params)
@@ -53,7 +53,7 @@ def fetch_results():
     df['away_goals'] = pd.to_numeric(df['away_goals'])
 
     config.RAW_DIR.mkdir(parents=True, exist_ok=True)
-    out_path = config.RAW_DIR / 'results_2425.csv'
+    out_path = config.RAW_DIR / f'results_{config.SEASON}.csv'
     df.to_csv(out_path, index=False)
 
     _validate_results(df, out_path)
@@ -62,7 +62,7 @@ def fetch_results():
 
 def _validate_results(df, path):
     df_check = pd.read_csv(path, parse_dates=['date'])
-    print(f"\n--- results_2425.csv validation ---")
+    print(f"\n--- results_{config.SEASON}.csv validation ---")
     print(f"Shape:   {df_check.shape[0]} rows × {df_check.shape[1]} columns")
     print(f"Columns: {list(df_check.columns)}")
     print(f"\nFirst 3 rows:")
@@ -81,7 +81,7 @@ def _validate_results(df, path):
 def fetch_standings():
     key = _get_api_key()
     url = f'https://api.football-data.org/v4/competitions/{config.LEAGUE_ID}/standings'
-    params = {'season': config.SEASON[:4]}
+    params = {'season': '20' + config.SEASON[:2]}
     headers = {'X-Auth-Token': key}
 
     response = requests.get(url, headers=headers, params=params)

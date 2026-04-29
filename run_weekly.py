@@ -40,8 +40,8 @@ def main():
     standings_df = _step("fetch_standings", fetch_standings)
 
     # fall back to cached CSV if live fetch failed
-    if results_df is None and (config.RAW_DIR / 'results_2425.csv').exists():
-        results_df = pd.read_csv(config.RAW_DIR / 'results_2425.csv')
+    if results_df is None and (config.RAW_DIR / f'results_{config.SEASON}.csv').exists():
+        results_df = pd.read_csv(config.RAW_DIR / f'results_{config.SEASON}.csv')
         print(f"[fetch_results] using cached CSV ({len(results_df)} rows)")
 
     print()
