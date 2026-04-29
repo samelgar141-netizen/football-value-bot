@@ -24,7 +24,7 @@ def _get_api_key():
 def fetch_fixtures():
     key = _get_api_key()
     url = f'https://api.football-data.org/v4/competitions/{config.LEAGUE_ID}/matches'
-    params = {'season': config.SEASON[:4], 'status': 'SCHEDULED'}
+    params = {'season': '20' + config.SEASON[:2], 'status': 'SCHEDULED'}
     headers = {'X-Auth-Token': key}
 
     response = requests.get(url, headers=headers, params=params)
