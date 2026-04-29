@@ -1,4 +1,22 @@
 date,home_team,away_team,market,model_prob,bookmaker_odds,ev,kelly_stake_gbp
-2026-05-02T15:15:54.031329+00:00,Liverpool,Manchester City,home,0.7364,2.6,0.9146,142.91
-2026-05-01T15:15:54.031329+00:00,Arsenal,Chelsea,home,0.651,2.3,0.4972,95.62
-2026-05-04T15:15:54.031329+00:00,Tottenham,Newcastle,home,0.6676,2.1,0.4019,91.34
+2026-05-04 14:00:00+00:00,Chelsea,Nottingham Forest,away,0.3866,4.9,0.8943,57.33
+2026-05-03 13:00:00+00:00,Bournemouth,Crystal Palace,away,0.3364,5.0,0.6822,42.64
+2026-05-09 14:00:00+00:00,Sunderland,Manchester United,home,0.3622,4.1,0.4849,39.1
+2026-05-11 19:00:00+00:00,Tottenham Hotspur,Leeds United,away,0.415,3.4,0.4109,42.8
+2026-05-09 14:00:00+00:00,Fulham,Bournemouth,home,0.5361,2.5,0.3404,56.73
+2026-05-04 19:00:00+00:00,Everton,Manchester City,home,0.1965,6.75,0.3266,14.2
+2026-05-04 19:00:00+00:00,Everton,Manchester City,draw,0.245,5.0,0.2251,14.07
+2026-05-03 14:30:00+00:00,Manchester United,Liverpool,home,0.5115,2.38,0.2174,39.38
+2026-05-01 19:00:00+00:00,Leeds United,Burnley,away,0.1489,8.0,0.1911,6.82
+2026-05-09 11:30:00+00:00,Liverpool,Chelsea,away,0.33,3.6,0.1879,18.07
+2026-05-02 14:00:00+00:00,Brentford,West Ham United,home,0.5895,2.0,0.1791,44.77
+2026-05-03 13:00:00+00:00,Bournemouth,Crystal Palace,draw,0.279,4.2,0.1719,13.43
+2026-05-10 13:00:00+00:00,Burnley,Aston Villa,home,0.2149,5.4,0.1607,9.13
+2026-05-10 15:30:00+00:00,West Ham United,Arsenal,away,0.684,1.68,0.1492,54.84
+2026-05-10 13:00:00+00:00,Nottingham Forest,Newcastle United,draw,0.3227,3.55,0.1456,14.27
+2026-05-02 16:30:00+00:00,Arsenal,Fulham,home,0.7853,1.45,0.1387,77.03
+2026-05-10 13:00:00+00:00,Crystal Palace,Everton,away,0.4095,2.7,0.1056,15.54
+2026-05-10 13:00:00+00:00,Burnley,Aston Villa,draw,0.267,4.1,0.0949,7.65
+2026-05-10 13:00:00+00:00,Crystal Palace,Everton,draw,0.3299,3.3,0.0887,9.65
+2026-05-04 14:00:00+00:00,Chelsea,Nottingham Forest,draw,0.262,4.1,0.0742,5.98
+2026-05-02 14:00:00+00:00,Newcastle United,Brighton and Hove Albion,away,0.4081,2.63,0.0734,11.26
