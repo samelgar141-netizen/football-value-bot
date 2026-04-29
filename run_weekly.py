@@ -1,3 +1,4 @@
+import subprocess
 import time
 from datetime import datetime, timezone
 
@@ -118,6 +119,11 @@ def main():
         print("[generate_report] SKIPPED — no value bets data")
     print()
 
+    # ── Step 9: commit and push report to GitHub ──────────────────────────
+    if report_path:
+        _push_report(report_path)
+    print()
+
     # ── Summary ───────────────────────────────────────────────────────────
     elapsed = time.time() - t0
     print("=" * 70)
@@ -131,6 +137,28 @@ def main():
     print("  bets you place using ledger/ledger.py")
     print("=" * 70)
     print()
+
+
+def _push_report(report_path):
+    print("[git] committing and pushing report…")
+    run_date = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+    try:
+        subprocess.run(['git', 'add', str(report_path)], check=True)
+        result = subprocess.run(
+            ['git', 'diff', '--cached', '--quiet'],
+            capture_output=True
+        )
+        if result.returncode == 0:
+            print("[git] no changes to report — already up to date.")
+            return
+        subprocess.run(
+            ['git', 'commit', '-m', f'Weekly report {run_date}'],
+            check=True
+        )
+        subprocess.run(['git', 'push'], check=True)
+        print(f"[git] report pushed to GitHub.")
+    except subprocess.CalledProcessError as e:
+        print(f"[git] push failed — {e}. Push manually with: git add reports/ && git push")
 
 
 if __name__ == '__main__':
