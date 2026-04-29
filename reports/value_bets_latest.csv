@@ -1,0 +1,4 @@
+date,home_team,away_team,market,model_prob,bookmaker_odds,ev,kelly_stake_gbp
+2026-05-02T15:15:54.031329+00:00,Liverpool,Manchester City,home,0.7364,2.6,0.9146,142.91
+2026-05-01T15:15:54.031329+00:00,Arsenal,Chelsea,home,0.651,2.3,0.4972,95.62
+2026-05-04T15:15:54.031329+00:00,Tottenham,Newcastle,home,0.6676,2.1,0.4019,91.34
