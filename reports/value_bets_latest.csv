@@ -1,23 +1,23 @@
 date,home_team,away_team,market,model_prob,bookmaker_odds,ev,kelly_stake_gbp
-2026-05-04 14:00:00+00:00,Chelsea,Nottingham Forest,away,0.3866,4.9,0.8943,57.33
-2026-05-03 13:00:00+00:00,Bournemouth,Crystal Palace,away,0.3364,5.3,0.7832,45.53
-2026-05-09 14:00:00+00:00,Sunderland,Manchester United,home,0.3622,4.1,0.4849,39.1
-2026-05-11 19:00:00+00:00,Tottenham Hotspur,Leeds United,away,0.415,3.4,0.4109,42.8
-2026-05-09 14:00:00+00:00,Fulham,Bournemouth,home,0.5361,2.5,0.3404,56.73
-2026-05-04 19:00:00+00:00,Everton,Manchester City,home,0.1965,6.75,0.3266,14.2
-2026-05-01 19:00:00+00:00,Leeds United,Burnley,away,0.1489,8.5,0.2655,8.85
-2026-05-03 13:00:00+00:00,Bournemouth,Crystal Palace,draw,0.279,4.35,0.2137,15.95
-2026-05-09 11:30:00+00:00,Liverpool,Chelsea,away,0.33,3.6,0.1879,18.07
-2026-05-03 14:30:00+00:00,Manchester United,Liverpool,home,0.5115,2.32,0.1867,35.36
-2026-05-04 19:00:00+00:00,Everton,Manchester City,draw,0.245,4.8,0.1761,11.59
-2026-05-02 16:30:00+00:00,Arsenal,Fulham,home,0.7853,1.48,0.1622,84.49
-2026-05-10 13:00:00+00:00,Burnley,Aston Villa,home,0.2149,5.4,0.1607,9.13
-2026-05-02 14:00:00+00:00,Brentford,West Ham United,home,0.5895,1.95,0.1496,39.37
-2026-05-10 13:00:00+00:00,Nottingham Forest,Newcastle United,draw,0.3227,3.55,0.1456,14.27
-2026-05-10 15:30:00+00:00,West Ham United,Arsenal,away,0.684,1.67,0.1423,53.11
-2026-05-10 13:00:00+00:00,Crystal Palace,Everton,away,0.4095,2.7,0.1056,15.54
-2026-05-10 13:00:00+00:00,Burnley,Aston Villa,draw,0.267,4.1,0.0949,7.65
-2026-05-10 13:00:00+00:00,Crystal Palace,Everton,draw,0.3299,3.3,0.0887,9.65
-2026-05-04 14:00:00+00:00,Chelsea,Nottingham Forest,draw,0.262,4.1,0.0742,5.98
-2026-05-02 14:00:00+00:00,Newcastle United,Brighton and Hove Albion,away,0.4081,2.63,0.0734,11.26
-2026-05-02 14:00:00+00:00,Wolverhampton Wanderers,Sunderland,home,0.3184,3.3,0.0509,5.53
+2026-05-04 14:00:00+00:00,Chelsea,Nottingham Forest,away,0.3866,4.9,0.8943,1.15
+2026-05-03 13:00:00+00:00,Bournemouth,Crystal Palace,away,0.3364,5.3,0.7832,0.91
+2026-05-09 14:00:00+00:00,Sunderland,Manchester United,home,0.3622,4.1,0.4849,0.78
+2026-05-11 19:00:00+00:00,Tottenham Hotspur,Leeds United,away,0.415,3.4,0.4109,0.86
+2026-05-09 14:00:00+00:00,Fulham,Bournemouth,home,0.5361,2.5,0.3404,1.13
+2026-05-04 19:00:00+00:00,Everton,Manchester City,home,0.1965,6.75,0.3266,0.28
+2026-05-01 19:00:00+00:00,Leeds United,Burnley,away,0.1489,8.5,0.2655,0.18
+2026-05-03 13:00:00+00:00,Bournemouth,Crystal Palace,draw,0.279,4.35,0.2137,0.32
+2026-05-09 11:30:00+00:00,Liverpool,Chelsea,away,0.33,3.6,0.1879,0.36
+2026-05-03 14:30:00+00:00,Manchester United,Liverpool,home,0.5115,2.32,0.1867,0.71
+2026-05-04 19:00:00+00:00,Everton,Manchester City,draw,0.245,4.8,0.1761,0.23
+2026-05-02 16:30:00+00:00,Arsenal,Fulham,home,0.7853,1.48,0.1622,1.69
+2026-05-10 13:00:00+00:00,Burnley,Aston Villa,home,0.2149,5.4,0.1607,0.18
+2026-05-02 14:00:00+00:00,Brentford,West Ham United,home,0.5895,1.95,0.1496,0.79
+2026-05-10 13:00:00+00:00,Nottingham Forest,Newcastle United,draw,0.3227,3.55,0.1456,0.29
+2026-05-10 15:30:00+00:00,West Ham United,Arsenal,away,0.684,1.67,0.1423,1.06
+2026-05-10 13:00:00+00:00,Crystal Palace,Everton,away,0.4095,2.7,0.1056,0.31
+2026-05-10 13:00:00+00:00,Burnley,Aston Villa,draw,0.267,4.1,0.0949,0.15
+2026-05-10 13:00:00+00:00,Crystal Palace,Everton,draw,0.3299,3.3,0.0887,0.19
+2026-05-04 14:00:00+00:00,Chelsea,Nottingham Forest,draw,0.262,4.1,0.0742,0.12
+2026-05-02 14:00:00+00:00,Newcastle United,Brighton and Hove Albion,away,0.4081,2.63,0.0734,0.23
+2026-05-02 14:00:00+00:00,Wolverhampton Wanderers,Sunderland,home,0.3184,3.3,0.0509,0.11
