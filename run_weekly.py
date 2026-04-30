@@ -140,25 +140,30 @@ def main():
 
 
 def _push_report(report_path):
-    print("[git] committing and pushing report…")
+    print("[git] committing and pushing all generated files…")
     run_date = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+    files_to_commit = [
+        str(report_path),
+        str(config.PROCESSED_DIR / 'team_stats.csv'),
+        str(config.LEDGER_DIR / 'bets.csv'),
+    ]
     try:
-        subprocess.run(['git', 'add', str(report_path)], check=True)
+        subprocess.run(['git', 'add'] + files_to_commit, check=True)
         result = subprocess.run(
             ['git', 'diff', '--cached', '--quiet'],
             capture_output=True
         )
         if result.returncode == 0:
-            print("[git] no changes to report — already up to date.")
+            print("[git] no changes — already up to date.")
             return
         subprocess.run(
-            ['git', 'commit', '-m', f'Weekly report {run_date}'],
+            ['git', 'commit', '-m', f'Weekly run {run_date}'],
             check=True
         )
         subprocess.run(['git', 'push'], check=True)
-        print(f"[git] report pushed to GitHub.")
+        print("[git] all files pushed to GitHub.")
     except subprocess.CalledProcessError as e:
-        print(f"[git] push failed — {e}. Push manually with: git add reports/ && git push")
+        print(f"[git] push failed — {e}. Push manually with: git add reports/ data/processed/ ledger/ && git push")
 
 
 if __name__ == '__main__':
