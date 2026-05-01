@@ -1,1 +1,6 @@
 bet_id,date_placed,home_team,away_team,market,odds,stake_gbp,model_prob,ev,result,profit_loss,running_bankroll,notes
+336ea222-4fdc-418f-bc8b-80974643633d,2026-04-29,Chelsea,Nottingham Forest,away,4.9,1.15,0.3866,0.8943,,,,
+fbb12424-3604-42ce-8a1f-35ddbce7675a,2026-04-29,Bournemouth,Crystal Palace,away,5.3,0.91,0.3364,0.7832,,,,
+e6b50ef3-1240-41c6-8735-9269e12d7a1e,2026-04-29,Everton,Manchester City,home,6.75,0.28,0.1965,0.3266,,,,
+e369cf54-28b1-4526-937f-0184bb50268a,2026-04-29,Leeds United,Burnley,away,8.5,0.18,0.1489,0.2655,,,,
+d25989ad-8a08-48da-ab15-6e5d32fbf5de,2026-04-29,Bournemouth,Crystal Palace,draw,4.35,0.32,0.279,0.2137,,,,
