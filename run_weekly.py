@@ -121,17 +121,19 @@ def main():
     print()
 
     # ── Step 8: generate report ───────────────────────────────────────────
-    from analysis.report_generator import generate_report
+    from analysis.report_generator import generate_report, generate_html_report
     report_path = None
     if value_bets_df is not None:
         report_path = _step("generate_report", generate_report, value_bets_df)
     else:
         print("[generate_report] SKIPPED — no value bets data")
+
+    html_path = _step("generate_html_report", generate_html_report)
     print()
 
     # ── Step 9: commit and push report to GitHub ──────────────────────────
     if report_path:
-        _push_report(report_path)
+        _push_report(report_path, html_path)
     print()
 
     # ── Summary ───────────────────────────────────────────────────────────
@@ -149,7 +151,7 @@ def main():
     print()
 
 
-def _push_report(report_path):
+def _push_report(report_path, html_path=None):
     print("[git] committing and pushing all generated files…")
     run_date = datetime.now(timezone.utc).strftime('%Y-%m-%d')
     files_to_commit = [
@@ -157,6 +159,8 @@ def _push_report(report_path):
         str(config.PROCESSED_DIR / 'team_stats.csv'),
         str(config.LEDGER_DIR / 'bets.csv'),
     ]
+    if html_path:
+        files_to_commit.append(str(html_path))
     try:
         subprocess.run(['git', 'add'] + files_to_commit, check=True)
         result = subprocess.run(
