@@ -1,5 +1,8 @@
 date,home_team,away_team,market,model_prob,bookmaker_odds,ev,kelly_stake_gbp
-2026-05-09 14:00:00+00:00,Sunderland,Manchester United,home,0.356,4.1,0.4595,0.74
-2026-05-09 14:00:00+00:00,Fulham,Bournemouth,home,0.5282,2.7,0.4261,1.25
-2026-05-09 11:30:00+00:00,Liverpool,Chelsea,away,0.3354,3.9,0.308,0.53
-2026-05-10 13:00:00+00:00,Burnley,Aston Villa,home,0.2111,5.8,0.2241,0.23
+2026-05-10 13:00:00+00:00,Burnley,Aston Villa,home,0.2596,5.75,0.4927,0.52
+2026-05-09 16:30:00+00:00,Manchester City,Brentford,away,0.1606,9.0,0.4456,0.28
+2026-05-09 14:00:00+00:00,Brighton and Hove Albion,Wolverhampton Wanderers,draw,0.2353,6.0,0.4118,0.41
+2026-05-10 15:30:00+00:00,West Ham United,Arsenal,home,0.2501,5.4,0.3506,0.4
+2026-05-09 16:30:00+00:00,Manchester City,Brentford,draw,0.2294,5.75,0.319,0.34
+2026-05-10 13:00:00+00:00,Burnley,Aston Villa,draw,0.2947,4.2,0.2378,0.37
+2026-05-09 14:00:00+00:00,Fulham,Bournemouth,home,0.4475,2.75,0.2306,0.66
