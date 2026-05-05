@@ -83,15 +83,23 @@ def generate_html_report():
         roi             = round(total_pl / total_staked * 100, 1) if total_staked else 0.0
         current_bankroll = round(float(settled.iloc[-1]['running_bankroll']), 2)
 
-    # chart data: bankroll over time — two label sets for toggle
-    chart_date_labels    = ['Start']
-    chart_cohort_labels  = ['Start']
-    chart_values         = [float(config.BANKROLL)]
+    # chart data — date view: one point per bet; cohort view: one point per cohort
+    chart_date_labels  = ['Start']
+    chart_date_values  = [float(config.BANKROLL)]
     for _, row in settled.iterrows():
         chart_date_labels.append(str(row['date_placed'])[:10])
-        cohort = int(row['betting_cohort']) if 'betting_cohort' in row and pd.notna(row['betting_cohort']) else '?'
-        chart_cohort_labels.append(f"GW{cohort}")
-        chart_values.append(round(float(row['running_bankroll']), 2))
+        chart_date_values.append(round(float(row['running_bankroll']), 2))
+
+    # cohort view: final bankroll after each cohort completes
+    chart_cohort_labels = ['Start']
+    chart_cohort_values = [float(config.BANKROLL)]
+    if not settled.empty and 'betting_cohort' in settled.columns:
+        for cohort_num, group in settled.groupby(
+            pd.to_numeric(settled['betting_cohort'], errors='coerce'), sort=True
+        ):
+            last_bankroll = round(float(group.iloc[-1]['running_bankroll']), 2)
+            chart_cohort_labels.append(f"BC {int(cohort_num)}")
+            chart_cohort_values.append(last_bankroll)
 
     # table rows html
     table_rows = ''
@@ -103,7 +111,7 @@ def generate_html_report():
         cohort = int(row['betting_cohort']) if 'betting_cohort' in row and pd.notna(row['betting_cohort']) else '-'
         table_rows += f"""
         <tr>
-            <td>GW{cohort}</td>
+            <td>BC {cohort}</td>
             <td>{row['date_placed']}</td>
             <td>{row['home_team']} v {row['away_team']}</td>
             <td>{row['market'].upper()}</td>
@@ -220,8 +228,9 @@ def generate_html_report():
 
 <script>
 const dateLabels   = {json.dumps(chart_date_labels)};
+const dateData     = {json.dumps(chart_date_values)};
 const cohortLabels = {json.dumps(chart_cohort_labels)};
-const bankrollData = {json.dumps(chart_values)};
+const cohortData   = {json.dumps(chart_cohort_values)};
 
 const ctx = document.getElementById('plChart').getContext('2d');
 const chart = new Chart(ctx, {{
@@ -230,7 +239,7 @@ const chart = new Chart(ctx, {{
     labels: dateLabels,
     datasets: [{{
       label: 'Bankroll (£)',
-      data: bankrollData,
+      data: dateData,
       borderColor: '#60a5fa',
       backgroundColor: 'rgba(96,165,250,0.1)',
       borderWidth: 2,
@@ -256,7 +265,8 @@ const chart = new Chart(ctx, {{
 }});
 
 function setAxis(mode) {{
-  chart.data.labels = mode === 'date' ? dateLabels : cohortLabels;
+  chart.data.labels   = mode === 'date' ? dateLabels : cohortLabels;
+  chart.data.datasets[0].data = mode === 'date' ? dateData : cohortData;
   chart.update();
   document.getElementById('btnDate').classList.toggle('active', mode === 'date');
   document.getElementById('btnCohort').classList.toggle('active', mode === 'cohort');
