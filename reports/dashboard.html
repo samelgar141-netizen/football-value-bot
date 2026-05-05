@@ -93,7 +93,7 @@
     </thead>
     <tbody>
         <tr>
-            <td>GW1</td>
+            <td>BC 1</td>
             <td>2026-05-01</td>
             <td>Leeds United v Burnley</td>
             <td>AWAY</td>
@@ -106,7 +106,7 @@
             <td>3-1</td>
         </tr>
         <tr>
-            <td>GW1</td>
+            <td>BC 1</td>
             <td>2026-05-03</td>
             <td>Bournemouth v Crystal Palace</td>
             <td>AWAY</td>
@@ -119,7 +119,7 @@
             <td>3-0</td>
         </tr>
         <tr>
-            <td>GW1</td>
+            <td>BC 1</td>
             <td>2026-05-03</td>
             <td>Bournemouth v Crystal Palace</td>
             <td>DRAW</td>
@@ -132,7 +132,7 @@
             <td>3-0</td>
         </tr>
         <tr>
-            <td>GW1</td>
+            <td>BC 1</td>
             <td>2026-05-04</td>
             <td>Chelsea v Nottingham Forest</td>
             <td>AWAY</td>
@@ -145,7 +145,7 @@
             <td>1-3</td>
         </tr>
         <tr>
-            <td>GW1</td>
+            <td>BC 1</td>
             <td>2026-05-04</td>
             <td>Everton v Manchester City</td>
             <td>HOME</td>
@@ -158,7 +158,7 @@
             <td>3-3</td>
         </tr>
         <tr>
-            <td>GW1</td>
+            <td>BC 1</td>
             <td>2026-05-04</td>
             <td>Everton v Manchester City</td>
             <td>DRAW</td>
@@ -177,8 +177,9 @@
 
 <script>
 const dateLabels   = ["Start", "2026-05-01", "2026-05-03", "2026-05-03", "2026-05-04", "2026-05-04", "2026-05-04"];
-const cohortLabels = ["Start", "GW1", "GW1", "GW1", "GW1", "GW1", "GW1"];
-const bankrollData = [20.0, 19.82, 18.91, 18.59, 23.08, 22.8, 23.81];
+const dateData     = [20.0, 19.82, 18.91, 18.59, 23.08, 22.8, 23.81];
+const cohortLabels = ["Start", "BC 1"];
+const cohortData   = [20.0, 23.81];
 
 const ctx = document.getElementById('plChart').getContext('2d');
 const chart = new Chart(ctx, {
@@ -187,7 +188,7 @@ const chart = new Chart(ctx, {
     labels: dateLabels,
     datasets: [{
       label: 'Bankroll (£)',
-      data: bankrollData,
+      data: dateData,
       borderColor: '#60a5fa',
       backgroundColor: 'rgba(96,165,250,0.1)',
       borderWidth: 2,
@@ -213,7 +214,8 @@ const chart = new Chart(ctx, {
 });
 
 function setAxis(mode) {
-  chart.data.labels = mode === 'date' ? dateLabels : cohortLabels;
+  chart.data.labels   = mode === 'date' ? dateLabels : cohortLabels;
+  chart.data.datasets[0].data = mode === 'date' ? dateData : cohortData;
   chart.update();
   document.getElementById('btnDate').classList.toggle('active', mode === 'date');
   document.getElementById('btnCohort').classList.toggle('active', mode === 'cohort');
