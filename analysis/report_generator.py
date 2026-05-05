@@ -84,14 +84,10 @@ def generate_html_report():
         current_bankroll = round(float(settled.iloc[-1]['running_bankroll']), 2)
 
     # chart data: bankroll over time
-    chart_labels = []
-    chart_values = []
-    running = float(config.BANKROLL)
-    chart_labels.append('Start')
-    chart_values.append(running)
+    chart_labels = ['Start']
+    chart_values = [float(config.BANKROLL)]
     for _, row in settled.iterrows():
-        label = f"{row['home_team']} v {row['away_team']}"
-        chart_labels.append(label)
+        chart_labels.append(str(row['date_placed'])[:10])
         chart_values.append(round(float(row['running_bankroll']), 2))
 
     # table rows html
