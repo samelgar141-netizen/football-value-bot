@@ -6,5 +6,4 @@ date,home_team,away_team,market,model_prob,bookmaker_odds,ev,kelly_stake_gbp
 2026-05-09 14:00:00+00:00,Fulham,Bournemouth,home,0.5282,2.7,0.4261,1.25
 2026-05-09 11:30:00+00:00,Liverpool,Chelsea,away,0.3354,3.9,0.308,0.53
 2026-05-17 14:00:00+00:00,Leeds United,Brighton and Hove Albion,home,0.4307,3.0,0.2922,0.73
-2026-05-13 19:00:00+00:00,Manchester City,Crystal Palace,away,0.1139,11.0,0.2531,0.13
 2026-05-10 13:00:00+00:00,Burnley,Aston Villa,home,0.2111,5.8,0.2241,0.23
