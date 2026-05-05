@@ -115,6 +115,64 @@ def get_summary():
     }
 
 
+def auto_settle_bets(results_df):
+    """Match finished results against unsettled ledger bets and log outcomes."""
+    import re
+
+    def _norm(name):
+        name = str(name).strip()
+        name = name.replace('&', 'and')
+        name = re.sub(r'^AFC\s+', '', name)
+        name = re.sub(r'\s+AFC$', '', name)
+        name = re.sub(r'\s+FC$', '', name)
+        name = re.sub(r'\s+SC$', '', name)
+        return name.strip()
+
+    if not _LEDGER_PATH.exists():
+        return 0
+
+    df = pd.read_csv(_LEDGER_PATH, dtype={'result': str, 'notes': str})
+    unsettled = df[df['result'].isna() | (df['result'] == '') | (df['result'] == 'nan')]
+
+    if unsettled.empty:
+        print("auto_settle_bets: no unsettled bets.")
+        return 0
+
+    settled_count = 0
+    for _, bet in unsettled.iterrows():
+        bet_home = _norm(bet['home_team'])
+        bet_away = _norm(bet['away_team'])
+
+        match = None
+        for _, res in results_df.iterrows():
+            if _norm(res['home_team']) == bet_home and _norm(res['away_team']) == bet_away:
+                match = res
+                break
+
+        if match is None:
+            continue
+
+        home_goals = int(match['home_goals'])
+        away_goals = int(match['away_goals'])
+        market = bet['market']
+
+        if market == 'home':
+            won = home_goals > away_goals
+        elif market == 'away':
+            won = away_goals > home_goals
+        elif market == 'draw':
+            won = home_goals == away_goals
+        else:
+            continue
+
+        outcome = 'win' if won else 'loss'
+        score   = f"{home_goals}-{away_goals}"
+        log_result(bet['bet_id'], outcome, score)
+        settled_count += 1
+
+    return settled_count
+
+
 def remove_bets(bet_ids):
     """Remove specific bet_ids from the ledger (use only for cleanup)."""
     if not _LEDGER_PATH.exists():
