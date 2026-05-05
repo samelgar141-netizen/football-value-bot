@@ -9,7 +9,7 @@ _LEDGER_PATH = config.LEDGER_DIR / 'bets.csv'
 
 _COLUMNS = [
     'bet_id', 'date_placed', 'home_team', 'away_team', 'market',
-    'odds', 'stake_gbp', 'model_prob', 'ev',
+    'odds', 'stake_gbp', 'model_prob', 'ev', 'betting_cohort',
     'result', 'profit_loss', 'running_bankroll', 'notes',
 ]
 
@@ -27,6 +27,24 @@ def initialise_ledger():
         print(f"Ledger already exists → {_LEDGER_PATH}")
 
 
+def _next_cohort():
+    """Return the cohort number to assign to new bets."""
+    if not _LEDGER_PATH.exists():
+        return 1
+    df = pd.read_csv(_LEDGER_PATH, dtype={'result': str, 'notes': str})
+    if df.empty or 'betting_cohort' not in df.columns:
+        return 1
+    # If unsettled bets already exist, new bets join their cohort
+    unsettled = df[df['result'].isna() | (df['result'] == '') | (df['result'] == 'nan')]
+    if not unsettled.empty:
+        vals = pd.to_numeric(unsettled['betting_cohort'], errors='coerce').dropna()
+        if not vals.empty:
+            return int(vals.iloc[0])
+    # All settled — start a new cohort
+    vals = pd.to_numeric(df['betting_cohort'], errors='coerce').dropna()
+    return int(vals.max()) + 1 if not vals.empty else 1
+
+
 def log_bet(bet_dict):
     if not _LEDGER_PATH.exists():
         raise FileNotFoundError(
@@ -37,10 +55,12 @@ def log_bet(bet_dict):
     row.update(bet_dict)
     row['bet_id'] = str(uuid.uuid4())
     row['date_placed'] = row.get('date_placed') or datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+    if not row.get('betting_cohort'):
+        row['betting_cohort'] = _next_cohort()
 
     df = pd.DataFrame([row], columns=_COLUMNS)
     df.to_csv(_LEDGER_PATH, mode='a', header=False, index=False)
-    print(f"Bet logged: {row['bet_id']}  |  {row['home_team']} v {row['away_team']}  |  {row['market']}  |  £{row['stake_gbp']}")
+    print(f"Bet logged: {row['bet_id']}  |  {row['home_team']} v {row['away_team']}  |  {row['market']}  |  £{row['stake_gbp']}  |  Cohort {row['betting_cohort']}")
     return row['bet_id']
 
 
