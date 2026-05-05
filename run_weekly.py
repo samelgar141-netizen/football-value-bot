@@ -110,12 +110,16 @@ def main():
 
     # ── Step 7: find value bets ───────────────────────────────────────────
     from analysis.value_detector import find_value_bets
+    from datetime import timedelta
     value_bets_df = None
     if predictions_df is not None and odds_df is not None:
         value_bets_df = _step("find_value_bets", find_value_bets,
                               predictions_df, odds_df)
-        if value_bets_df is not None:
-            print(f"  Value bets found: {len(value_bets_df)}")
+        if value_bets_df is not None and not value_bets_df.empty:
+            cutoff = datetime.now(timezone.utc) + timedelta(days=6)
+            value_bets_df['_date_dt'] = pd.to_datetime(value_bets_df['date'], utc=True)
+            value_bets_df = value_bets_df[value_bets_df['_date_dt'] <= cutoff].drop(columns=['_date_dt']).reset_index(drop=True)
+            print(f"  Value bets found (next 6 days): {len(value_bets_df)}")
     else:
         print("[find_value_bets] SKIPPED — missing predictions or odds data")
     print()
