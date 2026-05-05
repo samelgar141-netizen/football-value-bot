@@ -10,7 +10,14 @@
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
           background: #0f172a; color: #e2e8f0; min-height: 100vh; padding: 2rem; }
   h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.25rem; }
-  .subtitle { color: #94a3b8; font-size: 0.9rem; margin-bottom: 2rem; }
+  .subtitle { color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem; }
+  .tab-nav { display: flex; gap: 0.5rem; margin-bottom: 2rem; border-bottom: 1px solid #334155; padding-bottom: 0; }
+  .tab-btn { background: none; border: none; color: #94a3b8; padding: 0.6rem 1.2rem;
+              cursor: pointer; font-size: 0.9rem; border-bottom: 2px solid transparent;
+              margin-bottom: -1px; transition: all .15s; }
+  .tab-btn.active { color: #60a5fa; border-bottom-color: #60a5fa; font-weight: 600; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
   .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 1rem; margin-bottom: 2rem; }
   .card { background: #1e293b; border-radius: 10px; padding: 1.2rem; }
@@ -36,62 +43,86 @@
   tr:hover td { background: #263148; }
   .win  { color: #22c55e; font-weight: 600; }
   .loss { color: #ef4444; font-weight: 600; }
+  .bet-btn { padding: 0.3rem 0.9rem; border-radius: 6px; border: 1px solid #475569;
+              background: #1e293b; color: #94a3b8; cursor: pointer; font-size: 0.82rem;
+              transition: all .15s; min-width: 54px; }
+  .bet-btn.yes { background: #166534; border-color: #22c55e; color: #22c55e; font-weight: 600; }
+  .log-bar { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+  .log-btn { background: #1d4ed8; color: #fff; border: none; padding: 0.6rem 1.4rem;
+              border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600;
+              transition: background .15s; }
+  .log-btn:hover { background: #2563eb; }
+  .log-btn:disabled { background: #334155; color: #64748b; cursor: not-allowed; }
+  .copy-confirm { color: #22c55e; font-size: 0.85rem; display: none; }
+  .no-bets { color: #64748b; font-style: italic; padding: 1rem 0; }
   .footer { text-align: center; color: #475569; font-size: 0.8rem; margin-top: 1rem; }
+  .instruction { background: #1e3a5f; border: 1px solid #1d4ed8; border-radius: 8px;
+                  padding: 1rem 1.2rem; margin-bottom: 1.5rem; font-size: 0.85rem; color: #93c5fd; }
+  .instruction code { background: #0f172a; padding: 0.1rem 0.4rem; border-radius: 4px;
+                       font-family: monospace; color: #e2e8f0; }
 </style>
 </head>
 <body>
 <h1>Football Value Bot</h1>
-<p class="subtitle">Generated 05 May 2026 &nbsp;|&nbsp; Starting bankroll: £20</p>
+<p class="subtitle">Generated 05 May 2026 &nbsp;|&nbsp; Starting bankroll: £20 &nbsp;|&nbsp; EV threshold: 20%</p>
 
-<div class="cards">
-  <div class="card">
-    <div class="label">Current Bankroll</div>
-    <div class="value blue">£23.81</div>
-  </div>
-  <div class="card">
-    <div class="label">Total P/L</div>
-    <div class="value" style="color:#22c55e">+£3.81</div>
-  </div>
-  <div class="card">
-    <div class="label">ROI</div>
-    <div class="value" style="color:#22c55e">+122.9%</div>
-  </div>
-  <div class="card">
-    <div class="label">Bets Settled</div>
-    <div class="value">6</div>
-  </div>
-  <div class="card">
-    <div class="label">Wins / Losses</div>
-    <div class="value"><span class="win">2W</span> / <span class="loss">4L</span></div>
-  </div>
-  <div class="card">
-    <div class="label">Total Staked</div>
-    <div class="value">£3.10</div>
-  </div>
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="showTab('pl')">P&amp;L Dashboard</button>
+  <button class="tab-btn" onclick="showTab('upcoming')">Upcoming Bets</button>
 </div>
 
-<section>
-  <h2>Bankroll Over Time</h2>
-  <div class="toggle">
-    <button id="btnDate" class="active" onclick="setAxis('date')">Date</button>
-    <button id="btnCohort" onclick="setAxis('cohort')">Betting Cohort</button>
-  </div>
-  <div class="chart-wrap">
-    <canvas id="plChart"></canvas>
-  </div>
-</section>
+<!-- ── P&L Dashboard tab ─────────────────────────────────────────────── -->
+<div id="tab-pl" class="tab-panel active">
 
-<section>
-  <h2>Settled Bets</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Cohort</th><th>Date</th><th>Fixture</th><th>Market</th><th>Odds</th>
-        <th>Stake</th><th>EV</th><th>Result</th><th>P/L</th>
-        <th>Bankroll</th><th>Score</th>
-      </tr>
-    </thead>
-    <tbody>
+  <div class="cards">
+    <div class="card">
+      <div class="label">Current Bankroll</div>
+      <div class="value blue">£23.81</div>
+    </div>
+    <div class="card">
+      <div class="label">Total P/L</div>
+      <div class="value" style="color:#22c55e">+£3.81</div>
+    </div>
+    <div class="card">
+      <div class="label">ROI</div>
+      <div class="value" style="color:#22c55e">+122.9%</div>
+    </div>
+    <div class="card">
+      <div class="label">Bets Settled</div>
+      <div class="value">6</div>
+    </div>
+    <div class="card">
+      <div class="label">Wins / Losses</div>
+      <div class="value"><span class="win">2W</span> / <span class="loss">4L</span></div>
+    </div>
+    <div class="card">
+      <div class="label">Total Staked</div>
+      <div class="value">£3.10</div>
+    </div>
+  </div>
+
+  <section>
+    <h2>Bankroll Over Time</h2>
+    <div class="toggle">
+      <button id="btnDate" class="active" onclick="setAxis('date')">Date</button>
+      <button id="btnCohort" onclick="setAxis('cohort')">Betting Cohort</button>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="plChart"></canvas>
+    </div>
+  </section>
+
+  <section>
+    <h2>Settled Bets</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Cohort</th><th>Date</th><th>Fixture</th><th>Market</th><th>Odds</th>
+          <th>Stake</th><th>EV</th><th>Result</th><th>P/L</th>
+          <th>Bankroll</th><th>Score</th>
+        </tr>
+      </thead>
+      <tbody>
         <tr>
             <td>BC 1</td>
             <td>2026-05-01</td>
@@ -170,12 +201,124 @@
             <td>£23.81</td>
             <td>3-3</td>
         </tr></tbody>
-  </table>
-</section>
+    </table>
+  </section>
 
-<p class="footer">Football Value Bot &mdash; Poisson model, 20% EV threshold</p>
+</div>
+
+<!-- ── Upcoming Bets tab ─────────────────────────────────────────────── -->
+<div id="tab-upcoming" class="tab-panel">
+
+  <div class="instruction">
+    Toggle each bet to <strong>Yes</strong>, then click <strong>Log Selected Bets</strong>.
+    A Python command will be copied to your clipboard — paste it into Command Prompt
+    inside the <code>football-value-bot</code> folder and press Enter to log your bets.
+  </div>
+
+  <div class="log-bar">
+    <button class="log-btn" id="logBtn" onclick="copyLogCommand()" disabled>Log Selected Bets</button>
+    <span class="copy-confirm" id="copyConfirm">✓ Copied to clipboard — paste into Command Prompt</span>
+  </div>
+
+  <section>
+    <h2>Value Bets this Gameweek</h2>
+    <table><thead><tr><th>Date</th><th>Fixture</th><th>Market</th><th>Odds</th><th>Model %</th><th>EV</th><th>Kelly £</th><th>Place?</th></tr></thead><tbody>
+        <tr id="prow-0">
+            <td>2026-05-11</td>
+            <td>Tottenham Hotspur v Leeds United</td>
+            <td>AWAY</td>
+            <td>4.25</td>
+            <td>42.0%</td>
+            <td>79%</td>
+            <td>£1.21</td>
+            <td><button class="bet-btn" data-idx="0" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-1">
+            <td>2026-05-17</td>
+            <td>Manchester United v Nottingham Forest</td>
+            <td>AWAY</td>
+            <td>5.0</td>
+            <td>30.3%</td>
+            <td>51%</td>
+            <td>£0.64</td>
+            <td><button class="bet-btn" data-idx="1" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-2">
+            <td>2026-05-17</td>
+            <td>Aston Villa v Liverpool</td>
+            <td>HOME</td>
+            <td>3.4</td>
+            <td>44.5%</td>
+            <td>51%</td>
+            <td>£1.07</td>
+            <td><button class="bet-btn" data-idx="2" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-3">
+            <td>2026-05-09</td>
+            <td>Sunderland v Manchester United</td>
+            <td>HOME</td>
+            <td>4.1</td>
+            <td>35.6%</td>
+            <td>46%</td>
+            <td>£0.74</td>
+            <td><button class="bet-btn" data-idx="3" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-4">
+            <td>2026-05-09</td>
+            <td>Fulham v Bournemouth</td>
+            <td>HOME</td>
+            <td>2.7</td>
+            <td>52.8%</td>
+            <td>43%</td>
+            <td>£1.25</td>
+            <td><button class="bet-btn" data-idx="4" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-5">
+            <td>2026-05-09</td>
+            <td>Liverpool v Chelsea</td>
+            <td>AWAY</td>
+            <td>3.9</td>
+            <td>33.5%</td>
+            <td>31%</td>
+            <td>£0.53</td>
+            <td><button class="bet-btn" data-idx="5" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-6">
+            <td>2026-05-17</td>
+            <td>Leeds United v Brighton and Hove Albion</td>
+            <td>HOME</td>
+            <td>3.0</td>
+            <td>43.1%</td>
+            <td>29%</td>
+            <td>£0.73</td>
+            <td><button class="bet-btn" data-idx="6" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-7">
+            <td>2026-05-10</td>
+            <td>Burnley v Aston Villa</td>
+            <td>HOME</td>
+            <td>5.8</td>
+            <td>21.1%</td>
+            <td>22%</td>
+            <td>£0.23</td>
+            <td><button class="bet-btn" data-idx="7" onclick="toggleBet(this)">No</button></td>
+        </tr></tbody></table>
+  </section>
+
+</div>
+
+<p class="footer">Football Value Bot &mdash; Poisson model with recency weighting &amp; Dixon-Coles correction</p>
 
 <script>
+// ── Tab switching ────────────────────────────────────────────────────────
+function showTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ── P&L chart ────────────────────────────────────────────────────────────
 const dateLabels   = ["Start", "2026-05-01", "2026-05-03", "2026-05-03", "2026-05-04", "2026-05-04", "2026-05-04"];
 const dateData     = [20.0, 19.82, 18.91, 18.59, 23.08, 22.8, 23.81];
 const cohortLabels = ["Start", "BC 1"];
@@ -214,11 +357,42 @@ const chart = new Chart(ctx, {
 });
 
 function setAxis(mode) {
-  chart.data.labels   = mode === 'date' ? dateLabels : cohortLabels;
+  chart.data.labels = mode === 'date' ? dateLabels : cohortLabels;
   chart.data.datasets[0].data = mode === 'date' ? dateData : cohortData;
   chart.update();
   document.getElementById('btnDate').classList.toggle('active', mode === 'date');
   document.getElementById('btnCohort').classList.toggle('active', mode === 'cohort');
+}
+
+// ── Prospective bets ─────────────────────────────────────────────────────
+const prospectiveBets = [{"date": "2026-05-11", "home_team": "Tottenham Hotspur", "away_team": "Leeds United", "market": "away", "odds": 4.25, "model_prob": 0.42, "ev": 0.7852, "kelly": 1.21}, {"date": "2026-05-17", "home_team": "Manchester United", "away_team": "Nottingham Forest", "market": "away", "odds": 5.0, "model_prob": 0.3027, "ev": 0.5136, "kelly": 0.64}, {"date": "2026-05-17", "home_team": "Aston Villa", "away_team": "Liverpool", "market": "home", "odds": 3.4, "model_prob": 0.4449, "ev": 0.5128, "kelly": 1.07}, {"date": "2026-05-09", "home_team": "Sunderland", "away_team": "Manchester United", "market": "home", "odds": 4.1, "model_prob": 0.356, "ev": 0.4595, "kelly": 0.74}, {"date": "2026-05-09", "home_team": "Fulham", "away_team": "Bournemouth", "market": "home", "odds": 2.7, "model_prob": 0.5282, "ev": 0.4261, "kelly": 1.25}, {"date": "2026-05-09", "home_team": "Liverpool", "away_team": "Chelsea", "market": "away", "odds": 3.9, "model_prob": 0.3354, "ev": 0.308, "kelly": 0.53}, {"date": "2026-05-17", "home_team": "Leeds United", "away_team": "Brighton and Hove Albion", "market": "home", "odds": 3.0, "model_prob": 0.4307, "ev": 0.2922, "kelly": 0.73}, {"date": "2026-05-10", "home_team": "Burnley", "away_team": "Aston Villa", "market": "home", "odds": 5.8, "model_prob": 0.2111, "ev": 0.2241, "kelly": 0.23}];
+const selected = new Set();
+
+function toggleBet(btn) {
+  const idx = parseInt(btn.dataset.idx);
+  if (selected.has(idx)) {
+    selected.delete(idx);
+    btn.textContent = 'No';
+    btn.classList.remove('yes');
+  } else {
+    selected.add(idx);
+    btn.textContent = 'Yes';
+    btn.classList.add('yes');
+  }
+  document.getElementById('logBtn').disabled = selected.size === 0;
+}
+
+function copyLogCommand() {
+  const bets = [...selected].sort((a,b) => a-b).map(i => prospectiveBets[i]);
+  const lines = bets.map(b =>
+    `log_bet({'date_placed': '${b.date}', 'home_team': '${b.home_team}', 'away_team': '${b.away_team}', 'market': '${b.market}', 'odds': ${b.odds}, 'stake_gbp': ${b.kelly}, 'model_prob': ${b.model_prob}, 'ev': ${b.ev}})`
+  );
+  const code = 'from ledger.ledger import log_bet\n' + lines.join('\n');
+  navigator.clipboard.writeText(code).then(() => {
+    const el = document.getElementById('copyConfirm');
+    el.style.display = 'inline';
+    setTimeout(() => el.style.display = 'none', 3000);
+  });
 }
 </script>
 </body>

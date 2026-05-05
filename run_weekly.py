@@ -128,7 +128,7 @@ def main():
     else:
         print("[generate_report] SKIPPED — no value bets data")
 
-    html_path = _step("generate_html_report", generate_html_report)
+    html_path = _step("generate_html_report", generate_html_report, value_bets_df)
     print()
 
     # ── Step 9: commit and push report to GitHub ──────────────────────────
