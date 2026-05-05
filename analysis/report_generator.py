@@ -83,11 +83,14 @@ def generate_html_report():
         roi             = round(total_pl / total_staked * 100, 1) if total_staked else 0.0
         current_bankroll = round(float(settled.iloc[-1]['running_bankroll']), 2)
 
-    # chart data: bankroll over time
-    chart_labels = ['Start']
-    chart_values = [float(config.BANKROLL)]
+    # chart data: bankroll over time — two label sets for toggle
+    chart_date_labels    = ['Start']
+    chart_cohort_labels  = ['Start']
+    chart_values         = [float(config.BANKROLL)]
     for _, row in settled.iterrows():
-        chart_labels.append(str(row['date_placed'])[:10])
+        chart_date_labels.append(str(row['date_placed'])[:10])
+        cohort = int(row['betting_cohort']) if 'betting_cohort' in row and pd.notna(row['betting_cohort']) else '?'
+        chart_cohort_labels.append(f"GW{cohort}")
         chart_values.append(round(float(row['running_bankroll']), 2))
 
     # table rows html
@@ -97,8 +100,10 @@ def generate_html_report():
         pl = float(row['profit_loss'])
         pl_str = f"+£{pl:.2f}" if pl >= 0 else f"-£{abs(pl):.2f}"
         ev_pct = f"{float(row['ev'])*100:.0f}%"
+        cohort = int(row['betting_cohort']) if 'betting_cohort' in row and pd.notna(row['betting_cohort']) else '-'
         table_rows += f"""
         <tr>
+            <td>GW{cohort}</td>
             <td>{row['date_placed']}</td>
             <td>{row['home_team']} v {row['away_team']}</td>
             <td>{row['market'].upper()}</td>
@@ -139,6 +144,11 @@ def generate_html_report():
   section {{ background: #1e293b; border-radius: 10px; padding: 1.5rem; margin-bottom: 2rem; }}
   section h2 {{ font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: #cbd5e1; }}
   .chart-wrap {{ position: relative; height: 280px; }}
+  .toggle {{ display: inline-flex; background: #0f172a; border-radius: 8px; padding: 3px;
+             margin-bottom: 1rem; }}
+  .toggle button {{ background: none; border: none; color: #94a3b8; padding: 0.35rem 0.9rem;
+                    border-radius: 6px; cursor: pointer; font-size: 0.82rem; transition: all .15s; }}
+  .toggle button.active {{ background: #334155; color: #e2e8f0; font-weight: 600; }}
   table {{ width: 100%; border-collapse: collapse; font-size: 0.85rem; }}
   th {{ text-align: left; padding: 0.6rem 0.8rem; color: #94a3b8;
         font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em;
@@ -183,6 +193,10 @@ def generate_html_report():
 
 <section>
   <h2>Bankroll Over Time</h2>
+  <div class="toggle">
+    <button id="btnDate" class="active" onclick="setAxis('date')">Date</button>
+    <button id="btnCohort" onclick="setAxis('cohort')">Betting Cohort</button>
+  </div>
   <div class="chart-wrap">
     <canvas id="plChart"></canvas>
   </div>
@@ -193,7 +207,7 @@ def generate_html_report():
   <table>
     <thead>
       <tr>
-        <th>Date</th><th>Fixture</th><th>Market</th><th>Odds</th>
+        <th>Cohort</th><th>Date</th><th>Fixture</th><th>Market</th><th>Odds</th>
         <th>Stake</th><th>EV</th><th>Result</th><th>P/L</th>
         <th>Bankroll</th><th>Score</th>
       </tr>
@@ -205,14 +219,18 @@ def generate_html_report():
 <p class="footer">Football Value Bot &mdash; Poisson model, {config.MIN_EV_THRESHOLD:.0%} EV threshold</p>
 
 <script>
+const dateLabels   = {json.dumps(chart_date_labels)};
+const cohortLabels = {json.dumps(chart_cohort_labels)};
+const bankrollData = {json.dumps(chart_values)};
+
 const ctx = document.getElementById('plChart').getContext('2d');
-new Chart(ctx, {{
+const chart = new Chart(ctx, {{
   type: 'line',
   data: {{
-    labels: {json.dumps(chart_labels)},
+    labels: dateLabels,
     datasets: [{{
       label: 'Bankroll (£)',
-      data: {json.dumps(chart_values)},
+      data: bankrollData,
       borderColor: '#60a5fa',
       backgroundColor: 'rgba(96,165,250,0.1)',
       borderWidth: 2,
@@ -236,6 +254,13 @@ new Chart(ctx, {{
     }}
   }}
 }});
+
+function setAxis(mode) {{
+  chart.data.labels = mode === 'date' ? dateLabels : cohortLabels;
+  chart.update();
+  document.getElementById('btnDate').classList.toggle('active', mode === 'date');
+  document.getElementById('btnCohort').classList.toggle('active', mode === 'cohort');
+}}
 </script>
 </body>
 </html>"""
