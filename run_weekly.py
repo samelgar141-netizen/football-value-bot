@@ -47,6 +47,16 @@ def main():
 
     print()
 
+    # ── Step 2.5: auto-settle unsettled bets ──────────────────────────────
+    from ledger.ledger import auto_settle_bets
+    if results_df is not None:
+        settled = _step("auto_settle_bets", auto_settle_bets, results_df)
+        if settled is not None:
+            print(f"  Bets settled: {settled}")
+    else:
+        print("[auto_settle_bets] SKIPPED — no results data")
+    print()
+
     # ── Step 3: fetch fixtures ─────────────────────────────────────────────
     from pipelines.fetch_fixtures import fetch_fixtures
     fixtures_df = _step("fetch_fixtures", fetch_fixtures)
