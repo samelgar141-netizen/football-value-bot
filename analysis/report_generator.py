@@ -8,7 +8,7 @@ import config
 
 _REPORT_COLUMNS = [
     'date', 'home_team', 'away_team', 'market',
-    'model_prob', 'bookmaker_odds', 'ev', 'kelly_stake_gbp',
+    'model_prob', 'bookmaker_odds', 'ev', 'kelly_stake_gbp', 'bookmaker',
 ]
 
 
@@ -49,8 +49,8 @@ def _print_console_report(df):
         display = df.copy()
         display['fixture'] = display['home_team'] + ' v ' + display['away_team']
         display = display[['fixture', 'market', 'model_prob', 'bookmaker_odds',
-                            'ev', 'kelly_stake_gbp']]
-        display.columns = ['Fixture', 'Market', 'Model %', 'Odds', 'EV', 'Kelly £']
+                            'ev', 'kelly_stake_gbp', 'bookmaker']]
+        display.columns = ['Fixture', 'Market', 'Model %', 'Odds', 'EV', 'Kelly £', 'Bookmaker']
         display['Model %'] = (display['Model %'] * 100).round(1).astype(str) + '%'
         display['EV'] = (display['EV'] * 100).round(1).astype(str) + '%'
         print(tabulate(display, headers='keys', tablefmt='github', showindex=False))
