@@ -1,10 +1,10 @@
 date,home_team,away_team,market,model_prob,bookmaker_odds,ev,kelly_stake_gbp
-2026-05-04 14:00:00+00:00,Chelsea,Nottingham Forest,away,0.3866,4.9,0.8943,1.15
-2026-05-03 13:00:00+00:00,Bournemouth,Crystal Palace,away,0.3364,5.3,0.7832,0.91
-2026-05-09 14:00:00+00:00,Sunderland,Manchester United,home,0.3622,4.1,0.4849,0.78
-2026-05-11 19:00:00+00:00,Tottenham Hotspur,Leeds United,away,0.415,3.4,0.4109,0.86
-2026-05-09 14:00:00+00:00,Fulham,Bournemouth,home,0.5361,2.5,0.3404,1.13
-2026-05-04 19:00:00+00:00,Everton,Manchester City,home,0.1965,6.75,0.3266,0.28
-2026-05-01 19:00:00+00:00,Leeds United,Burnley,away,0.1489,8.5,0.2655,0.18
-2026-05-03 13:00:00+00:00,Bournemouth,Crystal Palace,draw,0.279,4.35,0.2137,0.32
-2026-05-04 19:00:00+00:00,Everton,Manchester City,draw,0.245,4.9,0.2006,0.26
+2026-05-11 19:00:00+00:00,Tottenham Hotspur,Leeds United,away,0.42,4.25,0.7852,1.21
+2026-05-17 11:30:00+00:00,Manchester United,Nottingham Forest,away,0.3027,5.0,0.5136,0.64
+2026-05-17 11:30:00+00:00,Aston Villa,Liverpool,home,0.4449,3.4,0.5128,1.07
+2026-05-09 14:00:00+00:00,Sunderland,Manchester United,home,0.356,4.1,0.4595,0.74
+2026-05-09 14:00:00+00:00,Fulham,Bournemouth,home,0.5282,2.7,0.4261,1.25
+2026-05-09 11:30:00+00:00,Liverpool,Chelsea,away,0.3354,3.9,0.308,0.53
+2026-05-17 14:00:00+00:00,Leeds United,Brighton and Hove Albion,home,0.4307,3.0,0.2922,0.73
+2026-05-13 19:00:00+00:00,Manchester City,Crystal Palace,away,0.1139,11.0,0.2531,0.13
+2026-05-10 13:00:00+00:00,Burnley,Aston Villa,home,0.2111,5.8,0.2241,0.23
