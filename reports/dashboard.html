@@ -224,36 +224,6 @@
     <h2>Value Bets this Gameweek</h2>
     <table><thead><tr><th>Date</th><th>Fixture</th><th>Market</th><th>Odds</th><th>Model %</th><th>EV</th><th>Kelly £</th><th>Place?</th></tr></thead><tbody>
         <tr id="prow-0">
-            <td>2026-05-11</td>
-            <td>Tottenham Hotspur v Leeds United</td>
-            <td>AWAY</td>
-            <td>4.25</td>
-            <td>42.0%</td>
-            <td>79%</td>
-            <td>£1.21</td>
-            <td><button class="bet-btn" data-idx="0" onclick="toggleBet(this)">No</button></td>
-        </tr>
-        <tr id="prow-1">
-            <td>2026-05-17</td>
-            <td>Manchester United v Nottingham Forest</td>
-            <td>AWAY</td>
-            <td>5.0</td>
-            <td>30.3%</td>
-            <td>51%</td>
-            <td>£0.64</td>
-            <td><button class="bet-btn" data-idx="1" onclick="toggleBet(this)">No</button></td>
-        </tr>
-        <tr id="prow-2">
-            <td>2026-05-17</td>
-            <td>Aston Villa v Liverpool</td>
-            <td>HOME</td>
-            <td>3.4</td>
-            <td>44.5%</td>
-            <td>51%</td>
-            <td>£1.07</td>
-            <td><button class="bet-btn" data-idx="2" onclick="toggleBet(this)">No</button></td>
-        </tr>
-        <tr id="prow-3">
             <td>2026-05-09</td>
             <td>Sunderland v Manchester United</td>
             <td>HOME</td>
@@ -261,9 +231,9 @@
             <td>35.6%</td>
             <td>46%</td>
             <td>£0.74</td>
-            <td><button class="bet-btn" data-idx="3" onclick="toggleBet(this)">No</button></td>
+            <td><button class="bet-btn" data-idx="0" onclick="toggleBet(this)">No</button></td>
         </tr>
-        <tr id="prow-4">
+        <tr id="prow-1">
             <td>2026-05-09</td>
             <td>Fulham v Bournemouth</td>
             <td>HOME</td>
@@ -271,9 +241,9 @@
             <td>52.8%</td>
             <td>43%</td>
             <td>£1.25</td>
-            <td><button class="bet-btn" data-idx="4" onclick="toggleBet(this)">No</button></td>
+            <td><button class="bet-btn" data-idx="1" onclick="toggleBet(this)">No</button></td>
         </tr>
-        <tr id="prow-5">
+        <tr id="prow-2">
             <td>2026-05-09</td>
             <td>Liverpool v Chelsea</td>
             <td>AWAY</td>
@@ -281,19 +251,9 @@
             <td>33.5%</td>
             <td>31%</td>
             <td>£0.53</td>
-            <td><button class="bet-btn" data-idx="5" onclick="toggleBet(this)">No</button></td>
+            <td><button class="bet-btn" data-idx="2" onclick="toggleBet(this)">No</button></td>
         </tr>
-        <tr id="prow-6">
-            <td>2026-05-17</td>
-            <td>Leeds United v Brighton and Hove Albion</td>
-            <td>HOME</td>
-            <td>3.0</td>
-            <td>43.1%</td>
-            <td>29%</td>
-            <td>£0.73</td>
-            <td><button class="bet-btn" data-idx="6" onclick="toggleBet(this)">No</button></td>
-        </tr>
-        <tr id="prow-7">
+        <tr id="prow-3">
             <td>2026-05-10</td>
             <td>Burnley v Aston Villa</td>
             <td>HOME</td>
@@ -301,7 +261,7 @@
             <td>21.1%</td>
             <td>22%</td>
             <td>£0.23</td>
-            <td><button class="bet-btn" data-idx="7" onclick="toggleBet(this)">No</button></td>
+            <td><button class="bet-btn" data-idx="3" onclick="toggleBet(this)">No</button></td>
         </tr></tbody></table>
   </section>
 
@@ -365,7 +325,7 @@ function setAxis(mode) {
 }
 
 // ── Prospective bets ─────────────────────────────────────────────────────
-const prospectiveBets = [{"date": "2026-05-11", "home_team": "Tottenham Hotspur", "away_team": "Leeds United", "market": "away", "odds": 4.25, "model_prob": 0.42, "ev": 0.7852, "kelly": 1.21}, {"date": "2026-05-17", "home_team": "Manchester United", "away_team": "Nottingham Forest", "market": "away", "odds": 5.0, "model_prob": 0.3027, "ev": 0.5136, "kelly": 0.64}, {"date": "2026-05-17", "home_team": "Aston Villa", "away_team": "Liverpool", "market": "home", "odds": 3.4, "model_prob": 0.4449, "ev": 0.5128, "kelly": 1.07}, {"date": "2026-05-09", "home_team": "Sunderland", "away_team": "Manchester United", "market": "home", "odds": 4.1, "model_prob": 0.356, "ev": 0.4595, "kelly": 0.74}, {"date": "2026-05-09", "home_team": "Fulham", "away_team": "Bournemouth", "market": "home", "odds": 2.7, "model_prob": 0.5282, "ev": 0.4261, "kelly": 1.25}, {"date": "2026-05-09", "home_team": "Liverpool", "away_team": "Chelsea", "market": "away", "odds": 3.9, "model_prob": 0.3354, "ev": 0.308, "kelly": 0.53}, {"date": "2026-05-17", "home_team": "Leeds United", "away_team": "Brighton and Hove Albion", "market": "home", "odds": 3.0, "model_prob": 0.4307, "ev": 0.2922, "kelly": 0.73}, {"date": "2026-05-10", "home_team": "Burnley", "away_team": "Aston Villa", "market": "home", "odds": 5.8, "model_prob": 0.2111, "ev": 0.2241, "kelly": 0.23}];
+const prospectiveBets = [{"date": "2026-05-09", "home_team": "Sunderland", "away_team": "Manchester United", "market": "home", "odds": 4.1, "model_prob": 0.356, "ev": 0.4595, "kelly": 0.74}, {"date": "2026-05-09", "home_team": "Fulham", "away_team": "Bournemouth", "market": "home", "odds": 2.7, "model_prob": 0.5282, "ev": 0.4261, "kelly": 1.25}, {"date": "2026-05-09", "home_team": "Liverpool", "away_team": "Chelsea", "market": "away", "odds": 3.9, "model_prob": 0.3354, "ev": 0.308, "kelly": 0.53}, {"date": "2026-05-10", "home_team": "Burnley", "away_team": "Aston Villa", "market": "home", "odds": 5.8, "model_prob": 0.2111, "ev": 0.2241, "kelly": 0.23}];
 const selected = new Set();
 
 function toggleBet(btn) {
