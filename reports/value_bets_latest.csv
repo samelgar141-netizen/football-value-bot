@@ -1,4 +1,9 @@
 date,home_team,away_team,market,model_prob,bookmaker_odds,ev,kelly_stake_gbp
-2026-05-02T15:15:54.031329+00:00,Liverpool,Manchester City,home,0.7364,2.6,0.9146,142.91
-2026-05-01T15:15:54.031329+00:00,Arsenal,Chelsea,home,0.651,2.3,0.4972,95.62
-2026-05-04T15:15:54.031329+00:00,Tottenham,Newcastle,home,0.6676,2.1,0.4019,91.34
+2026-05-11 19:00:00+00:00,Tottenham Hotspur,Leeds United,away,0.42,4.25,0.7852,1.21
+2026-05-17 11:30:00+00:00,Manchester United,Nottingham Forest,away,0.3027,5.0,0.5136,0.64
+2026-05-17 11:30:00+00:00,Aston Villa,Liverpool,home,0.4449,3.4,0.5128,1.07
+2026-05-09 14:00:00+00:00,Sunderland,Manchester United,home,0.356,4.1,0.4595,0.74
+2026-05-09 14:00:00+00:00,Fulham,Bournemouth,home,0.5282,2.7,0.4261,1.25
+2026-05-09 11:30:00+00:00,Liverpool,Chelsea,away,0.3354,3.9,0.308,0.53
+2026-05-17 14:00:00+00:00,Leeds United,Brighton and Hove Albion,home,0.4307,3.0,0.2922,0.73
+2026-05-10 13:00:00+00:00,Burnley,Aston Villa,home,0.2111,5.8,0.2241,0.23
