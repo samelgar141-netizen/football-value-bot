@@ -26,7 +26,6 @@ def generate_report(value_bets_df):
 
 
 def _validate_report(path):
-    import pandas as pd
     df = pd.read_csv(path)
     if list(df.columns) != _REPORT_COLUMNS:
         raise ValueError(
@@ -60,8 +59,8 @@ def _print_console_report(df):
     print()
 
 
-def generate_html_report():
-    """Generate an HTML dashboard from the settled bets in the ledger."""
+def generate_html_report(value_bets_df=None):
+    """Generate an HTML dashboard from the settled bets ledger and upcoming value bets."""
     ledger_path = config.LEDGER_DIR / 'bets.csv'
     if not ledger_path.exists():
         return None
@@ -76,40 +75,38 @@ def generate_html_report():
         total_staked = total_pl = roi = 0.0
         current_bankroll = float(config.BANKROLL)
     else:
-        wins            = int((settled['result'] == 'win').sum())
-        losses          = int((settled['result'] == 'loss').sum())
-        total_staked    = round(float(settled['stake_gbp'].sum()), 2)
-        total_pl        = round(float(settled['profit_loss'].sum()), 2)
-        roi             = round(total_pl / total_staked * 100, 1) if total_staked else 0.0
+        wins             = int((settled['result'] == 'win').sum())
+        losses           = int((settled['result'] == 'loss').sum())
+        total_staked     = round(float(settled['stake_gbp'].sum()), 2)
+        total_pl         = round(float(settled['profit_loss'].sum()), 2)
+        roi              = round(total_pl / total_staked * 100, 1) if total_staked else 0.0
         current_bankroll = round(float(settled.iloc[-1]['running_bankroll']), 2)
 
     # chart data — date view: one point per bet; cohort view: one point per cohort
-    chart_date_labels  = ['Start']
-    chart_date_values  = [float(config.BANKROLL)]
+    chart_date_labels = ['Start']
+    chart_date_values = [float(config.BANKROLL)]
     for _, row in settled.iterrows():
         chart_date_labels.append(str(row['date_placed'])[:10])
         chart_date_values.append(round(float(row['running_bankroll']), 2))
 
-    # cohort view: final bankroll after each cohort completes
     chart_cohort_labels = ['Start']
     chart_cohort_values = [float(config.BANKROLL)]
     if not settled.empty and 'betting_cohort' in settled.columns:
         for cohort_num, group in settled.groupby(
             pd.to_numeric(settled['betting_cohort'], errors='coerce'), sort=True
         ):
-            last_bankroll = round(float(group.iloc[-1]['running_bankroll']), 2)
             chart_cohort_labels.append(f"BC {int(cohort_num)}")
-            chart_cohort_values.append(last_bankroll)
+            chart_cohort_values.append(round(float(group.iloc[-1]['running_bankroll']), 2))
 
-    # table rows html
-    table_rows = ''
+    # settled bets table rows
+    settled_rows = ''
     for _, row in settled.iterrows():
         result_class = 'win' if row['result'] == 'win' else 'loss'
         pl = float(row['profit_loss'])
         pl_str = f"+£{pl:.2f}" if pl >= 0 else f"-£{abs(pl):.2f}"
         ev_pct = f"{float(row['ev'])*100:.0f}%"
         cohort = int(row['betting_cohort']) if 'betting_cohort' in row and pd.notna(row['betting_cohort']) else '-'
-        table_rows += f"""
+        settled_rows += f"""
         <tr>
             <td>BC {cohort}</td>
             <td>{row['date_placed']}</td>
@@ -121,7 +118,39 @@ def generate_html_report():
             <td class="{result_class}">{row['result'].upper()}</td>
             <td class="{result_class}">{pl_str}</td>
             <td>£{float(row['running_bankroll']):.2f}</td>
-            <td>{row.get('notes','') or ''}</td>
+            <td>{row.get('notes', '') or ''}</td>
+        </tr>"""
+
+    # prospective bets — embed as JSON for JS
+    prospective_js = '[]'
+    prospective_rows = ''
+    if value_bets_df is not None and not value_bets_df.empty:
+        bets_list = []
+        for _, row in value_bets_df.iterrows():
+            bets_list.append({
+                'date':       str(row['date'])[:10],
+                'home_team':  str(row['home_team']),
+                'away_team':  str(row['away_team']),
+                'market':     str(row['market']),
+                'odds':       round(float(row['bookmaker_odds']), 2),
+                'model_prob': round(float(row['model_prob']), 4),
+                'ev':         round(float(row['ev']), 4),
+                'kelly':      round(float(row['kelly_stake_gbp']), 2),
+            })
+        prospective_js = json.dumps(bets_list)
+
+        for i, b in enumerate(bets_list):
+            ev_pct = f"{b['ev']*100:.0f}%"
+            prospective_rows += f"""
+        <tr id="prow-{i}">
+            <td>{b['date']}</td>
+            <td>{b['home_team']} v {b['away_team']}</td>
+            <td>{b['market'].upper()}</td>
+            <td>{b['odds']}</td>
+            <td>{b['model_prob']*100:.1f}%</td>
+            <td>{ev_pct}</td>
+            <td>£{b['kelly']:.2f}</td>
+            <td><button class="bet-btn" data-idx="{i}" onclick="toggleBet(this)">No</button></td>
         </tr>"""
 
     pl_colour = '#22c55e' if total_pl >= 0 else '#ef4444'
@@ -139,7 +168,14 @@ def generate_html_report():
   body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
           background: #0f172a; color: #e2e8f0; min-height: 100vh; padding: 2rem; }}
   h1 {{ font-size: 1.6rem; font-weight: 700; margin-bottom: 0.25rem; }}
-  .subtitle {{ color: #94a3b8; font-size: 0.9rem; margin-bottom: 2rem; }}
+  .subtitle {{ color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem; }}
+  .tab-nav {{ display: flex; gap: 0.5rem; margin-bottom: 2rem; border-bottom: 1px solid #334155; padding-bottom: 0; }}
+  .tab-btn {{ background: none; border: none; color: #94a3b8; padding: 0.6rem 1.2rem;
+              cursor: pointer; font-size: 0.9rem; border-bottom: 2px solid transparent;
+              margin-bottom: -1px; transition: all .15s; }}
+  .tab-btn.active {{ color: #60a5fa; border-bottom-color: #60a5fa; font-weight: 600; }}
+  .tab-panel {{ display: none; }}
+  .tab-panel.active {{ display: block; }}
   .cards {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 1rem; margin-bottom: 2rem; }}
   .card {{ background: #1e293b; border-radius: 10px; padding: 1.2rem; }}
@@ -165,68 +201,124 @@ def generate_html_report():
   tr:hover td {{ background: #263148; }}
   .win  {{ color: #22c55e; font-weight: 600; }}
   .loss {{ color: #ef4444; font-weight: 600; }}
+  .bet-btn {{ padding: 0.3rem 0.9rem; border-radius: 6px; border: 1px solid #475569;
+              background: #1e293b; color: #94a3b8; cursor: pointer; font-size: 0.82rem;
+              transition: all .15s; min-width: 54px; }}
+  .bet-btn.yes {{ background: #166534; border-color: #22c55e; color: #22c55e; font-weight: 600; }}
+  .log-bar {{ display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }}
+  .log-btn {{ background: #1d4ed8; color: #fff; border: none; padding: 0.6rem 1.4rem;
+              border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600;
+              transition: background .15s; }}
+  .log-btn:hover {{ background: #2563eb; }}
+  .log-btn:disabled {{ background: #334155; color: #64748b; cursor: not-allowed; }}
+  .copy-confirm {{ color: #22c55e; font-size: 0.85rem; display: none; }}
+  .no-bets {{ color: #64748b; font-style: italic; padding: 1rem 0; }}
   .footer {{ text-align: center; color: #475569; font-size: 0.8rem; margin-top: 1rem; }}
+  .instruction {{ background: #1e3a5f; border: 1px solid #1d4ed8; border-radius: 8px;
+                  padding: 1rem 1.2rem; margin-bottom: 1.5rem; font-size: 0.85rem; color: #93c5fd; }}
+  .instruction code {{ background: #0f172a; padding: 0.1rem 0.4rem; border-radius: 4px;
+                       font-family: monospace; color: #e2e8f0; }}
 </style>
 </head>
 <body>
 <h1>Football Value Bot</h1>
-<p class="subtitle">Generated {date.today().strftime('%d %B %Y')} &nbsp;|&nbsp; Starting bankroll: £{config.BANKROLL}</p>
+<p class="subtitle">Generated {date.today().strftime('%d %B %Y')} &nbsp;|&nbsp; Starting bankroll: £{config.BANKROLL} &nbsp;|&nbsp; EV threshold: {config.MIN_EV_THRESHOLD:.0%}</p>
 
-<div class="cards">
-  <div class="card">
-    <div class="label">Current Bankroll</div>
-    <div class="value blue">£{current_bankroll:.2f}</div>
-  </div>
-  <div class="card">
-    <div class="label">Total P/L</div>
-    <div class="value" style="color:{pl_colour}">{pl_str}</div>
-  </div>
-  <div class="card">
-    <div class="label">ROI</div>
-    <div class="value" style="color:{pl_colour}">{roi:+.1f}%</div>
-  </div>
-  <div class="card">
-    <div class="label">Bets Settled</div>
-    <div class="value">{wins + losses}</div>
-  </div>
-  <div class="card">
-    <div class="label">Wins / Losses</div>
-    <div class="value"><span class="win">{wins}W</span> / <span class="loss">{losses}L</span></div>
-  </div>
-  <div class="card">
-    <div class="label">Total Staked</div>
-    <div class="value">£{total_staked:.2f}</div>
-  </div>
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="showTab('pl')">P&amp;L Dashboard</button>
+  <button class="tab-btn" onclick="showTab('upcoming')">Upcoming Bets</button>
 </div>
 
-<section>
-  <h2>Bankroll Over Time</h2>
-  <div class="toggle">
-    <button id="btnDate" class="active" onclick="setAxis('date')">Date</button>
-    <button id="btnCohort" onclick="setAxis('cohort')">Betting Cohort</button>
-  </div>
-  <div class="chart-wrap">
-    <canvas id="plChart"></canvas>
-  </div>
-</section>
+<!-- ── P&L Dashboard tab ─────────────────────────────────────────────── -->
+<div id="tab-pl" class="tab-panel active">
 
-<section>
-  <h2>Settled Bets</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Cohort</th><th>Date</th><th>Fixture</th><th>Market</th><th>Odds</th>
-        <th>Stake</th><th>EV</th><th>Result</th><th>P/L</th>
-        <th>Bankroll</th><th>Score</th>
-      </tr>
-    </thead>
-    <tbody>{table_rows}</tbody>
-  </table>
-</section>
+  <div class="cards">
+    <div class="card">
+      <div class="label">Current Bankroll</div>
+      <div class="value blue">£{current_bankroll:.2f}</div>
+    </div>
+    <div class="card">
+      <div class="label">Total P/L</div>
+      <div class="value" style="color:{pl_colour}">{pl_str}</div>
+    </div>
+    <div class="card">
+      <div class="label">ROI</div>
+      <div class="value" style="color:{pl_colour}">{roi:+.1f}%</div>
+    </div>
+    <div class="card">
+      <div class="label">Bets Settled</div>
+      <div class="value">{wins + losses}</div>
+    </div>
+    <div class="card">
+      <div class="label">Wins / Losses</div>
+      <div class="value"><span class="win">{wins}W</span> / <span class="loss">{losses}L</span></div>
+    </div>
+    <div class="card">
+      <div class="label">Total Staked</div>
+      <div class="value">£{total_staked:.2f}</div>
+    </div>
+  </div>
 
-<p class="footer">Football Value Bot &mdash; Poisson model, {config.MIN_EV_THRESHOLD:.0%} EV threshold</p>
+  <section>
+    <h2>Bankroll Over Time</h2>
+    <div class="toggle">
+      <button id="btnDate" class="active" onclick="setAxis('date')">Date</button>
+      <button id="btnCohort" onclick="setAxis('cohort')">Betting Cohort</button>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="plChart"></canvas>
+    </div>
+  </section>
+
+  <section>
+    <h2>Settled Bets</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Cohort</th><th>Date</th><th>Fixture</th><th>Market</th><th>Odds</th>
+          <th>Stake</th><th>EV</th><th>Result</th><th>P/L</th>
+          <th>Bankroll</th><th>Score</th>
+        </tr>
+      </thead>
+      <tbody>{settled_rows}</tbody>
+    </table>
+  </section>
+
+</div>
+
+<!-- ── Upcoming Bets tab ─────────────────────────────────────────────── -->
+<div id="tab-upcoming" class="tab-panel">
+
+  <div class="instruction">
+    Toggle each bet to <strong>Yes</strong>, then click <strong>Log Selected Bets</strong>.
+    A Python command will be copied to your clipboard — paste it into Command Prompt
+    inside the <code>football-value-bot</code> folder and press Enter to log your bets.
+  </div>
+
+  <div class="log-bar">
+    <button class="log-btn" id="logBtn" onclick="copyLogCommand()" disabled>Log Selected Bets</button>
+    <span class="copy-confirm" id="copyConfirm">✓ Copied to clipboard — paste into Command Prompt</span>
+  </div>
+
+  <section>
+    <h2>Value Bets this Gameweek</h2>
+    {'<table><thead><tr><th>Date</th><th>Fixture</th><th>Market</th><th>Odds</th><th>Model %</th><th>EV</th><th>Kelly £</th><th>Place?</th></tr></thead><tbody>' + prospective_rows + '</tbody></table>' if prospective_rows else '<p class="no-bets">No upcoming value bets found. Run python run_weekly.py to refresh.</p>'}
+  </section>
+
+</div>
+
+<p class="footer">Football Value Bot &mdash; Poisson model with recency weighting &amp; Dixon-Coles correction</p>
 
 <script>
+// ── Tab switching ────────────────────────────────────────────────────────
+function showTab(name) {{
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}}
+
+// ── P&L chart ────────────────────────────────────────────────────────────
 const dateLabels   = {json.dumps(chart_date_labels)};
 const dateData     = {json.dumps(chart_date_values)};
 const cohortLabels = {json.dumps(chart_cohort_labels)};
@@ -265,16 +357,48 @@ const chart = new Chart(ctx, {{
 }});
 
 function setAxis(mode) {{
-  chart.data.labels   = mode === 'date' ? dateLabels : cohortLabels;
+  chart.data.labels = mode === 'date' ? dateLabels : cohortLabels;
   chart.data.datasets[0].data = mode === 'date' ? dateData : cohortData;
   chart.update();
   document.getElementById('btnDate').classList.toggle('active', mode === 'date');
   document.getElementById('btnCohort').classList.toggle('active', mode === 'cohort');
 }}
+
+// ── Prospective bets ─────────────────────────────────────────────────────
+const prospectiveBets = {prospective_js};
+const selected = new Set();
+
+function toggleBet(btn) {{
+  const idx = parseInt(btn.dataset.idx);
+  if (selected.has(idx)) {{
+    selected.delete(idx);
+    btn.textContent = 'No';
+    btn.classList.remove('yes');
+  }} else {{
+    selected.add(idx);
+    btn.textContent = 'Yes';
+    btn.classList.add('yes');
+  }}
+  document.getElementById('logBtn').disabled = selected.size === 0;
+}}
+
+function copyLogCommand() {{
+  const bets = [...selected].sort((a,b) => a-b).map(i => prospectiveBets[i]);
+  const lines = bets.map(b =>
+    `log_bet({{'date_placed': '${{b.date}}', 'home_team': '${{b.home_team}}', 'away_team': '${{b.away_team}}', 'market': '${{b.market}}', 'odds': ${{b.odds}}, 'stake_gbp': ${{b.kelly}}, 'model_prob': ${{b.model_prob}}, 'ev': ${{b.ev}}}})`
+  );
+  const code = 'from ledger.ledger import log_bet\\n' + lines.join('\\n');
+  navigator.clipboard.writeText(code).then(() => {{
+    const el = document.getElementById('copyConfirm');
+    el.style.display = 'inline';
+    setTimeout(() => el.style.display = 'none', 3000);
+  }});
+}}
 </script>
 </body>
 </html>"""
 
+    config.REPORTS_DIR.mkdir(parents=True, exist_ok=True)
     out_path = config.REPORTS_DIR / 'dashboard.html'
     out_path.write_text(html, encoding='utf-8')
     print(f"HTML dashboard saved → {out_path}")
