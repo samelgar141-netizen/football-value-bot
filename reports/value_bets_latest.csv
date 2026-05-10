@@ -1,8 +1,5 @@
 date,home_team,away_team,market,model_prob,bookmaker_odds,ev,kelly_stake_gbp,bookmaker
-2026-05-10 13:00:00+00:00,Burnley,Aston Villa,home,0.2596,5.75,0.4927,0.52,Unibet
-2026-05-09 16:30:00+00:00,Manchester City,Brentford,away,0.1606,9.0,0.4456,0.28,Betway
-2026-05-09 14:00:00+00:00,Brighton and Hove Albion,Wolverhampton Wanderers,draw,0.2353,6.0,0.4118,0.41,Betway
-2026-05-10 15:30:00+00:00,West Ham United,Arsenal,home,0.2501,5.4,0.3506,0.4,Unibet
-2026-05-09 16:30:00+00:00,Manchester City,Brentford,draw,0.2294,5.75,0.319,0.34,Betway
-2026-05-10 13:00:00+00:00,Burnley,Aston Villa,draw,0.2947,4.2,0.2378,0.37,Unibet
-2026-05-09 14:00:00+00:00,Fulham,Bournemouth,home,0.4475,2.75,0.2306,0.66,Unibet
+2026-05-11 19:00:00+00:00,Tottenham Hotspur,Leeds United,away,0.4544,4.1,0.863,1.39,William Hill
+2026-05-13 19:00:00+00:00,Manchester City,Crystal Palace,away,0.1169,14.0,0.6364,0.24,Betway
+2026-05-13 19:00:00+00:00,Manchester City,Crystal Palace,draw,0.2048,7.5,0.5358,0.41,Betway
+2026-05-15 19:00:00+00:00,Aston Villa,Liverpool,home,0.4159,3.1,0.2892,0.69,Unibet
