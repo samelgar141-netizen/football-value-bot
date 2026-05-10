@@ -293,8 +293,8 @@ def generate_html_report(value_bets_df=None):
 
   <div class="instruction">
     Toggle each bet to <strong>Yes</strong>, then click <strong>Log Selected Bets</strong>.
-    A Python command will be copied to your clipboard — paste it into Command Prompt
-    inside the <code>football-value-bot</code> folder and press Enter to log your bets.
+    A <code>python -c "..."</code> command will be copied to your clipboard — paste it into
+    Command Prompt or PowerShell inside the <code>football-value-bot</code> folder and press Enter.
   </div>
 
   <div class="log-bar">
@@ -389,7 +389,8 @@ function copyLogCommand() {{
   const lines = bets.map(b =>
     `log_bet({{'date_placed': '${{b.date}}', 'home_team': '${{b.home_team}}', 'away_team': '${{b.away_team}}', 'market': '${{b.market}}', 'odds': ${{b.odds}}, 'stake_gbp': ${{b.kelly}}, 'model_prob': ${{b.model_prob}}, 'ev': ${{b.ev}}}})`
   );
-  const code = 'from ledger.ledger import log_bet\\n' + lines.join('\\n');
+  const stmts = ['from ledger.ledger import log_bet', ...lines].join('; ');
+  const code = 'python -c "' + stmts + '"';
   navigator.clipboard.writeText(code).then(() => {{
     const el = document.getElementById('copyConfirm');
     el.style.display = 'inline';
