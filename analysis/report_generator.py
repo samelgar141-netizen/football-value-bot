@@ -136,6 +136,7 @@ def generate_html_report(value_bets_df=None):
                 'model_prob': round(float(row['model_prob']), 4),
                 'ev':         round(float(row['ev']), 4),
                 'kelly':      round(float(row['kelly_stake_gbp']), 2),
+                'bookmaker':  str(row.get('bookmaker', '') or ''),
             })
         prospective_js = json.dumps(bets_list)
 
@@ -150,6 +151,7 @@ def generate_html_report(value_bets_df=None):
             <td>{b['model_prob']*100:.1f}%</td>
             <td>{ev_pct}</td>
             <td>£{b['kelly']:.2f}</td>
+            <td>{b['bookmaker']}</td>
             <td><button class="bet-btn" data-idx="{i}" onclick="toggleBet(this)">No</button></td>
         </tr>"""
 
@@ -302,7 +304,7 @@ def generate_html_report(value_bets_df=None):
 
   <section>
     <h2>Value Bets this Gameweek</h2>
-    {'<table><thead><tr><th>Date</th><th>Fixture</th><th>Market</th><th>Odds</th><th>Model %</th><th>EV</th><th>Kelly £</th><th>Place?</th></tr></thead><tbody>' + prospective_rows + '</tbody></table>' if prospective_rows else '<p class="no-bets">No upcoming value bets found. Run python run_weekly.py to refresh.</p>'}
+    {'<table><thead><tr><th>Date</th><th>Fixture</th><th>Market</th><th>Odds</th><th>Model %</th><th>EV</th><th>Kelly £</th><th>Bookmaker</th><th>Place?</th></tr></thead><tbody>' + prospective_rows + '</tbody></table>' if prospective_rows else '<p class="no-bets">No upcoming value bets found. Run python run_weekly.py to refresh.</p>'}
   </section>
 
 </div>
