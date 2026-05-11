@@ -28,7 +28,7 @@ def fetch_odds():
     params = {
         'apiKey':     key,
         'regions':    _REGIONS,
-        'markets':    'h2h,totals',
+        'markets':    'h2h,totals,bttsPro',
         'oddsFormat': _ODDS_FORMAT,
         'bookmakers': ','.join(config.BOOKMAKERS),
     }
@@ -49,12 +49,14 @@ def fetch_odds():
         away_team = event['away_team']
 
         best = {
-            'home_odds':   None,
-            'draw_odds':   None,
-            'away_odds':   None,
-            'over25_odds': None,
-            'under25_odds': None,
-            'bookmaker':   None,
+            'home_odds':     None,
+            'draw_odds':     None,
+            'away_odds':     None,
+            'over25_odds':   None,
+            'under25_odds':  None,
+            'btts_yes_odds': None,
+            'btts_no_odds':  None,
+            'bookmaker':     None,
         }
 
         for bm in event.get('bookmakers', []):
@@ -89,6 +91,16 @@ def fetch_odds():
                             if best['under25_odds'] is None or price > best['under25_odds']:
                                 best['under25_odds'] = price
 
+                elif market['key'] == 'bttsPro':
+                    for outcome in market['outcomes']:
+                        price = outcome['price']
+                        if outcome['name'] == 'Yes':
+                            if best['btts_yes_odds'] is None or price > best['btts_yes_odds']:
+                                best['btts_yes_odds'] = price
+                        elif outcome['name'] == 'No':
+                            if best['btts_no_odds'] is None or price > best['btts_no_odds']:
+                                best['btts_no_odds'] = price
+
         rows.append({
             'match_id':      event['id'],
             'home_team':     home_team,
@@ -99,13 +111,16 @@ def fetch_odds():
             'away_odds':     best['away_odds'],
             'over25_odds':   best['over25_odds'],
             'under25_odds':  best['under25_odds'],
+            'btts_yes_odds': best['btts_yes_odds'],
+            'btts_no_odds':  best['btts_no_odds'],
             'bookmaker':     best['bookmaker'],
         })
 
     df = pd.DataFrame(rows, columns=[
         'match_id', 'home_team', 'away_team', 'commence_time',
         'home_odds', 'draw_odds', 'away_odds',
-        'over25_odds', 'under25_odds', 'bookmaker',
+        'over25_odds', 'under25_odds', 'btts_yes_odds', 'btts_no_odds',
+        'bookmaker',
     ])
     df['commence_time'] = pd.to_datetime(df['commence_time'], utc=True)
 

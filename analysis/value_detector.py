@@ -29,6 +29,13 @@ def remove_vig(home_odds, draw_odds, away_odds):
     return raw_home / total, raw_draw / total, raw_away / total
 
 
+def remove_vig_2way(yes_odds, no_odds):
+    raw_yes = implied_prob(yes_odds)
+    raw_no  = implied_prob(no_odds)
+    total = raw_yes + raw_no
+    return raw_yes / total, raw_no / total
+
+
 def calculate_ev(model_prob, decimal_odds):
     return (model_prob * decimal_odds) - 1.0
 
@@ -81,6 +88,28 @@ def find_value_bets(predictions_df, odds_df):
             ('draw',  row['draw_prob'],     row['draw_odds'], true_draw),
             ('away',  row['away_win_prob'], row['away_odds'], true_away),
         ]
+
+        # Over/Under 2.5 goals
+        try:
+            if pd.notna(row.get('over25_odds')) and pd.notna(row.get('under25_odds')):
+                true_over, true_under = remove_vig_2way(row['over25_odds'], row['under25_odds'])
+                markets += [
+                    ('over_2_5',  row['over25_prob'],  row['over25_odds'],  true_over),
+                    ('under_2_5', row['under25_prob'], row['under25_odds'], true_under),
+                ]
+        except (ValueError, KeyError):
+            pass
+
+        # Both Teams To Score
+        try:
+            if pd.notna(row.get('btts_yes_odds')) and pd.notna(row.get('btts_no_odds')):
+                true_btts_yes, true_btts_no = remove_vig_2way(row['btts_yes_odds'], row['btts_no_odds'])
+                markets += [
+                    ('btts_yes', row['btts_prob'],         row['btts_yes_odds'], true_btts_yes),
+                    ('btts_no',  1.0 - row['btts_prob'],   row['btts_no_odds'],  true_btts_no),
+                ]
+        except (ValueError, KeyError):
+            pass
 
         for market, model_prob, odds_val, no_vig_prob in markets:
             ev = calculate_ev(model_prob, odds_val)
