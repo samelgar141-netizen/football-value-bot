@@ -153,12 +153,20 @@ def predict_match(home_team, away_team, team_stats_df):
     draw_prob     = float(np.sum(np.diag(score_matrix)))
     away_win_prob = float(np.sum(np.triu(score_matrix, 1)))
 
+    goal_sum     = np.add.outer(goals, goals)
+    over25_prob  = float(score_matrix[goal_sum > 2].sum())
+    under25_prob = float(score_matrix[goal_sum <= 2].sum())
+    btts_prob    = float(score_matrix[1:, 1:].sum())
+
     return {
         'home_win_prob':       home_win_prob,
         'draw_prob':           draw_prob,
         'away_win_prob':       away_win_prob,
         'expected_home_goals': exp_home,
         'expected_away_goals': exp_away,
+        'over25_prob':         over25_prob,
+        'under25_prob':        under25_prob,
+        'btts_prob':           btts_prob,
         'score_matrix':        score_df,
     }
 
@@ -182,6 +190,9 @@ def predict_all_fixtures(fixtures_df, team_stats_df):
             'away_win_prob':       pred['away_win_prob'],
             'expected_home_goals': pred['expected_home_goals'],
             'expected_away_goals': pred['expected_away_goals'],
+            'over25_prob':         pred['over25_prob'],
+            'under25_prob':        pred['under25_prob'],
+            'btts_prob':           pred['btts_prob'],
         })
 
     return pd.DataFrame(rows)
