@@ -64,7 +64,7 @@
 </head>
 <body>
 <h1>Football Value Bot</h1>
-<p class="subtitle">Generated 10 May 2026 &nbsp;|&nbsp; Starting bankroll: £20 &nbsp;|&nbsp; EV threshold: 20%</p>
+<p class="subtitle">Generated 11 May 2026 &nbsp;|&nbsp; Starting bankroll: £20 &nbsp;|&nbsp; EV threshold: 20%</p>
 
 <div class="tab-nav">
   <button class="tab-btn active" onclick="showTab('pl')">P&amp;L Dashboard</button>
@@ -326,28 +326,50 @@
             <td><button class="bet-btn" data-idx="0" onclick="toggleBet(this)">No</button></td>
         </tr>
         <tr id="prow-1">
-            <td>2026-05-13</td>
-            <td>Manchester City v Crystal Palace</td>
+            <td>2026-05-17</td>
+            <td>Manchester United v Nottingham Forest</td>
             <td>AWAY</td>
-            <td>14.0</td>
-            <td>11.7%</td>
-            <td>64%</td>
-            <td>£0.24</td>
-            <td>Betway</td>
+            <td>4.9</td>
+            <td>36.6%</td>
+            <td>79%</td>
+            <td>£1.02</td>
+            <td>Sky Bet</td>
             <td><button class="bet-btn" data-idx="1" onclick="toggleBet(this)">No</button></td>
         </tr>
         <tr id="prow-2">
             <td>2026-05-13</td>
             <td>Manchester City v Crystal Palace</td>
-            <td>DRAW</td>
-            <td>7.5</td>
-            <td>20.5%</td>
-            <td>54%</td>
-            <td>£0.41</td>
+            <td>AWAY</td>
+            <td>14.0</td>
+            <td>11.7%</td>
+            <td>63%</td>
+            <td>£0.24</td>
             <td>Betway</td>
             <td><button class="bet-btn" data-idx="2" onclick="toggleBet(this)">No</button></td>
         </tr>
         <tr id="prow-3">
+            <td>2026-05-13</td>
+            <td>Manchester City v Crystal Palace</td>
+            <td>DRAW</td>
+            <td>7.5</td>
+            <td>20.4%</td>
+            <td>53%</td>
+            <td>£0.41</td>
+            <td>Betway</td>
+            <td><button class="bet-btn" data-idx="3" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-4">
+            <td>2026-05-17</td>
+            <td>Wolverhampton Wanderers v Fulham</td>
+            <td>HOME</td>
+            <td>3.55</td>
+            <td>36.8%</td>
+            <td>31%</td>
+            <td>£0.60</td>
+            <td>Unibet</td>
+            <td><button class="bet-btn" data-idx="4" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-5">
             <td>2026-05-15</td>
             <td>Aston Villa v Liverpool</td>
             <td>HOME</td>
@@ -356,7 +378,51 @@
             <td>29%</td>
             <td>£0.69</td>
             <td>Unibet</td>
-            <td><button class="bet-btn" data-idx="3" onclick="toggleBet(this)">No</button></td>
+            <td><button class="bet-btn" data-idx="5" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-6">
+            <td>2026-05-17</td>
+            <td>Leeds United v Brighton and Hove Albion</td>
+            <td>HOME</td>
+            <td>3.0</td>
+            <td>42.6%</td>
+            <td>28%</td>
+            <td>£0.69</td>
+            <td>Betway</td>
+            <td><button class="bet-btn" data-idx="6" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-7">
+            <td>2026-05-17</td>
+            <td>Wolverhampton Wanderers v Fulham</td>
+            <td>UNDER_2_5</td>
+            <td>2.15</td>
+            <td>58.7%</td>
+            <td>26%</td>
+            <td>£1.14</td>
+            <td>Unibet</td>
+            <td><button class="bet-btn" data-idx="7" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-8">
+            <td>2026-05-17</td>
+            <td>Everton v Sunderland</td>
+            <td>AWAY</td>
+            <td>4.6</td>
+            <td>26.9%</td>
+            <td>24%</td>
+            <td>£0.33</td>
+            <td>Unibet</td>
+            <td><button class="bet-btn" data-idx="8" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-9">
+            <td>2026-05-17</td>
+            <td>Wolverhampton Wanderers v Fulham</td>
+            <td>DRAW</td>
+            <td>3.95</td>
+            <td>30.7%</td>
+            <td>21%</td>
+            <td>£0.36</td>
+            <td>Unibet</td>
+            <td><button class="bet-btn" data-idx="9" onclick="toggleBet(this)">No</button></td>
         </tr></tbody></table>
   </section>
 
@@ -420,7 +486,7 @@ function setAxis(mode) {
 }
 
 // ── Prospective bets ─────────────────────────────────────────────────────
-const prospectiveBets = [{"date": "2026-05-11", "home_team": "Tottenham Hotspur", "away_team": "Leeds United", "market": "away", "odds": 4.1, "model_prob": 0.4544, "ev": 0.863, "kelly": 1.39, "bookmaker": "William Hill"}, {"date": "2026-05-13", "home_team": "Manchester City", "away_team": "Crystal Palace", "market": "away", "odds": 14.0, "model_prob": 0.1169, "ev": 0.6364, "kelly": 0.24, "bookmaker": "Betway"}, {"date": "2026-05-13", "home_team": "Manchester City", "away_team": "Crystal Palace", "market": "draw", "odds": 7.5, "model_prob": 0.2048, "ev": 0.5358, "kelly": 0.41, "bookmaker": "Betway"}, {"date": "2026-05-15", "home_team": "Aston Villa", "away_team": "Liverpool", "market": "home", "odds": 3.1, "model_prob": 0.4159, "ev": 0.2892, "kelly": 0.69, "bookmaker": "Unibet"}];
+const prospectiveBets = [{"date": "2026-05-11", "home_team": "Tottenham Hotspur", "away_team": "Leeds United", "market": "away", "odds": 4.1, "model_prob": 0.4541, "ev": 0.8616, "kelly": 1.39, "bookmaker": "William Hill"}, {"date": "2026-05-17", "home_team": "Manchester United", "away_team": "Nottingham Forest", "market": "away", "odds": 4.9, "model_prob": 0.3657, "ev": 0.7918, "kelly": 1.02, "bookmaker": "Sky Bet"}, {"date": "2026-05-13", "home_team": "Manchester City", "away_team": "Crystal Palace", "market": "away", "odds": 14.0, "model_prob": 0.1166, "ev": 0.6323, "kelly": 0.24, "bookmaker": "Betway"}, {"date": "2026-05-13", "home_team": "Manchester City", "away_team": "Crystal Palace", "market": "draw", "odds": 7.5, "model_prob": 0.2044, "ev": 0.533, "kelly": 0.41, "bookmaker": "Betway"}, {"date": "2026-05-17", "home_team": "Wolverhampton Wanderers", "away_team": "Fulham", "market": "home", "odds": 3.55, "model_prob": 0.3683, "ev": 0.3075, "kelly": 0.6, "bookmaker": "Unibet"}, {"date": "2026-05-15", "home_team": "Aston Villa", "away_team": "Liverpool", "market": "home", "odds": 3.1, "model_prob": 0.4164, "ev": 0.291, "kelly": 0.69, "bookmaker": "Unibet"}, {"date": "2026-05-17", "home_team": "Leeds United", "away_team": "Brighton and Hove Albion", "market": "home", "odds": 3.0, "model_prob": 0.4259, "ev": 0.2778, "kelly": 0.69, "bookmaker": "Betway"}, {"date": "2026-05-17", "home_team": "Wolverhampton Wanderers", "away_team": "Fulham", "market": "under_2_5", "odds": 2.15, "model_prob": 0.5872, "ev": 0.2625, "kelly": 1.14, "bookmaker": "Unibet"}, {"date": "2026-05-17", "home_team": "Everton", "away_team": "Sunderland", "market": "away", "odds": 4.6, "model_prob": 0.2685, "ev": 0.2352, "kelly": 0.33, "bookmaker": "Unibet"}, {"date": "2026-05-17", "home_team": "Wolverhampton Wanderers", "away_team": "Fulham", "market": "draw", "odds": 3.95, "model_prob": 0.3073, "ev": 0.2138, "kelly": 0.36, "bookmaker": "Unibet"}];
 const selected = new Set();
 
 function toggleBet(btn) {

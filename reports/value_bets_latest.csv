@@ -1,5 +1,11 @@
 date,home_team,away_team,market,model_prob,bookmaker_odds,ev,kelly_stake_gbp,bookmaker
-2026-05-11 19:00:00+00:00,Tottenham Hotspur,Leeds United,away,0.4544,4.1,0.863,1.39,William Hill
-2026-05-13 19:00:00+00:00,Manchester City,Crystal Palace,away,0.1169,14.0,0.6364,0.24,Betway
-2026-05-13 19:00:00+00:00,Manchester City,Crystal Palace,draw,0.2048,7.5,0.5358,0.41,Betway
-2026-05-15 19:00:00+00:00,Aston Villa,Liverpool,home,0.4159,3.1,0.2892,0.69,Unibet
+2026-05-11 19:00:00+00:00,Tottenham Hotspur,Leeds United,away,0.4541,4.1,0.8616,1.39,William Hill
+2026-05-17 11:30:00+00:00,Manchester United,Nottingham Forest,away,0.3657,4.9,0.7918,1.02,Sky Bet
+2026-05-13 19:00:00+00:00,Manchester City,Crystal Palace,away,0.1166,14.0,0.6323,0.24,Betway
+2026-05-13 19:00:00+00:00,Manchester City,Crystal Palace,draw,0.2044,7.5,0.533,0.41,Betway
+2026-05-17 14:00:00+00:00,Wolverhampton Wanderers,Fulham,home,0.3683,3.55,0.3075,0.6,Unibet
+2026-05-15 19:00:00+00:00,Aston Villa,Liverpool,home,0.4164,3.1,0.291,0.69,Unibet
+2026-05-17 14:00:00+00:00,Leeds United,Brighton and Hove Albion,home,0.4259,3.0,0.2778,0.69,Betway
+2026-05-17 14:00:00+00:00,Wolverhampton Wanderers,Fulham,under_2_5,0.5872,2.15,0.2625,1.14,Unibet
+2026-05-17 14:00:00+00:00,Everton,Sunderland,away,0.2685,4.6,0.2352,0.33,Unibet
+2026-05-17 14:00:00+00:00,Wolverhampton Wanderers,Fulham,draw,0.3073,3.95,0.2138,0.36,Unibet
