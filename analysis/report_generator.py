@@ -1,5 +1,6 @@
 import json
 from datetime import date
+from fractions import Fraction
 from tabulate import tabulate
 
 import pandas as pd
@@ -8,15 +9,26 @@ import config
 
 _REPORT_COLUMNS = [
     'date', 'home_team', 'away_team', 'market',
-    'model_prob', 'bookmaker_odds', 'ev', 'kelly_stake_gbp', 'bookmaker',
+    'model_prob', 'bookmaker_odds', 'fractional_odds', 'ev', 'kelly_stake_gbp', 'bookmaker',
 ]
+
+
+def _to_fractional(decimal_odds):
+    """Convert decimal odds to UK fractional string, e.g. 11.0 → '10/1'."""
+    try:
+        f = Fraction(decimal_odds - 1).limit_denominator(100)
+        return f"{f.numerator}/{f.denominator}"
+    except Exception:
+        return ''
 
 
 def generate_report(value_bets_df):
     config.REPORTS_DIR.mkdir(parents=True, exist_ok=True)
     out_path = config.REPORTS_DIR / 'value_bets_latest.csv'
 
-    report_df = value_bets_df.reindex(columns=_REPORT_COLUMNS)
+    df = value_bets_df.copy()
+    df['fractional_odds'] = df['bookmaker_odds'].apply(_to_fractional)
+    report_df = df.reindex(columns=_REPORT_COLUMNS)
     report_df.to_csv(out_path, index=False)
 
     _validate_report(out_path)
@@ -49,8 +61,8 @@ def _print_console_report(df):
         display = df.copy()
         display['fixture'] = display['home_team'] + ' v ' + display['away_team']
         display = display[['fixture', 'market', 'model_prob', 'bookmaker_odds',
-                            'ev', 'kelly_stake_gbp', 'bookmaker']]
-        display.columns = ['Fixture', 'Market', 'Model %', 'Odds', 'EV', 'Kelly £', 'Bookmaker']
+                            'fractional_odds', 'ev', 'kelly_stake_gbp', 'bookmaker']]
+        display.columns = ['Fixture', 'Market', 'Model %', 'Odds (dec)', 'Odds (UK)', 'EV', 'Kelly £', 'Bookmaker']
         display['Model %'] = (display['Model %'] * 100).round(1).astype(str) + '%'
         display['EV'] = (display['EV'] * 100).round(1).astype(str) + '%'
         print(tabulate(display, headers='keys', tablefmt='github', showindex=False))
@@ -128,15 +140,16 @@ def generate_html_report(value_bets_df=None):
         bets_list = []
         for _, row in value_bets_df.iterrows():
             bets_list.append({
-                'date':       str(row['date'])[:10],
-                'home_team':  str(row['home_team']),
-                'away_team':  str(row['away_team']),
-                'market':     str(row['market']),
-                'odds':       round(float(row['bookmaker_odds']), 2),
-                'model_prob': round(float(row['model_prob']), 4),
-                'ev':         round(float(row['ev']), 4),
-                'kelly':      round(float(row['kelly_stake_gbp']), 2),
-                'bookmaker':  str(row.get('bookmaker', '') or ''),
+                'date':            str(row['date'])[:10],
+                'home_team':       str(row['home_team']),
+                'away_team':       str(row['away_team']),
+                'market':          str(row['market']),
+                'odds':            round(float(row['bookmaker_odds']), 2),
+                'fractional_odds': _to_fractional(float(row['bookmaker_odds'])),
+                'model_prob':      round(float(row['model_prob']), 4),
+                'ev':              round(float(row['ev']), 4),
+                'kelly':           round(float(row['kelly_stake_gbp']), 2),
+                'bookmaker':       str(row.get('bookmaker', '') or ''),
             })
         prospective_js = json.dumps(bets_list)
 
@@ -147,6 +160,7 @@ def generate_html_report(value_bets_df=None):
             <td>{b['date']}</td>
             <td>{b['home_team']} v {b['away_team']}</td>
             <td>{b['market'].upper()}</td>
+            <td>{b['fractional_odds']}</td>
             <td>{b['odds']}</td>
             <td>{b['model_prob']*100:.1f}%</td>
             <td>{ev_pct}</td>
@@ -304,7 +318,7 @@ def generate_html_report(value_bets_df=None):
 
   <section>
     <h2>Value Bets this Gameweek</h2>
-    {'<table><thead><tr><th>Date</th><th>Fixture</th><th>Market</th><th>Odds</th><th>Model %</th><th>EV</th><th>Kelly £</th><th>Bookmaker</th><th>Place?</th></tr></thead><tbody>' + prospective_rows + '</tbody></table>' if prospective_rows else '<p class="no-bets">No upcoming value bets found. Run python run_weekly.py to refresh.</p>'}
+    {'<table><thead><tr><th>Date</th><th>Fixture</th><th>Market</th><th>Odds (UK)</th><th>Odds (dec)</th><th>Model %</th><th>EV</th><th>Kelly £</th><th>Bookmaker</th><th>Place?</th></tr></thead><tbody>' + prospective_rows + '</tbody></table>' if prospective_rows else '<p class="no-bets">No upcoming value bets found. Run python run_weekly.py to refresh.</p>'}
   </section>
 
 </div>
