@@ -133,12 +133,16 @@ def generate_html_report(value_bets_df=None):
             <td>{row.get('notes', '') or ''}</td>
         </tr>"""
 
-    # prospective bets — embed as JSON for JS
+    # prospective bets — embed as JSON for JS (future fixtures only)
+    from datetime import datetime, timezone as _tz
+    _now = datetime.now(_tz.utc)
     prospective_js = '[]'
     prospective_rows = ''
     if value_bets_df is not None and not value_bets_df.empty:
         bets_list = []
         for _, row in value_bets_df.iterrows():
+            if pd.to_datetime(row['date'], utc=True) < _now:
+                continue
             bets_list.append({
                 'date':            str(row['date'])[:10],
                 'home_team':       str(row['home_team']),

@@ -365,91 +365,7 @@
 
   <section>
     <h2>Value Bets this Gameweek</h2>
-    <table><thead><tr><th>Date</th><th>Fixture</th><th>Market</th><th>Odds (UK)</th><th>Odds (dec)</th><th>Model %</th><th>EV</th><th>Kelly £</th><th>Bookmaker</th><th>Place?</th></tr></thead><tbody>
-        <tr id="prow-0">
-            <td>2026-05-10</td>
-            <td>Burnley v Aston Villa</td>
-            <td>HOME</td>
-            <td>19/4</td>
-            <td>5.75</td>
-            <td>26.0%</td>
-            <td>49%</td>
-            <td>£0.52</td>
-            <td>Unibet</td>
-            <td><button class="bet-btn" data-idx="0" onclick="toggleBet(this)">No</button></td>
-        </tr>
-        <tr id="prow-1">
-            <td>2026-05-09</td>
-            <td>Manchester City v Brentford</td>
-            <td>AWAY</td>
-            <td>8/1</td>
-            <td>9.0</td>
-            <td>16.1%</td>
-            <td>45%</td>
-            <td>£0.28</td>
-            <td>Betway</td>
-            <td><button class="bet-btn" data-idx="1" onclick="toggleBet(this)">No</button></td>
-        </tr>
-        <tr id="prow-2">
-            <td>2026-05-09</td>
-            <td>Brighton and Hove Albion v Wolverhampton Wanderers</td>
-            <td>DRAW</td>
-            <td>5/1</td>
-            <td>6.0</td>
-            <td>23.5%</td>
-            <td>41%</td>
-            <td>£0.41</td>
-            <td>Betway</td>
-            <td><button class="bet-btn" data-idx="2" onclick="toggleBet(this)">No</button></td>
-        </tr>
-        <tr id="prow-3">
-            <td>2026-05-10</td>
-            <td>West Ham United v Arsenal</td>
-            <td>HOME</td>
-            <td>22/5</td>
-            <td>5.4</td>
-            <td>25.0%</td>
-            <td>35%</td>
-            <td>£0.40</td>
-            <td>Unibet</td>
-            <td><button class="bet-btn" data-idx="3" onclick="toggleBet(this)">No</button></td>
-        </tr>
-        <tr id="prow-4">
-            <td>2026-05-09</td>
-            <td>Manchester City v Brentford</td>
-            <td>DRAW</td>
-            <td>19/4</td>
-            <td>5.75</td>
-            <td>22.9%</td>
-            <td>32%</td>
-            <td>£0.34</td>
-            <td>Betway</td>
-            <td><button class="bet-btn" data-idx="4" onclick="toggleBet(this)">No</button></td>
-        </tr>
-        <tr id="prow-5">
-            <td>2026-05-10</td>
-            <td>Burnley v Aston Villa</td>
-            <td>DRAW</td>
-            <td>16/5</td>
-            <td>4.2</td>
-            <td>29.5%</td>
-            <td>24%</td>
-            <td>£0.37</td>
-            <td>Unibet</td>
-            <td><button class="bet-btn" data-idx="5" onclick="toggleBet(this)">No</button></td>
-        </tr>
-        <tr id="prow-6">
-            <td>2026-05-09</td>
-            <td>Fulham v Bournemouth</td>
-            <td>HOME</td>
-            <td>7/4</td>
-            <td>2.75</td>
-            <td>44.8%</td>
-            <td>23%</td>
-            <td>£0.66</td>
-            <td>Unibet</td>
-            <td><button class="bet-btn" data-idx="6" onclick="toggleBet(this)">No</button></td>
-        </tr></tbody></table>
+    <p class="no-bets">No upcoming value bets found. Run python run_weekly.py to refresh.</p>
   </section>
 
 </div>
@@ -512,7 +428,7 @@ function setAxis(mode) {
 }
 
 // ── Prospective bets ─────────────────────────────────────────────────────
-const prospectiveBets = [{"date": "2026-05-10", "home_team": "Burnley", "away_team": "Aston Villa", "market": "home", "odds": 5.75, "fractional_odds": "19/4", "model_prob": 0.2596, "ev": 0.4927, "kelly": 0.52, "bookmaker": "Unibet"}, {"date": "2026-05-09", "home_team": "Manchester City", "away_team": "Brentford", "market": "away", "odds": 9.0, "fractional_odds": "8/1", "model_prob": 0.1606, "ev": 0.4456, "kelly": 0.28, "bookmaker": "Betway"}, {"date": "2026-05-09", "home_team": "Brighton and Hove Albion", "away_team": "Wolverhampton Wanderers", "market": "draw", "odds": 6.0, "fractional_odds": "5/1", "model_prob": 0.2353, "ev": 0.4118, "kelly": 0.41, "bookmaker": "Betway"}, {"date": "2026-05-10", "home_team": "West Ham United", "away_team": "Arsenal", "market": "home", "odds": 5.4, "fractional_odds": "22/5", "model_prob": 0.2501, "ev": 0.3506, "kelly": 0.4, "bookmaker": "Unibet"}, {"date": "2026-05-09", "home_team": "Manchester City", "away_team": "Brentford", "market": "draw", "odds": 5.75, "fractional_odds": "19/4", "model_prob": 0.2294, "ev": 0.319, "kelly": 0.34, "bookmaker": "Betway"}, {"date": "2026-05-10", "home_team": "Burnley", "away_team": "Aston Villa", "market": "draw", "odds": 4.2, "fractional_odds": "16/5", "model_prob": 0.2947, "ev": 0.2378, "kelly": 0.37, "bookmaker": "Unibet"}, {"date": "2026-05-09", "home_team": "Fulham", "away_team": "Bournemouth", "market": "home", "odds": 2.75, "fractional_odds": "7/4", "model_prob": 0.4475, "ev": 0.2306, "kelly": 0.66, "bookmaker": "Unibet"}];
+const prospectiveBets = [];
 const selected = new Set();
 
 function toggleBet(btn) {
