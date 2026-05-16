@@ -405,6 +405,22 @@ Returns: `total_bets`, `settled_bets`, `wins`, `losses`, `total_staked`, `total_
 
 ---
 
+## Planned improvements — next season
+
+### xG (Expected Goals) integration
+Currently the model uses actual goals scored/conceded to build team ratings. Swapping these for xG would remove noise from penalties, deflections, and goalkeeping outliers — giving a cleaner picture of a team's underlying quality.
+
+**Source:** [Understat](https://understat.com) — free, covers the Premier League, accessible via the `understat` Python package (no API key needed).
+
+**What changes:**
+- `pipelines/fetch_stats.py` — add `fetch_xg()` using the `understat` package
+- `models/poisson_model.py` — use xGH/xGA columns instead of actual goals in `compute_team_stats()`
+- Everything downstream (value detector, report, dashboard) stays the same
+
+**When:** Reset at the start of the 2026/27 season alongside the season data refresh.
+
+---
+
 ## Model limitations and responsible use
 
 - **Odds are a snapshot**: The report captures odds at the time `run_weekly.py` runs. Always verify the current price at the bookmaker before placing a bet.
