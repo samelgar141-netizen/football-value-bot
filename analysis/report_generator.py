@@ -124,6 +124,7 @@ def generate_html_report(value_bets_df=None):
             <td>{row['date_placed']}</td>
             <td>{row['home_team']} v {row['away_team']}</td>
             <td>{row['market'].upper()}</td>
+            <td>{_to_fractional(float(row['odds']))}</td>
             <td>{row['odds']}</td>
             <td>£{float(row['stake_gbp']):.2f}</td>
             <td>{ev_pct}</td>
@@ -295,7 +296,7 @@ def generate_html_report(value_bets_df=None):
     <table>
       <thead>
         <tr>
-          <th>Cohort</th><th>Date</th><th>Fixture</th><th>Market</th><th>Odds</th>
+          <th>Cohort</th><th>Date</th><th>Fixture</th><th>Market</th><th>Odds (UK)</th><th>Odds</th>
           <th>Stake</th><th>EV</th><th>Result</th><th>P/L</th>
           <th>Bankroll</th><th>Score</th>
         </tr>
