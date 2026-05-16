@@ -1,8 +1,9 @@
 date,home_team,away_team,market,model_prob,bookmaker_odds,fractional_odds,ev,kelly_stake_gbp,bookmaker
-2026-05-10 13:00:00+00:00,Burnley,Aston Villa,home,0.2596,5.75,19/4,0.4927,0.52,Unibet
-2026-05-09 16:30:00+00:00,Manchester City,Brentford,away,0.1606,9.0,8/1,0.4456,0.28,Betway
-2026-05-09 14:00:00+00:00,Brighton and Hove Albion,Wolverhampton Wanderers,draw,0.2353,6.0,5/1,0.4118,0.41,Betway
-2026-05-10 15:30:00+00:00,West Ham United,Arsenal,home,0.2501,5.4,22/5,0.3506,0.4,Unibet
-2026-05-09 16:30:00+00:00,Manchester City,Brentford,draw,0.2294,5.75,19/4,0.319,0.34,Betway
-2026-05-10 13:00:00+00:00,Burnley,Aston Villa,draw,0.2947,4.2,16/5,0.2378,0.37,Unibet
-2026-05-09 14:00:00+00:00,Fulham,Bournemouth,home,0.4475,2.75,7/4,0.2306,0.66,Unibet
+2026-05-17 11:30:00+00:00,Manchester United,Nottingham Forest,away,0.3683,4.9,39/10,0.8045,1.03,Sky Bet
+2026-05-18 19:00:00+00:00,Arsenal,Burnley,away,0.0688,25.0,24/1,0.7201,0.15,Sky Bet
+2026-05-18 19:00:00+00:00,Arsenal,Burnley,draw,0.1444,11.0,10/1,0.5889,0.29,Sky Bet
+2026-05-17 14:00:00+00:00,Wolverhampton Wanderers,Fulham,home,0.3661,3.55,51/20,0.2996,0.59,Unibet
+2026-05-17 14:00:00+00:00,Leeds United,Brighton and Hove Albion,home,0.4231,3.0,2/1,0.2694,0.67,Betway
+2026-05-17 14:00:00+00:00,Wolverhampton Wanderers,Fulham,under_2_5,0.5891,2.15,23/20,0.2667,1.16,Unibet
+2026-05-17 14:00:00+00:00,Everton,Sunderland,away,0.2705,4.6,18/5,0.2443,0.34,Unibet
+2026-05-17 14:00:00+00:00,Wolverhampton Wanderers,Fulham,draw,0.3079,3.95,59/20,0.2162,0.37,Unibet
