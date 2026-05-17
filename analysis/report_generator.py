@@ -9,7 +9,7 @@ import config
 
 _REPORT_COLUMNS = [
     'date', 'home_team', 'away_team', 'market',
-    'model_prob', 'bookmaker_odds', 'fractional_odds', 'ev', 'kelly_stake_gbp', 'bookmaker',
+    'model_prob', 'model_prob_pct', 'odds_prob_pct', 'fractional_odds', 'ev', 'kelly_stake_gbp', 'bookmaker',
 ]
 
 
@@ -28,6 +28,8 @@ def generate_report(value_bets_df):
 
     df = value_bets_df.copy()
     df['fractional_odds'] = df['bookmaker_odds'].apply(_to_fractional)
+    df['odds_prob_pct']   = (100 / df['bookmaker_odds']).round(1)
+    df['model_prob_pct']  = (df['model_prob'] * 100).round(1)
     report_df = df.reindex(columns=_REPORT_COLUMNS)
     report_df.to_csv(out_path, index=False)
 
@@ -60,10 +62,11 @@ def _print_console_report(df):
     else:
         display = df.copy()
         display['fixture'] = display['home_team'] + ' v ' + display['away_team']
-        display = display[['fixture', 'market', 'model_prob', 'bookmaker_odds',
-                            'fractional_odds', 'ev', 'kelly_stake_gbp', 'bookmaker']]
-        display.columns = ['Fixture', 'Market', 'Model %', 'Odds (dec)', 'Odds (UK)', 'EV', 'Kelly £', 'Bookmaker']
-        display['Model %'] = (display['Model %'] * 100).round(1).astype(str) + '%'
+        display = display[['fixture', 'market', 'model_prob_pct', 'fractional_odds',
+                            'odds_prob_pct', 'ev', 'kelly_stake_gbp', 'bookmaker']]
+        display.columns = ['Fixture', 'Market', 'Model %', 'Odds (UK)', 'Odds Prob %', 'EV', 'Kelly £', 'Bookmaker']
+        display['Model %']     = display['Model %'].astype(str) + '%'
+        display['Odds Prob %'] = display['Odds Prob %'].astype(str) + '%'
         display['EV'] = (display['EV'] * 100).round(1).astype(str) + '%'
         print(tabulate(display, headers='keys', tablefmt='github', showindex=False))
 
@@ -125,8 +128,9 @@ def generate_html_report(value_bets_df=None):
             <td>{row['home_team']} v {row['away_team']}</td>
             <td>{row['market'].upper()}</td>
             <td>{_to_fractional(float(row['odds']))}</td>
-            <td>{row['odds']}</td>
+            <td>{round(100/float(row['odds']),1)}%</td>
             <td>£{float(row['stake_gbp']):.2f}</td>
+            <td>{float(row['model_prob'])*100:.1f}%</td>
             <td>{ev_pct}</td>
             <td class="{result_class}">{row['result'].upper()}</td>
             <td class="{result_class}">{pl_str}</td>
@@ -150,6 +154,7 @@ def generate_html_report(value_bets_df=None):
                 'away_team':       str(row['away_team']),
                 'market':          str(row['market']),
                 'odds':            round(float(row['bookmaker_odds']), 2),
+                'odds_prob_pct':   round(100 / float(row['bookmaker_odds']), 1),
                 'fractional_odds': _to_fractional(float(row['bookmaker_odds'])),
                 'model_prob':      round(float(row['model_prob']), 4),
                 'ev':              round(float(row['ev']), 4),
@@ -166,7 +171,7 @@ def generate_html_report(value_bets_df=None):
             <td>{b['home_team']} v {b['away_team']}</td>
             <td>{b['market'].upper()}</td>
             <td>{b['fractional_odds']}</td>
-            <td>{b['odds']}</td>
+            <td>{b['odds_prob_pct']}%</td>
             <td>{b['model_prob']*100:.1f}%</td>
             <td>{ev_pct}</td>
             <td>£{b['kelly']:.2f}</td>
@@ -296,8 +301,8 @@ def generate_html_report(value_bets_df=None):
     <table>
       <thead>
         <tr>
-          <th>Cohort</th><th>Date</th><th>Fixture</th><th>Market</th><th>Odds (UK)</th><th>Odds</th>
-          <th>Stake</th><th>EV</th><th>Result</th><th>P/L</th>
+          <th>Cohort</th><th>Date</th><th>Fixture</th><th>Market</th><th>Odds (UK)</th><th>Odds Prob %</th>
+          <th>Stake</th><th>Model %</th><th>EV</th><th>Result</th><th>P/L</th>
           <th>Bankroll</th><th>Score</th>
         </tr>
       </thead>
@@ -323,7 +328,7 @@ def generate_html_report(value_bets_df=None):
 
   <section>
     <h2>Value Bets this Gameweek</h2>
-    {'<table><thead><tr><th>Date</th><th>Fixture</th><th>Market</th><th>Odds (UK)</th><th>Odds (dec)</th><th>Model %</th><th>EV</th><th>Kelly £</th><th>Bookmaker</th><th>Place?</th></tr></thead><tbody>' + prospective_rows + '</tbody></table>' if prospective_rows else '<p class="no-bets">No upcoming value bets found. Run python run_weekly.py to refresh.</p>'}
+    {'<table><thead><tr><th>Date</th><th>Fixture</th><th>Market</th><th>Odds (UK)</th><th>Odds Prob %</th><th>Model %</th><th>EV</th><th>Kelly £</th><th>Bookmaker</th><th>Place?</th></tr></thead><tbody>' + prospective_rows + '</tbody></table>' if prospective_rows else '<p class="no-bets">No upcoming value bets found. Run python run_weekly.py to refresh.</p>'}
   </section>
 
 </div>
