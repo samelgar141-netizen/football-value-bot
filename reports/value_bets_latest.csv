@@ -1,9 +1,3 @@
 date,home_team,away_team,market,model_prob,model_prob_pct,odds_prob_pct,fractional_odds,ev,kelly_stake_gbp,bookmaker
-2026-05-17 11:30:00+00:00,Manchester United,Nottingham Forest,away,0.3683,36.8,20.4,39/10,0.8045,1.03,Sky Bet
-2026-05-18 19:00:00+00:00,Arsenal,Burnley,away,0.0688,6.9,4.0,24/1,0.7201,0.15,Sky Bet
-2026-05-18 19:00:00+00:00,Arsenal,Burnley,draw,0.1444,14.4,9.1,10/1,0.5889,0.29,Sky Bet
-2026-05-17 14:00:00+00:00,Wolverhampton Wanderers,Fulham,home,0.3661,36.6,28.2,51/20,0.2996,0.59,Unibet
-2026-05-17 14:00:00+00:00,Leeds United,Brighton and Hove Albion,home,0.4231,42.3,33.3,2/1,0.2694,0.67,Betway
-2026-05-17 14:00:00+00:00,Wolverhampton Wanderers,Fulham,under_2_5,0.5891,58.9,46.5,23/20,0.2667,1.16,Unibet
-2026-05-17 14:00:00+00:00,Everton,Sunderland,away,0.2705,27.0,21.7,18/5,0.2443,0.34,Unibet
-2026-05-17 14:00:00+00:00,Wolverhampton Wanderers,Fulham,draw,0.3079,30.8,25.3,59/20,0.2162,0.37,Unibet
+2026-05-18 19:00:00+00:00,Arsenal,Burnley,away,0.0689,6.9,4.0,24/1,0.7227,0.15,Sky Bet
+2026-05-18 19:00:00+00:00,Arsenal,Burnley,draw,0.1447,14.5,9.1,10/1,0.5916,0.3,Sky Bet
