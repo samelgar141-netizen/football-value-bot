@@ -6,11 +6,16 @@ This document lists statistical improvements that could make the Poisson model m
 
 ## Priority 1 — High Impact
 
-### 1. xG (Expected Goals)
+### 1. xG (Expected Goals) — used alongside actual goals
 
-**What it is:** Instead of using actual goals scored/conceded to build team ratings, use Expected Goals — a measure of shot quality that estimates how many goals a team *should* have scored based on the positions and types of shots taken. Removes noise from lucky deflections, penalty-heavy runs, and exceptional goalkeeping.
+**What it is:** Expected Goals measures the quality of chances created — how many goals a team *should* have scored based on shot position, type, and difficulty. Rather than replacing actual goals, the model would use **both signals together**:
 
-**Example:** A team that scores 1.2 actual goals per game but generates 2.1 xG per game is genuinely strong — the model currently underrates them.
+- **xG** captures chance creation and defensive solidity — it reflects the underlying quality of a team's play stripped of finishing luck
+- **Actual goals** captures finishing ability and composure — a team consistently outscoring their xG is genuinely clinical, not just lucky
+
+Blending the two gives a more complete picture than either alone. A team with high xG but low actual goals may be wasteful in front of goal; a team outscoring their xG significantly may be riding form that will regress. Using both features lets the model distinguish between these cases.
+
+**Example:** Arsenal generate 2.1 xG per game but score 1.9 actual goals — slightly underperforming their chances but broadly consistent, suggesting a reliable rating. A team generating 1.0 xG but scoring 1.8 actual goals is likely overrated by a goals-only model and due to regress.
 
 | | |
 |---|---|
@@ -18,9 +23,9 @@ This document lists statistical improvements that could make the Poisson model m
 | **Source** | [Understat](https://understat.com) — covers Premier League, La Liga, Bundesliga, Serie A, Ligue 1, RFPL |
 | **Access method** | `understat` Python package (pip install understat) — no API key required, scrapes directly |
 | **Cost** | Free |
-| **What changes in code** | `pipelines/fetch_stats.py` — add `fetch_xg()` function; `models/poisson_model.py` — swap actual goals for xGH/xGA in `compute_team_stats()` |
+| **What changes in code** | `pipelines/fetch_stats.py` — add `fetch_xg()` function to pull xGH/xGA per match; `models/poisson_model.py` — blend xG and actual goals in `compute_team_stats()`, e.g. weighted average such as `(xG × 0.6) + (actual goals × 0.4)` |
 
-> **Note:** This is already planned for the start of the 2026/27 season — see README.
+> **Note:** This is already planned for the start of the 2026/27 season — see README. The blending weight (0.6/0.4 or similar) can be tuned once sufficient historical data is available to backtest against.
 
 ---
 
@@ -177,7 +182,7 @@ This document lists statistical improvements that could make the Poisson model m
 
 | Improvement | Impact | Data Available? | Source | Free? |
 |---|---|---|---|---|
-| xG (Expected Goals) | High | Yes | Understat (`understat` package) | Yes |
+| xG alongside actual goals | High | Yes | Understat (`understat` package) | Yes |
 | Shots on target ratio | High | Yes | football-data.org (already integrated) | Yes |
 | Injury / suspension data | High | Partial | football-data.org (limited) / API-Football (full) | Limited / ~£10/mo |
 | Recent form signal | Medium | Yes | Existing results CSV — code change only | Yes |
