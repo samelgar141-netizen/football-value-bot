@@ -231,6 +231,55 @@ The model's estimate of the true probability that this outcome occurs. Calculate
 
 7. **Market probability** — summing the right cells gives each market: draw = all diagonal cells (0-0, 1-1, 2-2…); over 2.5 = all cells where home + away goals > 2; BTTS = all cells where both scores ≥ 1.
 
+#### Example: Poisson score matrix — Arsenal v Manchester City (2024/25 season)
+
+The following is the actual output the model produced for this fixture using the complete 2024/25 season results.
+
+**Step 1 — Team ratings** (from `data/processed/team_stats.csv`):
+
+| Team | Role | Attack | Defence |
+|---|---|---|---|
+| Arsenal | Home | 1.09 | 0.86 |
+| Manchester City | Away | 0.72 | 1.18 |
+
+> Ratings above 1.0 are stronger than league average. Arsenal's strong home attack (1.09) combined with Man City's below-average away defence (1.18 = concedes 18% more than average) pushes Arsenal's expected goal tally up. Man City's away attack (0.72) is well below average, meaning they are unlikely to score.
+
+**Step 2 — Expected goals:**
+
+```
+Arsenal (home) = Arsenal home_attack × Man City away_defence × league avg home goals
+               = 1.09 × 1.18 × 1.50 = 1.93 goals expected
+
+Man City (away) = Man City away_attack × Arsenal home_defence × league avg away goals
+                = 0.72 × 0.86 × 1.06 = 0.65 goals expected
+```
+
+**Step 3 — Score matrix** (probability of each exact scoreline):
+
+| | **Man City 0** | **Man City 1** | **Man City 2** | **Man City 3** | **Man City 4** |
+|---|---|---|---|---|---|
+| **Arsenal 0** | 8.5% | 4.0% | 1.6% | 0.3% | 0.1% |
+| **Arsenal 1** | 13.7% | **10.5%** | 3.1% | 0.7% | 0.1% |
+| **Arsenal 2** | 14.1% | 9.2% | **3.0%** | 0.6% | 0.1% |
+| **Arsenal 3** | 9.1% | 5.9% | 1.9% | **0.4%** | 0.1% |
+| **Arsenal 4** | 4.4% | 2.8% | 0.9% | 0.2% | **0.0%** |
+| **Arsenal 5** | 1.7% | 1.1% | 0.4% | 0.1% | 0.0% |
+
+*Rows = Arsenal goals scored. Columns = Man City goals scored. Bold diagonal = draw scorelines (0-0, 1-1, 2-2…). Cells below 0.1% are omitted for clarity — the full grid runs to 10-10.*
+
+**Step 4 — Reading markets from the grid:**
+
+| Market | Which cells | Probability |
+|---|---|---|
+| Arsenal win | All cells where Arsenal goals > Man City goals (lower-left triangle) | **66.9%** |
+| Draw | Diagonal cells: 0-0, 1-1, 2-2, 3-3… | **22.4%** |
+| Man City win | All cells where Man City goals > Arsenal goals (upper-right triangle) | **10.7%** |
+| Under 2.5 goals | Cells where total goals ≤ 2: (0-0, 1-0, 0-1, 2-0, 1-1, 0-2) | **52.4%** |
+| Over 2.5 goals | All remaining cells — total goals ≥ 3 | **47.6%** |
+| BTTS — yes | All cells where both scores ≥ 1: (1-1, 1-2, 2-1, 2-2…) | **41.8%** |
+
+The most likely individual scoreline is **Arsenal 2-0 Man City** at 14.1% — yet it still happens fewer than 1 in 7 times, which illustrates why no single scoreline is ever a reliable bet. The value-detection logic ignores individual scorelines entirely and works only at the market level (home/draw/away/over/under/BTTS).
+
 ---
 
 ### EV — e.g. 59%
