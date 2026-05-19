@@ -107,8 +107,8 @@
     <section>
       <h2>Bankroll Over Time</h2>
       <div class="toggle">
-        <button id="btnDate" class="active" onclick="setAxis('date')">Date</button>
-        <button id="btnCohort" onclick="setAxis('cohort')">Betting Cohort</button>
+        <button id="btnDate" onclick="setAxis('date')">Date</button>
+        <button id="btnCohort" class="active" onclick="setAxis('cohort')">Betting Cohort</button>
       </div>
       <div class="chart-wrap">
         <canvas id="plChart"></canvas>
@@ -521,8 +521,8 @@ function showTab(name) {
 }
 
 // ── P&L chart ────────────────────────────────────────────────────────────
-const dateLabels   = ["Start", "2026-05-01", "2026-05-03", "2026-05-03", "2026-05-04", "2026-05-04", "2026-05-04", "2026-05-10", "2026-05-09", "2026-05-09", "2026-05-10", "2026-05-09", "2026-05-10", "2026-05-09", "2026-05-11", "2026-05-13", "2026-05-13", "2026-05-15", "2026-05-17", "2026-05-17", "2026-05-17", "2026-05-17", "2026-05-17", "2026-05-17"];
-const dateData     = [20.0, 19.82, 18.91, 18.59, 23.08, 22.8, 23.81, 23.29, 23.01, 22.6, 22.2, 21.86, 23.04, 22.38, 20.99, 20.75, 20.34, 21.79, 20.76, 20.17, 21.51, 22.84, 24.06, 25.15];
+const dateLabels   = ["Start", "2026-05-01", "2026-05-03", "2026-05-04", "2026-05-09", "2026-05-10", "2026-05-11", "2026-05-13", "2026-05-15", "2026-05-17"];
+const dateData     = [20.0, 19.82, 18.59, 23.81, 22.38, 23.04, 20.99, 20.34, 21.79, 25.15];
 const cohortLabels = ["Start", "BC 1", "BC 2", "BC 3", "BC 4"];
 const cohortData   = [20.0, 23.81, 22.38, 21.79, 25.15];
 
@@ -530,18 +530,30 @@ const ctx = document.getElementById('plChart').getContext('2d');
 const chart = new Chart(ctx, {
   type: 'line',
   data: {
-    labels: dateLabels,
-    datasets: [{
-      label: 'Bankroll (£)',
-      data: dateData,
-      borderColor: '#60a5fa',
-      backgroundColor: 'rgba(96,165,250,0.1)',
-      borderWidth: 2,
-      pointBackgroundColor: '#60a5fa',
-      pointRadius: 4,
-      tension: 0.3,
-      fill: true,
-    }]
+    labels: cohortLabels,
+    datasets: [
+      {
+        label: 'Bankroll (£)',
+        data: cohortData,
+        borderColor: '#60a5fa',
+        backgroundColor: 'rgba(96,165,250,0.1)',
+        borderWidth: 2,
+        pointBackgroundColor: '#60a5fa',
+        pointRadius: 4,
+        tension: 0.3,
+        fill: true,
+      },
+      {
+        label: 'Starting Bankroll',
+        data: Array(cohortLabels.length).fill(20),
+        borderColor: '#ef4444',
+        borderWidth: 1.5,
+        borderDash: [6, 3],
+        pointRadius: 0,
+        fill: false,
+        tension: 0,
+      },
+    ]
   },
   options: {
     responsive: true,
@@ -552,18 +564,21 @@ const chart = new Chart(ctx, {
       y: {
         ticks: { color: '#94a3b8', callback: v => '£' + v.toFixed(2) },
         grid: { color: '#334155' },
-        beginAtZero: false,
+        min: 0,
       }
     }
   }
 });
 
 function setAxis(mode) {
-  chart.data.labels = mode === 'date' ? dateLabels : cohortLabels;
-  chart.data.datasets[0].data = mode === 'date' ? dateData : cohortData;
+  const isDate = mode === 'date';
+  const labels = isDate ? dateLabels : cohortLabels;
+  chart.data.labels = labels;
+  chart.data.datasets[0].data = isDate ? dateData : cohortData;
+  chart.data.datasets[1].data = Array(labels.length).fill(20);
   chart.update();
-  document.getElementById('btnDate').classList.toggle('active', mode === 'date');
-  document.getElementById('btnCohort').classList.toggle('active', mode === 'cohort');
+  document.getElementById('btnDate').classList.toggle('active', isDate);
+  document.getElementById('btnCohort').classList.toggle('active', !isDate);
 }
 
 // ── Cohort bar chart ─────────────────────────────────────────────────────

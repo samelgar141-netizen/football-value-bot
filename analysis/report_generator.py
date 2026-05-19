@@ -100,9 +100,12 @@ def generate_html_report(value_bets_df=None):
     # chart data — date view: one point per bet; cohort view: one point per cohort
     chart_date_labels = ['Start']
     chart_date_values = [float(config.BANKROLL)]
-    for _, row in settled.iterrows():
-        chart_date_labels.append(str(row['date_placed'])[:10])
-        chart_date_values.append(round(float(row['running_bankroll']), 2))
+    if not settled.empty:
+        _daily = settled.copy()
+        _daily['_date'] = _daily['date_placed'].astype(str).str[:10]
+        for _d, _br in _daily.groupby('_date', sort=True)['running_bankroll'].last().items():
+            chart_date_labels.append(_d)
+            chart_date_values.append(round(float(_br), 2))
 
     chart_cohort_labels = ['Start']
     chart_cohort_values = [float(config.BANKROLL)]
@@ -309,8 +312,8 @@ def generate_html_report(value_bets_df=None):
     <section>
       <h2>Bankroll Over Time</h2>
       <div class="toggle">
-        <button id="btnDate" class="active" onclick="setAxis('date')">Date</button>
-        <button id="btnCohort" onclick="setAxis('cohort')">Betting Cohort</button>
+        <button id="btnDate" onclick="setAxis('date')">Date</button>
+        <button id="btnCohort" class="active" onclick="setAxis('cohort')">Betting Cohort</button>
       </div>
       <div class="chart-wrap">
         <canvas id="plChart"></canvas>
@@ -387,18 +390,30 @@ const ctx = document.getElementById('plChart').getContext('2d');
 const chart = new Chart(ctx, {{
   type: 'line',
   data: {{
-    labels: dateLabels,
-    datasets: [{{
-      label: 'Bankroll (£)',
-      data: dateData,
-      borderColor: '#60a5fa',
-      backgroundColor: 'rgba(96,165,250,0.1)',
-      borderWidth: 2,
-      pointBackgroundColor: '#60a5fa',
-      pointRadius: 4,
-      tension: 0.3,
-      fill: true,
-    }}]
+    labels: cohortLabels,
+    datasets: [
+      {{
+        label: 'Bankroll (£)',
+        data: cohortData,
+        borderColor: '#60a5fa',
+        backgroundColor: 'rgba(96,165,250,0.1)',
+        borderWidth: 2,
+        pointBackgroundColor: '#60a5fa',
+        pointRadius: 4,
+        tension: 0.3,
+        fill: true,
+      }},
+      {{
+        label: 'Starting Bankroll',
+        data: Array(cohortLabels.length).fill({config.BANKROLL}),
+        borderColor: '#ef4444',
+        borderWidth: 1.5,
+        borderDash: [6, 3],
+        pointRadius: 0,
+        fill: false,
+        tension: 0,
+      }},
+    ]
   }},
   options: {{
     responsive: true,
@@ -409,18 +424,21 @@ const chart = new Chart(ctx, {{
       y: {{
         ticks: {{ color: '#94a3b8', callback: v => '£' + v.toFixed(2) }},
         grid: {{ color: '#334155' }},
-        beginAtZero: false,
+        min: 0,
       }}
     }}
   }}
 }});
 
 function setAxis(mode) {{
-  chart.data.labels = mode === 'date' ? dateLabels : cohortLabels;
-  chart.data.datasets[0].data = mode === 'date' ? dateData : cohortData;
+  const isDate = mode === 'date';
+  const labels = isDate ? dateLabels : cohortLabels;
+  chart.data.labels = labels;
+  chart.data.datasets[0].data = isDate ? dateData : cohortData;
+  chart.data.datasets[1].data = Array(labels.length).fill({config.BANKROLL});
   chart.update();
-  document.getElementById('btnDate').classList.toggle('active', mode === 'date');
-  document.getElementById('btnCohort').classList.toggle('active', mode === 'cohort');
+  document.getElementById('btnDate').classList.toggle('active', isDate);
+  document.getElementById('btnCohort').classList.toggle('active', !isDate);
 }}
 
 // ── Cohort bar chart ─────────────────────────────────────────────────────
