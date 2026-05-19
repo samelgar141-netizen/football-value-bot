@@ -182,6 +182,14 @@ def auto_settle_bets(results_df):
             won = away_goals > home_goals
         elif market == 'draw':
             won = home_goals == away_goals
+        elif market == 'over_2_5':
+            won = (home_goals + away_goals) > 2
+        elif market == 'under_2_5':
+            won = (home_goals + away_goals) <= 2
+        elif market == 'btts_yes':
+            won = home_goals > 0 and away_goals > 0
+        elif market == 'btts_no':
+            won = home_goals == 0 or away_goals == 0
         else:
             continue
 
