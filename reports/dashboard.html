@@ -60,6 +60,8 @@
                   padding: 1rem 1.2rem; margin-bottom: 1.5rem; font-size: 0.85rem; color: #93c5fd; }
   .instruction code { background: #0f172a; padding: 0.1rem 0.4rem; border-radius: 4px;
                        font-family: monospace; color: #e2e8f0; }
+  .chart-row { display: flex; gap: 1rem; margin-bottom: 2rem; }
+  .chart-row section { flex: 1; margin-bottom: 0; }
 </style>
 </head>
 <body>
@@ -101,16 +103,29 @@
     </div>
   </div>
 
-  <section>
-    <h2>Bankroll Over Time</h2>
-    <div class="toggle">
-      <button id="btnDate" class="active" onclick="setAxis('date')">Date</button>
-      <button id="btnCohort" onclick="setAxis('cohort')">Betting Cohort</button>
-    </div>
-    <div class="chart-wrap">
-      <canvas id="plChart"></canvas>
-    </div>
-  </section>
+  <div class="chart-row">
+    <section>
+      <h2>Bankroll Over Time</h2>
+      <div class="toggle">
+        <button id="btnDate" class="active" onclick="setAxis('date')">Date</button>
+        <button id="btnCohort" onclick="setAxis('cohort')">Betting Cohort</button>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="plChart"></canvas>
+      </div>
+    </section>
+
+    <section>
+      <h2>Bets by Cohort</h2>
+      <div class="toggle">
+        <button id="btnVol" class="active" onclick="setBarAxis('volume')">Volume</button>
+        <button id="btnVal" onclick="setBarAxis('value')">Value (£)</button>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="barChart"></canvas>
+      </div>
+    </section>
+  </div>
 
   <section>
     <h2>Settled Bets</h2>
@@ -549,6 +564,62 @@ function setAxis(mode) {
   chart.update();
   document.getElementById('btnDate').classList.toggle('active', mode === 'date');
   document.getElementById('btnCohort').classList.toggle('active', mode === 'cohort');
+}
+
+// ── Cohort bar chart ─────────────────────────────────────────────────────
+const barCohorts     = ["BC 1", "BC 2", "BC 3", "BC 4"];
+const barWinsCount   = [2, 1, 1, 4];
+const barLossesCount = [4, 6, 3, 2];
+const barWinsValue   = [1.41, 0.37, 0.69, 2.54];
+const barLossesValue = [1.69, 2.61, 2.04, 1.62];
+
+const barCtx = document.getElementById('barChart').getContext('2d');
+const barChart = new Chart(barCtx, {
+  type: 'bar',
+  data: {
+    labels: barCohorts,
+    datasets: [
+      {
+        label: 'Won',
+        data: barWinsCount,
+        backgroundColor: 'rgba(34,197,94,0.7)',
+        borderColor: '#22c55e',
+        borderWidth: 1,
+      },
+      {
+        label: 'Lost',
+        data: barLossesCount,
+        backgroundColor: 'rgba(239,68,68,0.7)',
+        borderColor: '#ef4444',
+        borderWidth: 1,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { labels: { color: '#94a3b8', padding: 16 } },
+    },
+    scales: {
+      x: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } },
+      y: {
+        ticks: { color: '#94a3b8' },
+        grid: { color: '#334155' },
+        beginAtZero: true,
+      },
+    },
+  },
+});
+
+function setBarAxis(mode) {
+  const isVol = mode === 'volume';
+  barChart.data.datasets[0].data = isVol ? barWinsCount   : barWinsValue;
+  barChart.data.datasets[1].data = isVol ? barLossesCount : barLossesValue;
+  barChart.options.scales.y.ticks.callback = isVol ? v => v : v => '£' + v.toFixed(2);
+  barChart.update();
+  document.getElementById('btnVol').classList.toggle('active', isVol);
+  document.getElementById('btnVal').classList.toggle('active', !isVol);
 }
 
 // ── Prospective bets ─────────────────────────────────────────────────────

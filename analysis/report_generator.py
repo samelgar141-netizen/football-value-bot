@@ -113,6 +113,24 @@ def generate_html_report(value_bets_df=None):
             chart_cohort_labels.append(f"BC {int(cohort_num)}")
             chart_cohort_values.append(round(float(group.iloc[-1]['running_bankroll']), 2))
 
+    # per-cohort bar chart data (wins/losses by count and by staked value)
+    bar_cohort_labels = []
+    bar_wins_count    = []
+    bar_losses_count  = []
+    bar_wins_value    = []
+    bar_losses_value  = []
+    if not settled.empty and 'betting_cohort' in settled.columns:
+        for cohort_num, group in settled.groupby(
+            pd.to_numeric(settled['betting_cohort'], errors='coerce'), sort=True
+        ):
+            wins_g   = group[group['result'] == 'win']
+            losses_g = group[group['result'] == 'loss']
+            bar_cohort_labels.append(f"BC {int(cohort_num)}")
+            bar_wins_count.append(int(len(wins_g)))
+            bar_losses_count.append(int(len(losses_g)))
+            bar_wins_value.append(round(float(wins_g['stake_gbp'].sum()), 2))
+            bar_losses_value.append(round(float(losses_g['stake_gbp'].sum()), 2))
+
     # settled bets table rows
     settled_rows = ''
     for _, row in settled.iterrows():
@@ -244,6 +262,8 @@ def generate_html_report(value_bets_df=None):
                   padding: 1rem 1.2rem; margin-bottom: 1.5rem; font-size: 0.85rem; color: #93c5fd; }}
   .instruction code {{ background: #0f172a; padding: 0.1rem 0.4rem; border-radius: 4px;
                        font-family: monospace; color: #e2e8f0; }}
+  .chart-row {{ display: flex; gap: 1rem; margin-bottom: 2rem; }}
+  .chart-row section {{ flex: 1; margin-bottom: 0; }}
 </style>
 </head>
 <body>
@@ -285,16 +305,29 @@ def generate_html_report(value_bets_df=None):
     </div>
   </div>
 
-  <section>
-    <h2>Bankroll Over Time</h2>
-    <div class="toggle">
-      <button id="btnDate" class="active" onclick="setAxis('date')">Date</button>
-      <button id="btnCohort" onclick="setAxis('cohort')">Betting Cohort</button>
-    </div>
-    <div class="chart-wrap">
-      <canvas id="plChart"></canvas>
-    </div>
-  </section>
+  <div class="chart-row">
+    <section>
+      <h2>Bankroll Over Time</h2>
+      <div class="toggle">
+        <button id="btnDate" class="active" onclick="setAxis('date')">Date</button>
+        <button id="btnCohort" onclick="setAxis('cohort')">Betting Cohort</button>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="plChart"></canvas>
+      </div>
+    </section>
+
+    <section>
+      <h2>Bets by Cohort</h2>
+      <div class="toggle">
+        <button id="btnVol" class="active" onclick="setBarAxis('volume')">Volume</button>
+        <button id="btnVal" onclick="setBarAxis('value')">Value (£)</button>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="barChart"></canvas>
+      </div>
+    </section>
+  </div>
 
   <section>
     <h2>Settled Bets</h2>
@@ -388,6 +421,62 @@ function setAxis(mode) {{
   chart.update();
   document.getElementById('btnDate').classList.toggle('active', mode === 'date');
   document.getElementById('btnCohort').classList.toggle('active', mode === 'cohort');
+}}
+
+// ── Cohort bar chart ─────────────────────────────────────────────────────
+const barCohorts     = {json.dumps(bar_cohort_labels)};
+const barWinsCount   = {json.dumps(bar_wins_count)};
+const barLossesCount = {json.dumps(bar_losses_count)};
+const barWinsValue   = {json.dumps(bar_wins_value)};
+const barLossesValue = {json.dumps(bar_losses_value)};
+
+const barCtx = document.getElementById('barChart').getContext('2d');
+const barChart = new Chart(barCtx, {{
+  type: 'bar',
+  data: {{
+    labels: barCohorts,
+    datasets: [
+      {{
+        label: 'Won',
+        data: barWinsCount,
+        backgroundColor: 'rgba(34,197,94,0.7)',
+        borderColor: '#22c55e',
+        borderWidth: 1,
+      }},
+      {{
+        label: 'Lost',
+        data: barLossesCount,
+        backgroundColor: 'rgba(239,68,68,0.7)',
+        borderColor: '#ef4444',
+        borderWidth: 1,
+      }},
+    ]
+  }},
+  options: {{
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {{
+      legend: {{ labels: {{ color: '#94a3b8', padding: 16 }} }},
+    }},
+    scales: {{
+      x: {{ ticks: {{ color: '#94a3b8' }}, grid: {{ color: '#1e293b' }} }},
+      y: {{
+        ticks: {{ color: '#94a3b8' }},
+        grid: {{ color: '#334155' }},
+        beginAtZero: true,
+      }},
+    }},
+  }},
+}});
+
+function setBarAxis(mode) {{
+  const isVol = mode === 'volume';
+  barChart.data.datasets[0].data = isVol ? barWinsCount   : barWinsValue;
+  barChart.data.datasets[1].data = isVol ? barLossesCount : barLossesValue;
+  barChart.options.scales.y.ticks.callback = isVol ? v => v : v => '£' + v.toFixed(2);
+  barChart.update();
+  document.getElementById('btnVol').classList.toggle('active', isVol);
+  document.getElementById('btnVal').classList.toggle('active', !isVol);
 }}
 
 // ── Prospective bets ─────────────────────────────────────────────────────
