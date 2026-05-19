@@ -26,6 +26,12 @@ def generate_report(value_bets_df):
     config.REPORTS_DIR.mkdir(parents=True, exist_ok=True)
     out_path = config.REPORTS_DIR / 'value_bets_latest.csv'
 
+    if value_bets_df is None or value_bets_df.empty or 'bookmaker_odds' not in value_bets_df.columns:
+        pd.DataFrame(columns=_REPORT_COLUMNS).to_csv(out_path, index=False)
+        _validate_report(out_path)
+        _print_console_report(pd.DataFrame(columns=_REPORT_COLUMNS))
+        return out_path
+
     df = value_bets_df.copy()
     df['fractional_odds'] = df['bookmaker_odds'].apply(_to_fractional)
     df['odds_prob_pct']   = (100 / df['bookmaker_odds']).round(1)
