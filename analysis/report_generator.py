@@ -131,8 +131,8 @@ def generate_html_report(value_bets_df=None):
             bar_cohort_labels.append(f"BC {int(cohort_num)}")
             bar_wins_count.append(int(len(wins_g)))
             bar_losses_count.append(int(len(losses_g)))
-            bar_wins_value.append(round(float(wins_g['stake_gbp'].sum()), 2))
-            bar_losses_value.append(round(float(losses_g['stake_gbp'].sum()), 2))
+            bar_wins_value.append(round(float(wins_g['profit_loss'].sum()), 2))
+            bar_losses_value.append(round(abs(float(losses_g['profit_loss'].sum())), 2))
 
     # settled bets table rows
     settled_rows = ''
@@ -324,7 +324,7 @@ def generate_html_report(value_bets_df=None):
       <h2>Bets by Cohort</h2>
       <div class="toggle">
         <button id="btnVol" class="active" onclick="setBarAxis('volume')">Volume</button>
-        <button id="btnVal" onclick="setBarAxis('value')">Value (£)</button>
+        <button id="btnVal" onclick="setBarAxis('value')">Profit/Loss (£)</button>
       </div>
       <div class="chart-wrap">
         <canvas id="barChart"></canvas>

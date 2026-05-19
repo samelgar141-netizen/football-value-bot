@@ -119,7 +119,7 @@
       <h2>Bets by Cohort</h2>
       <div class="toggle">
         <button id="btnVol" class="active" onclick="setBarAxis('volume')">Volume</button>
-        <button id="btnVal" onclick="setBarAxis('value')">Value (£)</button>
+        <button id="btnVal" onclick="setBarAxis('value')">Profit/Loss (£)</button>
       </div>
       <div class="chart-wrap">
         <canvas id="barChart"></canvas>
@@ -585,7 +585,7 @@ function setAxis(mode) {
 const barCohorts     = ["BC 1", "BC 2", "BC 3", "BC 4"];
 const barWinsCount   = [2, 1, 1, 4];
 const barLossesCount = [4, 6, 3, 2];
-const barWinsValue   = [1.41, 0.37, 0.69, 2.54];
+const barWinsValue   = [5.5, 1.18, 1.45, 4.98];
 const barLossesValue = [1.69, 2.61, 2.04, 1.62];
 
 const barCtx = document.getElementById('barChart').getContext('2d');
