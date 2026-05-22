@@ -66,7 +66,7 @@
 </head>
 <body>
 <h1>Football Value Bot</h1>
-<p class="subtitle">Generated 19 May 2026 &nbsp;|&nbsp; Starting bankroll: £20 &nbsp;|&nbsp; EV threshold: 20%</p>
+<p class="subtitle">Generated 22 May 2026 &nbsp;|&nbsp; Starting bankroll: £20 &nbsp;|&nbsp; EV threshold: 20%</p>
 
 <div class="tab-nav">
   <button class="tab-btn active" onclick="showTab('pl')">P&amp;L Dashboard</button>
@@ -504,7 +504,127 @@
 
   <section>
     <h2>Value Bets this Gameweek</h2>
-    <p class="no-bets">No upcoming value bets found. Run python run_weekly.py to refresh.</p>
+    <table><thead><tr><th>Date</th><th>Fixture</th><th>Market</th><th>Odds (UK)</th><th>Odds Prob %</th><th>Model %</th><th>EV</th><th>Kelly £</th><th>Bookmaker</th><th>Place?</th></tr></thead><tbody>
+        <tr id="prow-0">
+            <td>2026-05-24</td>
+            <td>Tottenham Hotspur v Everton</td>
+            <td>AWAY</td>
+            <td>3/1</td>
+            <td>25.0%</td>
+            <td>49.8%</td>
+            <td>99%</td>
+            <td>£1.65</td>
+            <td>William Hill</td>
+            <td><button class="bet-btn" data-idx="0" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-1">
+            <td>2026-05-24</td>
+            <td>Manchester City v Aston Villa</td>
+            <td>UNDER_2_5</td>
+            <td>23/10</td>
+            <td>30.3%</td>
+            <td>43.9%</td>
+            <td>45%</td>
+            <td>£0.98</td>
+            <td>Betway</td>
+            <td><button class="bet-btn" data-idx="1" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-2">
+            <td>2026-05-24</td>
+            <td>Crystal Palace v Arsenal</td>
+            <td>UNDER_2_5</td>
+            <td>6/5</td>
+            <td>45.5%</td>
+            <td>61.3%</td>
+            <td>35%</td>
+            <td>£1.45</td>
+            <td>Sky Bet</td>
+            <td><button class="bet-btn" data-idx="2" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-3">
+            <td>2026-05-24</td>
+            <td>Fulham v Newcastle United</td>
+            <td>UNDER_2_5</td>
+            <td>5/4</td>
+            <td>44.4%</td>
+            <td>59.7%</td>
+            <td>34%</td>
+            <td>£1.37</td>
+            <td>Unibet</td>
+            <td><button class="bet-btn" data-idx="3" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-4">
+            <td>2026-05-24</td>
+            <td>Brighton and Hove Albion v Manchester United</td>
+            <td>UNDER_2_5</td>
+            <td>29/20</td>
+            <td>40.8%</td>
+            <td>54.1%</td>
+            <td>33%</td>
+            <td>£1.12</td>
+            <td>Unibet</td>
+            <td><button class="bet-btn" data-idx="4" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-5">
+            <td>2026-05-24</td>
+            <td>Nottingham Forest v Bournemouth</td>
+            <td>UNDER_2_5</td>
+            <td>69/50</td>
+            <td>42.0%</td>
+            <td>55.1%</td>
+            <td>31%</td>
+            <td>£1.12</td>
+            <td>Paddy Power</td>
+            <td><button class="bet-btn" data-idx="5" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-6">
+            <td>2026-05-24</td>
+            <td>West Ham United v Leeds United</td>
+            <td>AWAY</td>
+            <td>3/1</td>
+            <td>25.0%</td>
+            <td>32.5%</td>
+            <td>30%</td>
+            <td>£0.50</td>
+            <td>Sky Bet</td>
+            <td><button class="bet-btn" data-idx="6" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-7">
+            <td>2026-05-24</td>
+            <td>Burnley v Wolverhampton Wanderers</td>
+            <td>UNDER_2_5</td>
+            <td>21/20</td>
+            <td>48.8%</td>
+            <td>63.3%</td>
+            <td>30%</td>
+            <td>£1.42</td>
+            <td>William Hill</td>
+            <td><button class="bet-btn" data-idx="7" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-8">
+            <td>2026-05-24</td>
+            <td>Fulham v Newcastle United</td>
+            <td>HOME</td>
+            <td>19/10</td>
+            <td>34.5%</td>
+            <td>43.8%</td>
+            <td>27%</td>
+            <td>£0.71</td>
+            <td>Unibet</td>
+            <td><button class="bet-btn" data-idx="8" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-9">
+            <td>2026-05-24</td>
+            <td>Manchester City v Aston Villa</td>
+            <td>DRAW</td>
+            <td>5/1</td>
+            <td>16.7%</td>
+            <td>20.9%</td>
+            <td>26%</td>
+            <td>£0.26</td>
+            <td>Betway</td>
+            <td><button class="bet-btn" data-idx="9" onclick="toggleBet(this)">No</button></td>
+        </tr></tbody></table>
   </section>
 
 </div>
@@ -638,7 +758,7 @@ function setBarAxis(mode) {
 }
 
 // ── Prospective bets ─────────────────────────────────────────────────────
-const prospectiveBets = [];
+const prospectiveBets = [{"date": "2026-05-24", "home_team": "Tottenham Hotspur", "away_team": "Everton", "market": "away", "odds": 4.0, "odds_prob_pct": 25.0, "fractional_odds": "3/1", "model_prob": 0.4976, "ev": 0.9903, "kelly": 1.65, "bookmaker": "William Hill"}, {"date": "2026-05-24", "home_team": "Manchester City", "away_team": "Aston Villa", "market": "under_2_5", "odds": 3.3, "odds_prob_pct": 30.3, "fractional_odds": "23/10", "model_prob": 0.4394, "ev": 0.4501, "kelly": 0.98, "bookmaker": "Betway"}, {"date": "2026-05-24", "home_team": "Crystal Palace", "away_team": "Arsenal", "market": "under_2_5", "odds": 2.2, "odds_prob_pct": 45.5, "fractional_odds": "6/5", "model_prob": 0.6131, "ev": 0.3489, "kelly": 1.45, "bookmaker": "Sky Bet"}, {"date": "2026-05-24", "home_team": "Fulham", "away_team": "Newcastle United", "market": "under_2_5", "odds": 2.25, "odds_prob_pct": 44.4, "fractional_odds": "5/4", "model_prob": 0.5966, "ev": 0.3423, "kelly": 1.37, "bookmaker": "Unibet"}, {"date": "2026-05-24", "home_team": "Brighton and Hove Albion", "away_team": "Manchester United", "market": "under_2_5", "odds": 2.45, "odds_prob_pct": 40.8, "fractional_odds": "29/20", "model_prob": 0.5412, "ev": 0.3259, "kelly": 1.12, "bookmaker": "Unibet"}, {"date": "2026-05-24", "home_team": "Nottingham Forest", "away_team": "Bournemouth", "market": "under_2_5", "odds": 2.38, "odds_prob_pct": 42.0, "fractional_odds": "69/50", "model_prob": 0.5506, "ev": 0.3104, "kelly": 1.12, "bookmaker": "Paddy Power"}, {"date": "2026-05-24", "home_team": "West Ham United", "away_team": "Leeds United", "market": "away", "odds": 4.0, "odds_prob_pct": 25.0, "fractional_odds": "3/1", "model_prob": 0.325, "ev": 0.2999, "kelly": 0.5, "bookmaker": "Sky Bet"}, {"date": "2026-05-24", "home_team": "Burnley", "away_team": "Wolverhampton Wanderers", "market": "under_2_5", "odds": 2.05, "odds_prob_pct": 48.8, "fractional_odds": "21/20", "model_prob": 0.6333, "ev": 0.2982, "kelly": 1.42, "bookmaker": "William Hill"}, {"date": "2026-05-24", "home_team": "Fulham", "away_team": "Newcastle United", "market": "home", "odds": 2.9, "odds_prob_pct": 34.5, "fractional_odds": "19/10", "model_prob": 0.4382, "ev": 0.2709, "kelly": 0.71, "bookmaker": "Unibet"}, {"date": "2026-05-24", "home_team": "Manchester City", "away_team": "Aston Villa", "market": "draw", "odds": 6.0, "odds_prob_pct": 16.7, "fractional_odds": "5/1", "model_prob": 0.2093, "ev": 0.2557, "kelly": 0.26, "bookmaker": "Betway"}];
 const selected = new Set();
 
 function toggleBet(btn) {
