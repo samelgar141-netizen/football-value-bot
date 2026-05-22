@@ -28,7 +28,7 @@ def fetch_odds():
     params = {
         'apiKey':     key,
         'regions':    _REGIONS,
-        'markets':    'h2h,totals,bttsPro',
+        'markets':    'h2h,totals',
         'oddsFormat': _ODDS_FORMAT,
         'bookmakers': ','.join(config.BOOKMAKERS),
     }
