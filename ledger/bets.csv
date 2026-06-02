@@ -22,3 +22,13 @@ c84de0e6-63bd-4df6-a7c5-f327fe531c17,2026-05-17,Wolverhampton Wanderers,Fulham,h
 6d3867c2-8070-46a8-b040-5e17067a7fc8,2026-05-17,Wolverhampton Wanderers,Fulham,under_2_5,2.15,1.16,0.5891,0.2667,4,win,1.33,22.84,1-1
 c17f2fc3-fdf2-4317-8790-adea28d22bab,2026-05-17,Everton,Sunderland,away,4.6,0.34,0.2705,0.2443,4,win,1.22,24.06,1-3
 da7d975f-acaf-4b8f-ae14-629d1f732c25,2026-05-17,Wolverhampton Wanderers,Fulham,draw,3.95,0.37,0.3079,0.2162,4,win,1.09,25.15,1-1
+3cf2c8f9-3001-4e8d-878f-8eeb33d7df8e,2026-05-24,Tottenham Hotspur,Everton,away,4.0,1.65,0.4976,0.9903,5,loss,-1.65,23.5,1-0
+7205c3b3-0191-4571-ac8e-99dfefd4b2ef,2026-05-24,Manchester City,Aston Villa,under_2_5,3.3,0.98,0.4394,0.4501,5,loss,-0.98,22.52,1-2
+ea30da14-c0f5-44b9-9142-8a24994e0381,2026-05-24,Crystal Palace,Arsenal,under_2_5,2.2,1.45,0.6131,0.3489,5,loss,-1.45,21.07,1-2
+05694cf4-9308-47b5-9ae8-27c4c427d74d,2026-05-24,Fulham,Newcastle United,under_2_5,2.25,1.37,0.5966,0.3423,5,win,1.71,22.78,2-0
+dda6fbfc-59a9-4edb-95cc-9dab21918566,2026-05-24,Brighton and Hove Albion,Manchester United,under_2_5,2.45,1.12,0.5412,0.3259,5,loss,-1.12,21.66,0-3
+53bdc906-f3bf-4796-a034-289ed4eb9aa6,2026-05-24,Nottingham Forest,Bournemouth,under_2_5,2.38,1.12,0.5506,0.3104,5,win,1.55,23.21,1-1
+69ea2251-b37d-440b-9bf7-9a562609ece7,2026-05-24,West Ham United,Leeds United,away,4.0,0.5,0.325,0.2999,5,loss,-0.5,22.71,3-0
+fd716c3c-3b15-459d-976a-31fadbae6481,2026-05-24,Burnley,Wolverhampton Wanderers,under_2_5,2.05,1.42,0.6333,0.2982,5,win,1.49,24.2,1-1
+8bf5bd72-a4ad-4fd6-99c2-d4ce01d64272,2026-05-24,Fulham,Newcastle United,home,2.9,0.71,0.4382,0.2709,5,win,1.35,25.55,2-0
+fdaec7d3-1766-4c27-8ea6-38553ef1358b,2026-05-24,Manchester City,Aston Villa,draw,6.0,0.26,0.2093,0.2557,5,loss,-0.26,25.29,1-2
