@@ -42,29 +42,85 @@
     .screenshot-box {
       border: 2px dashed var(--border);
       border-radius: 8px;
-      padding: 1em 1.5em;
+      padding: 0.5em 0.8em 0.4em;
       background: var(--surface);
-      margin: 0.8em auto;
-      max-width: 640px;
+      margin: 0.6em auto;
       text-align: center;
-    }
-    .screenshot-box .label {
-      color: var(--muted);
-      font-size: 0.65em;
-      font-family: monospace;
-      display: block;
-      margin-bottom: 0.3em;
-    }
-    .screenshot-box .desc {
-      color: var(--text);
-      font-size: 0.72em;
     }
     .screenshot-box img {
       max-width: 100%;
-      max-height: 280px;
+      max-height: 360px;
       border-radius: 6px;
       display: block;
       margin: 0 auto;
+      cursor: zoom-in;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+    .screenshot-box img:hover {
+      opacity: 0.9;
+      transform: scale(1.01);
+    }
+
+    .img-caption {
+      font-size: 0.58em;
+      color: var(--muted);
+      margin: 0.35em 0 0;
+      font-style: italic;
+      line-height: 1.4;
+    }
+
+    /* Lightbox overlay */
+    #lightbox-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.93);
+      z-index: 99999;
+      cursor: zoom-out;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    #lightbox-overlay.active { display: flex; }
+    #lightbox-overlay img {
+      max-width: 92vw;
+      max-height: 84vh;
+      border-radius: 8px;
+      box-shadow: 0 8px 60px rgba(0, 0, 0, 0.8);
+      object-fit: contain;
+      cursor: default;
+    }
+    #lightbox-caption {
+      color: var(--text);
+      font-size: 0.85em;
+      margin-top: 0.9em;
+      text-align: center;
+      max-width: 80vw;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      opacity: 0.85;
+    }
+    #lightbox-close {
+      position: fixed;
+      top: 1.2rem;
+      right: 1.6rem;
+      color: #fff;
+      font-size: 2em;
+      line-height: 1;
+      cursor: pointer;
+      background: none;
+      border: none;
+      opacity: 0.7;
+      transition: opacity 0.15s;
+    }
+    #lightbox-close:hover { opacity: 1; }
+    #lightbox-hint {
+      position: fixed;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--muted);
+      font-size: 0.72em;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
     }
 
     .stat-grid {
@@ -203,9 +259,14 @@
   <p class="subtitle">A statistical approach to identifying positive expected value<br>in Premier League betting markets</p>
   <br>
   <div class="screenshot-box">
-    <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/01-github-repo.png" alt="GitHub repo main page" style="max-width:100%;max-height:300px;border-radius:6px;">
+    <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/01-github-repo.png"
+         alt="GitHub repo main page"
+         class="lightbox-trigger"
+         data-caption="GitHub repository — project file structure showing all modules: pipelines/, models/, analysis/, ledger/, reports/"
+         style="max-width:100%;max-height:380px;border-radius:6px;">
+    <p class="img-caption">GitHub repo main page &mdash; full project structure visible in file tree</p>
   </div>
-  <p style="font-size:0.55em; color:var(--muted); margin-top:0.8em;">Season 2025/26 &middot; Premier League &middot; Python</p>
+  <p style="font-size:0.55em; color:var(--muted); margin-top:0.6em;">Season 2025/26 &middot; Premier League &middot; Python</p>
   <aside class="notes">
     Welcome. This presentation walks through a fully automated football value betting pipeline built in Python.
     We'll cover the problem we're solving, the statistical model, how we find value in the market, and the results from the 2025/26 season.
@@ -231,7 +292,12 @@
     </div>
     <div>
       <div class="screenshot-box">
-        <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/06-value-bets.png" alt="value_bets_latest.csv" style="max-width:100%;max-height:300px;border-radius:6px;">
+        <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/06-value-bets.png"
+             alt="value_bets_latest.csv showing EV column"
+             class="lightbox-trigger"
+             data-caption="value_bets_latest.csv — GW38 value bets ranked by EV, showing model probability, bookmaker odds, vig-adjusted implied probability, and Kelly stake"
+             style="max-width:100%;max-height:360px;border-radius:6px;">
+        <p class="img-caption">value_bets_latest.csv &mdash; GW38 bets with model probability, EV, and bookmaker columns</p>
       </div>
     </div>
   </div>
@@ -258,7 +324,12 @@
     </div>
     <div>
       <div class="screenshot-box">
-        <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/02-pipeline-output.png" alt="Pipeline terminal output" style="max-width:100%;max-height:300px;border-radius:6px;">
+        <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/02-pipeline-output.png"
+             alt="Pipeline terminal output"
+             class="lightbox-trigger"
+             data-caption="Terminal output from python run_weekly.py — all 9 pipeline steps completing successfully in approximately 15 seconds"
+             style="max-width:100%;max-height:360px;border-radius:6px;">
+        <p class="img-caption">Terminal output from <code>python run_weekly.py</code> &mdash; all 9 steps completing in ~15 seconds</p>
       </div>
     </div>
   </div>
@@ -284,8 +355,13 @@
     <div class="pipeline-step"><span class="num">8</span>Generate CSV report<br><span style="color:var(--muted);">ranked by EV</span></div>
     <div class="pipeline-step"><span class="num">9</span>HTML dashboard<br><span style="color:var(--muted);">push to GitHub</span></div>
   </div>
-  <div class="screenshot-box" style="margin-top:0.5em;">
-    <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/03-folder-structure.png" alt="Repo folder structure" style="max-width:100%;max-height:220px;border-radius:6px;">
+  <div class="screenshot-box" style="margin-top:0.4em;">
+    <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/03-folder-structure.png"
+         alt="Repo folder structure"
+         class="lightbox-trigger"
+         data-caption="Repository folder structure on GitHub — data/, models/, pipelines/, analysis/, ledger/, reports/ and all supporting module files"
+         style="max-width:100%;max-height:250px;border-radius:6px;">
+    <p class="img-caption">Repo folder structure: data/, models/, pipelines/, analysis/, ledger/, reports/</p>
   </div>
   <aside class="notes">
     The pipeline is a linear sequence of 9 steps. Each step writes a CSV that the next step reads.
@@ -330,7 +406,12 @@
         <span style="color:var(--red);">&#9632;</span> Away win
       </p>
       <div class="screenshot-box" style="margin-top:0.4em;">
-        <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/04-score-matrix.png" alt="Score matrix from README" style="max-width:100%;max-height:180px;border-radius:6px;">
+        <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/04-score-matrix.png"
+             alt="Score matrix from README"
+             class="lightbox-trigger"
+             data-caption="Poisson score matrix example from README.md — Arsenal vs Man City 2024/25 worked example showing full 11×11 probability grid"
+             style="max-width:100%;max-height:200px;border-radius:6px;">
+        <p class="img-caption">README.md worked example &mdash; Arsenal vs Man City score matrix</p>
       </div>
     </div>
   </div>
@@ -372,8 +453,13 @@
       </tr>
     </tbody>
   </table>
-  <div class="screenshot-box" style="margin-top:0.6em;">
-    <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/05-team-stats.png" alt="team_stats.csv on GitHub" style="max-width:100%;max-height:220px;border-radius:6px;">
+  <div class="screenshot-box" style="margin-top:0.5em;">
+    <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/05-team-stats.png"
+         alt="team_stats.csv on GitHub"
+         class="lightbox-trigger"
+         data-caption="data/processed/team_stats.csv on GitHub — computed home/away attack and defence strength ratings for all 20 Premier League teams"
+         style="max-width:100%;max-height:280px;border-radius:6px;">
+    <p class="img-caption">data/processed/team_stats.csv &mdash; attack &amp; defence ratings for all 20 PL teams</p>
   </div>
   <aside class="notes">
     The model is deliberately conservative. We're using only goals data, but we apply four layers of statistical sophistication.
@@ -577,8 +663,13 @@ def predict_match(home, away, stats):
       <tr class="highlight-row"><td><strong>Total</strong></td><td></td><td><strong>33</strong></td><td></td><td><strong>12</strong></td><td><strong>21</strong></td></tr>
     </tbody>
   </table>
-  <div class="screenshot-box" style="margin-top:0.7em;">
-    <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/07-dashboard-settled.png" alt="Dashboard settled bets table" style="max-width:100%;max-height:220px;border-radius:6px;">
+  <div class="screenshot-box" style="margin-top:0.5em;">
+    <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/07-dashboard-settled.png"
+         alt="Dashboard settled bets table"
+         class="lightbox-trigger"
+         data-caption="Dashboard Settled Bets tab — all 33 bets across GW34–GW38 showing match results, bookmaker odds, model probability, EV, and individual P&L"
+         style="max-width:100%;max-height:260px;border-radius:6px;">
+    <p class="img-caption">Dashboard Settled Bets tab &mdash; all 33 bets with results, odds, model probability, and P&amp;L</p>
   </div>
   <aside class="notes">
     We ran 5 betting cohorts in the final 5 gameweeks of the 2025/26 season. This was a proof-of-concept test -- deliberately small stakes, real bets, real results.
@@ -616,12 +707,22 @@ def predict_match(home, away, stats):
       <div class="lbl">Best Cohort</div>
     </div>
   </div>
-  <div class="cols-2" style="margin-top:0.6em;">
+  <div class="cols-2" style="margin-top:0.5em;">
     <div class="screenshot-box">
-      <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/08-bankroll-chart.png" alt="Bankroll over time chart" style="max-width:100%;max-height:200px;border-radius:6px;">
+      <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/08-bankroll-chart.png"
+           alt="Bankroll over time chart"
+           class="lightbox-trigger"
+           data-caption="Bankroll Over Time chart (Betting Cohort view) — starting from £20, rising to £25.29 over GW34–GW38 with £20 reference line"
+           style="max-width:100%;max-height:230px;border-radius:6px;">
+      <p class="img-caption">Bankroll Over Time &mdash; £20 &rarr; £25.29 across five gameweeks</p>
     </div>
     <div class="screenshot-box">
-      <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/09-bar-chart.png" alt="Bets by cohort chart" style="max-width:100%;max-height:200px;border-radius:6px;">
+      <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/09-bar-chart.png"
+           alt="Bets by cohort chart"
+           class="lightbox-trigger"
+           data-caption="Bets by Cohort bar chart — wins and losses per betting cohort BC1–BC5, showing improving win rate in later gameweeks"
+           style="max-width:100%;max-height:230px;border-radius:6px;">
+      <p class="img-caption">Bets by Cohort &mdash; wins and losses per gameweek (BC1&ndash;BC5)</p>
     </div>
   </div>
   <aside class="notes">
@@ -697,8 +798,13 @@ def predict_match(home, away, stats):
       </ul>
     </div>
   </div>
-  <div class="screenshot-box" style="margin-top:0.7em;">
-    <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/10-improvements.png" alt="NEXT_STEP_IMPROVEMENTS.md" style="max-width:100%;max-height:220px;border-radius:6px;">
+  <div class="screenshot-box" style="margin-top:0.6em;">
+    <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/10-improvements.png"
+         alt="NEXT_STEP_IMPROVEMENTS.md"
+         class="lightbox-trigger"
+         data-caption="NEXT_STEP_IMPROVEMENTS.md on GitHub — full roadmap of planned model enhancements ranked by predictive impact, data availability, and cost"
+         style="max-width:100%;max-height:280px;border-radius:6px;">
+    <p class="img-caption">NEXT_STEP_IMPROVEMENTS.md &mdash; full model improvement roadmap ranked by impact and cost</p>
   </div>
   <aside class="notes">
     Elo ratings solve the cold-start problem -- early in the season we have few data points, so attack/defence ratings are noisy. Elo from previous seasons gives a prior that decays as new evidence arrives.
@@ -723,7 +829,12 @@ def predict_match(home, away, stats):
     </div>
     <div>
       <div class="screenshot-box">
-        <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/11-commit-history.png" alt="GitHub commit history" style="max-width:100%;max-height:300px;border-radius:6px;">
+        <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/11-commit-history.png"
+             alt="GitHub commit history"
+             class="lightbox-trigger"
+             data-caption="GitHub commit history — complete build timeline from project scaffold to end of 2025/26 season, showing all pipeline, model, and dashboard development"
+             style="max-width:100%;max-height:360px;border-radius:6px;">
+        <p class="img-caption">GitHub commit history &mdash; full build timeline from scaffold to season end</p>
       </div>
     </div>
   </div>
@@ -742,6 +853,14 @@ def predict_match(home, away, stats):
 </div>
 </div>
 
+<!-- Lightbox overlay -->
+<div id="lightbox-overlay">
+  <button id="lightbox-close" onclick="document.getElementById('lightbox-overlay').classList.remove('active')" aria-label="Close">&times;</button>
+  <img id="lightbox-img" src="" alt="" onclick="event.stopPropagation()">
+  <p id="lightbox-caption"></p>
+  <p id="lightbox-hint">Click anywhere to close &nbsp;&middot;&nbsp; Esc to close</p>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.0/dist/reveal.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.0/plugin/notes/notes.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.0/plugin/highlight/highlight.js"></script>
@@ -756,6 +875,31 @@ def predict_match(home, away, stats):
     margin: 0.04,
     plugins: [ RevealNotes, RevealHighlight ],
   });
+
+  // Lightbox
+  (function () {
+    var overlay = document.getElementById('lightbox-overlay');
+    var overlayImg = document.getElementById('lightbox-img');
+    var overlayCaption = document.getElementById('lightbox-caption');
+
+    document.querySelectorAll('.lightbox-trigger').forEach(function (img) {
+      img.addEventListener('click', function (e) {
+        e.stopPropagation();
+        overlayImg.src = this.src;
+        overlayImg.alt = this.alt;
+        overlayCaption.textContent = this.dataset.caption || this.alt;
+        overlay.classList.add('active');
+      });
+    });
+
+    overlay.addEventListener('click', function () {
+      overlay.classList.remove('active');
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') overlay.classList.remove('active');
+    });
+  })();
 </script>
 </body>
 </html>
