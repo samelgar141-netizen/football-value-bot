@@ -33,7 +33,8 @@
     .reveal h2 { font-size: 1.6em; border-bottom: 1px solid var(--border); padding-bottom: 0.2em; margin-bottom: 0.6em; }
     .reveal h3 { font-size: 1.15em; color: var(--yellow); }
 
-    .reveal p, .reveal li { font-size: 0.82em; line-height: 1.6; }
+    .reveal p { font-size: 0.82em; line-height: 1.6; }
+    .reveal li { font-size: 20px; line-height: 1.6; }
     .reveal ul { list-style: none; padding: 0; }
     .reveal ul li::before { content: "\25B8 "; color: var(--accent); }
 
@@ -126,18 +127,18 @@
     .stat-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 0.7em;
-      margin-top: 0.8em;
+      gap: 0.4em;
+      margin-top: 0.5em;
     }
     .stat-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 0.7em 0.5em;
+      padding: 0.4em 0.4em;
       text-align: center;
     }
-    .stat-card .val { font-size: 1.6em; font-weight: 700; color: var(--green); }
-    .stat-card .lbl { font-size: 0.6em; color: var(--muted); margin-top: 0.2em; }
+    .stat-card .val { font-size: 1.2em; font-weight: 700; color: var(--green); }
+    .stat-card .lbl { font-size: 0.55em; color: var(--muted); margin-top: 0.15em; }
 
     .reveal table {
       font-size: 0.68em;
@@ -180,6 +181,42 @@
       font-weight: 700;
       color: var(--accent);
       display: block;
+    }
+
+    .flow-chart { margin: 0.7em 0; }
+    .flow-row { display: flex; align-items: stretch; gap: 0; }
+    .flow-step-fc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.45em 0.3em;
+      font-size: 0.6em;
+      text-align: center;
+      flex: 1;
+      min-width: 0;
+    }
+    .flow-step-fc .num {
+      font-size: 1.4em;
+      font-weight: 700;
+      color: var(--accent);
+      display: block;
+      line-height: 1.2;
+    }
+    .flow-arrow-fc {
+      color: var(--accent);
+      font-size: 1.4em;
+      padding: 0 0.12em;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .flow-bend-fc {
+      text-align: right;
+      color: var(--accent);
+      font-size: 1.6em;
+      line-height: 1.0;
+      margin: 0.1em 0;
+      padding-right: 0.15em;
     }
 
     .score-matrix {
@@ -283,6 +320,7 @@
         <li class="fragment">Bookmakers build a systematic margin (vig) into every market &mdash; typically <strong>5&ndash;8%</strong></li>
         <li class="fragment">Traditional bettors rely on gut feel, form guides, or tipsters &mdash; largely random outcomes</li>
         <li class="fragment">The gap: if a bookmaker prices a home win at 2/1 (33% implied) but the true probability is <strong>45%</strong>, that&rsquo;s a mispricing worth exploiting repeatedly</li>
+        <li class="fragment">Bookmakers also shift odds based on <strong>volume of money placed</strong> &mdash; not just probability changes. Heavy one-sided betting moves the line, creating mispricings independent of the true probability</li>
         <li class="fragment" style="color: var(--green);">Over a large sample, positive expected value (EV) compounds into profit</li>
       </ul>
       <div class="example-box fragment" style="margin-top:0.8em;">
@@ -344,37 +382,44 @@
 <!-- Slide 4: Weekly Pipeline -->
 <section>
   <h2>The Weekly Pipeline</h2>
-  <div class="pipeline-grid">
-    <div class="pipeline-step"><span class="num">1</span>Fetch match results<br><span style="color:var(--muted);">football-data.org</span></div>
-    <div class="pipeline-step"><span class="num">2</span>Auto-settle pending bets<br><span style="color:var(--muted);">against finished results</span></div>
-    <div class="pipeline-step"><span class="num">3</span>Fetch upcoming fixtures<br><span style="color:var(--muted);">next 14 days</span></div>
-    <div class="pipeline-step"><span class="num">4</span>Fetch bookmaker odds<br><span style="color:var(--muted);">best price across 8 bookmakers</span></div>
-    <div class="pipeline-step"><span class="num">5</span>Compute team ratings<br><span style="color:var(--muted);">attack &amp; defence strengths</span></div>
-    <div class="pipeline-step"><span class="num">6</span>Predict all fixtures<br><span style="color:var(--muted);">score matrix per match</span></div>
-    <div class="pipeline-step"><span class="num">7</span>Find value bets<br><span style="color:var(--muted);">EV &gt; 20% threshold</span></div>
-    <div class="pipeline-step"><span class="num">8</span>Generate CSV report<br><span style="color:var(--muted);">ranked by EV</span></div>
-    <div class="pipeline-step"><span class="num">9</span>HTML dashboard<br><span style="color:var(--muted);">push to GitHub</span></div>
-  </div>
-  <div class="screenshot-box" style="margin-top:0.4em;">
-    <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/03-folder-structure.png"
-         alt="Repo folder structure"
-         class="lightbox-trigger"
-         data-caption="Repository folder structure on GitHub — data/, models/, pipelines/, analysis/, ledger/, reports/ and all supporting module files"
-         style="max-width:100%;max-height:250px;border-radius:6px;">
-    <p class="img-caption">Repo folder structure: data/, models/, pipelines/, analysis/, ledger/, reports/</p>
+  <div class="flow-chart">
+    <div class="flow-row">
+      <div class="flow-step-fc"><span class="num">1</span>Fetch results<br><span style="color:var(--muted);">football-data.org</span></div>
+      <span class="flow-arrow-fc">&rarr;</span>
+      <div class="flow-step-fc"><span class="num">2</span>Auto-settle bets<br><span style="color:var(--muted);">against results</span></div>
+      <span class="flow-arrow-fc">&rarr;</span>
+      <div class="flow-step-fc"><span class="num">3</span>Fetch fixtures<br><span style="color:var(--muted);">next 14 days</span></div>
+      <span class="flow-arrow-fc">&rarr;</span>
+      <div class="flow-step-fc"><span class="num">4</span>Fetch odds<br><span style="color:var(--muted);">8 bookmakers</span></div>
+      <span class="flow-arrow-fc">&rarr;</span>
+      <div class="flow-step-fc"><span class="num">5</span>Compute ratings<br><span style="color:var(--muted);">attack &amp; defence</span></div>
+    </div>
+    <div class="flow-bend-fc">&#x2193;</div>
+    <div class="flow-row">
+      <div class="flow-step-fc"><span class="num">6</span>Predict fixtures<br><span style="color:var(--muted);">score matrix</span></div>
+      <span class="flow-arrow-fc">&rarr;</span>
+      <div class="flow-step-fc"><span class="num">7</span>Find value bets<br><span style="color:var(--muted);">EV &gt; 20%</span></div>
+      <span class="flow-arrow-fc">&rarr;</span>
+      <div class="flow-step-fc"><span class="num">8</span>Generate CSV<br><span style="color:var(--muted);">ranked by EV</span></div>
+      <span class="flow-arrow-fc">&rarr;</span>
+      <div class="flow-step-fc"><span class="num">9</span>HTML dashboard<br><span style="color:var(--muted);">push to GitHub</span></div>
+      <span class="flow-arrow-fc">&rarr;</span>
+      <div class="flow-step-fc"><span class="num">10</span>Log bets placed<br><span style="color:var(--muted);">ledger.py</span></div>
+    </div>
   </div>
   <aside class="notes">
-    The pipeline is a linear sequence of 9 steps. Each step writes a CSV that the next step reads.
+    The pipeline is a linear sequence of 10 steps. Each step writes a CSV that the next step reads.
     Step 2 is an important automation: bets placed last week are automatically marked as won or lost
     by comparing them against the real results from football-data.org.
-    The 20% EV threshold in step 7 is configurable in config.py.
+    Step 10 is manual: after reviewing the value bets report, you log which bets you placed using ledger.py at the command prompt.
+    The 20% EV threshold in step 7 is configurable in config.py. The entire pipeline runs in ~15 seconds.
   </aside>
 </section>
 
 <!-- Slide 5: Why Poisson? -->
 <section>
   <h2>Why Poisson?</h2>
-  <div class="cols-65-35">
+  <div class="cols-2">
     <div>
       <ul>
         <li class="fragment">Football goals are rare, independent events &mdash; a textbook Poisson process</li>
@@ -386,31 +431,22 @@
         <li class="fragment">Build an 11&times;11 score matrix: every scoreline 0-0 to 10-10 with its probability</li>
         <li class="fragment">Sum cells to derive any market probability &mdash; home win, draw, over 2.5, BTTS, etc.</li>
       </ul>
+      <div class="example-box fragment" style="margin-top:0.5em; font-size:0.75em;">
+        <strong>Worked example &mdash; Tottenham (home) vs Everton (away)</strong><br>
+        <code style="font-size:0.88em;">home_attack(1.11) &times; away_defence(1.04) &times; avg(1.50) = &lambda;&nbsp;=&nbsp;1.73</code><br><br>
+        P(0) = (e<sup>&minus;1.73</sup> &times; 1.73<sup>0</sup>) / 0! = <strong>17.7%</strong><br>
+        P(1) = (e<sup>&minus;1.73</sup> &times; 1.73<sup>1</sup>) / 1! = <strong>30.6%</strong><br>
+        P(2) = (e<sup>&minus;1.73</sup> &times; 1.73<sup>2</sup>) / 2! = <strong>26.5%</strong><br>
+        <span style="color:var(--muted);">&lambda; computed independently for Everton &rarr; full 11&times;11 score matrix</span>
+      </div>
     </div>
     <div>
-      <p style="font-size:0.65em; color:var(--accent); margin-bottom:0.3em;">Score matrix (Arsenal vs Chelsea)</p>
-      <table class="score-matrix">
-        <thead>
-          <tr><th></th><th>0</th><th>1</th><th>2</th><th>3+</th></tr>
-        </thead>
-        <tbody>
-          <tr><th>0</th><td class="cell-away">7.2%</td><td class="cell-away">9.1%</td><td class="cell-away">5.7%</td><td class="cell-away">2.4%</td></tr>
-          <tr><th>1</th><td class="cell-home">10.8%</td><td class="cell-draw">13.6%</td><td class="cell-away">8.6%</td><td class="cell-away">3.6%</td></tr>
-          <tr><th>2</th><td class="cell-home">8.1%</td><td class="cell-home">10.2%</td><td class="cell-draw">6.4%</td><td class="cell-away">2.7%</td></tr>
-          <tr><th>3+</th><td class="cell-home">4.1%</td><td class="cell-home">5.1%</td><td class="cell-home">3.2%</td><td class="cell-draw">1.3%</td></tr>
-        </tbody>
-      </table>
-      <p style="font-size:0.5em; color:var(--muted); margin-top:0.3em;">
-        <span style="color:var(--green);">&#9632;</span> Home win &nbsp;
-        <span style="color:var(--yellow);">&#9632;</span> Draw &nbsp;
-        <span style="color:var(--red);">&#9632;</span> Away win
-      </p>
-      <div class="screenshot-box" style="margin-top:0.4em;">
+      <div class="screenshot-box">
         <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/04-score-matrix.png"
-             alt="Score matrix from README"
+             alt="Arsenal vs Man City score matrix"
              class="lightbox-trigger"
              data-caption="Poisson score matrix example from README.md — Arsenal vs Man City 2024/25 worked example showing full 11×11 probability grid"
-             style="max-width:100%;max-height:200px;border-radius:6px;">
+             style="max-width:100%;max-height:380px;border-radius:6px;">
         <p class="img-caption">README.md worked example &mdash; Arsenal vs Man City score matrix</p>
       </div>
     </div>
@@ -469,58 +505,6 @@
   </aside>
 </section>
 
-<!-- Slide 6b: What Could Be Added -->
-<section>
-  <h2>What Could Be Added to the Model</h2>
-  <p style="font-size:0.7em; color:var(--muted);">Additional raw signals that could feed into the expected goals (&lambda;) calculation</p>
-  <table>
-    <thead>
-      <tr><th>Feature</th><th>Predictive Value</th><th>In Current API?</th><th>Cost</th></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>xG (Expected Goals)</td>
-        <td>High &mdash; strips out finishing luck</td>
-        <td>No &mdash; needs Understat package</td>
-        <td><span class="tag-free">Free</span></td>
-      </tr>
-      <tr style="background:rgba(74,222,128,0.08);">
-        <td><strong style="color:var(--green);">Shots on Target</strong></td>
-        <td><strong>High &mdash; proxy for xG</strong></td>
-        <td><strong style="color:var(--green);">YES &mdash; already downloaded,<br>just not saved</strong></td>
-        <td><span class="tag-free">Free (same key)</span></td>
-      </tr>
-      <tr>
-        <td>Total Shots</td>
-        <td>Medium</td>
-        <td><span style="color:var(--green);">Yes &mdash; same API response</span></td>
-        <td><span class="tag-free">Free (same key)</span></td>
-      </tr>
-      <tr>
-        <td>Possession %</td>
-        <td>Low-Medium</td>
-        <td>No &mdash; not at free tier</td>
-        <td><span class="tag-paid">~&euro;9/mo upgrade</span></td>
-      </tr>
-      <tr>
-        <td>Touches in Opp. Box</td>
-        <td>Medium-High</td>
-        <td>No &mdash; event-level data (Opta/StatsBomb)</td>
-        <td><span class="tag-enterprise">Enterprise</span></td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="example-box" style="margin-top:0.7em;">
-    <strong style="color:var(--green);">Easiest win:</strong> Shots on target is already in the football-data.org match response &mdash; it&rsquo;s downloaded every week but not saved. One column added to <code>fetch_results()</code> unlocks it at zero cost. xG requires a second free source (Understat) but gives the biggest accuracy improvement.
-  </div>
-  <aside class="notes">
-    This slide answers a key question: what do we need to do to improve the model?
-    Shots on target is the lowest-hanging fruit. The data is already arriving in our API response -- we just discard it. Adding one column to the pipeline gives us a quality proxy for chance creation.
-    xG is the gold standard input for Poisson football models. It removes the noise of finishing luck. A striker who hits the post three times in a game creates the same goals as one who scores zero -- xG captures the difference.
-    Possession on its own is a weak predictor -- some of the best counter-attacking teams in the world have low possession but win regularly.
-  </aside>
-</section>
-
 <!-- Slide 7: Score Matrix to Markets -->
 <section>
   <h2>From Score Matrix to Markets</h2>
@@ -570,6 +554,14 @@ def predict_match(home, away, stats):
 
     return matrix
       </code></pre>
+      <div class="screenshot-box" style="margin-top:0.5em;">
+        <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/04-score-matrix.png"
+             alt="Arsenal vs Man City score matrix"
+             class="lightbox-trigger"
+             data-caption="README.md worked example — Arsenal vs Man City 2024/25 score matrix showing the full 11×11 probability grid produced by np.outer(home_probs, away_probs)"
+             style="max-width:100%;max-height:190px;border-radius:6px;">
+        <p class="img-caption">README.md &mdash; Arsenal vs Man City score matrix output</p>
+      </div>
     </div>
   </div>
   <aside class="notes">
@@ -582,30 +574,40 @@ def predict_match(home, away, stats):
 <!-- Slide 8: EV and Vig Removal -->
 <section>
   <h2>Finding Value: EV and Vig Removal</h2>
+  <p style="font-size:0.7em; color:var(--muted); margin-bottom:0.3em;">Example: <strong>Tottenham vs Everton &mdash; GW38 away market</strong></p>
   <h3>Step 1 &mdash; Remove bookmaker margin</h3>
   <div class="formula-box">
-    Raw implied prob = 1 / decimal_odds<br>
-    True prob = raw_prob / (sum of all raw probs in market)
+    Raw implied prob = 1 / decimal_odds &nbsp;&middot;&nbsp;
+    True prob = raw_prob &divide; overround<br>
+    <span style="font-size:0.82em; color:var(--muted);">Overround = sum of all raw implied probs in the market &mdash; always &gt; 100%, the bookmaker&rsquo;s built-in margin</span>
   </div>
   <div class="example-box">
-    1X2 market odds: 2.30 / 3.40 / 3.20 &nbsp;&rarr;&nbsp; overround = 107.3%<br>
-    True home prob = (1/2.30) / 1.073 = <strong>40.5%</strong> (not 43.5%)
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.4em; text-align:center; margin-bottom:0.5em;">
+      <div><span style="color:var(--muted); font-size:0.85em;">Tottenham (home)</span><br>odds: <strong>1.85</strong><br>raw: 1/1.85 = 54.1%</div>
+      <div><span style="color:var(--muted); font-size:0.85em;">Draw</span><br>odds: <strong>3.50</strong><br>raw: 1/3.50 = 28.6%</div>
+      <div><span style="color:var(--muted); font-size:0.85em;">Everton (away)</span><br>odds: <strong>4.00</strong><br>raw: 1/4.00 = 25.0%</div>
+    </div>
+    Overround = 54.1 + 28.6 + 25.0 = <strong>107.6%</strong> &nbsp;&rarr;&nbsp; bookmaker margin = <strong>7.6%</strong><br>
+    Vig-removed Everton away prob = 25.0 &divide; 107.6 = <strong style="color:var(--yellow);">23.2%</strong>
   </div>
-  <h3 style="margin-top:0.7em;">Step 2 &mdash; Calculate Expected Value</h3>
+  <h3 style="margin-top:0.5em;">Step 2 &mdash; Calculate Expected Value</h3>
   <div class="formula-box">
     EV = (Model probability &times; Decimal odds) &minus; 1
   </div>
   <div class="example-box">
-    Model: 60% home win &nbsp;&middot;&nbsp; Bookmaker: 2.10 &nbsp;&rarr;&nbsp; EV = (0.60 &times; 2.10) &minus; 1 = <strong style="color:var(--green);">+26%</strong>
+    Model prob for Everton away: <strong>49.8%</strong> &nbsp;&middot;&nbsp; Bookmaker decimal odds: <strong>4.00</strong><br>
+    EV = (0.498 &times; 4.00) &minus; 1 = <strong style="color:var(--green);">+99%</strong><br>
+    <span style="color:var(--muted);">Model sees 49.8% &mdash; market prices only 23.2% &rarr; clear value</span>
   </div>
-  <p class="fragment" style="font-size:0.72em; color:var(--muted); margin-top:0.5em;">
+  <p class="fragment" style="font-size:0.7em; color:var(--muted); margin-top:0.4em;">
     Only bets with EV &gt; 20% are surfaced &mdash; configurable via <code>MIN_EV_THRESHOLD</code> in config.py
   </p>
   <aside class="notes">
-    Vig removal is essential. Without it we'd be comparing our model probability against an artificially inflated bookmaker probability, which understates our edge.
-    Step 1 normalises the bookmaker's prices to sum to exactly 100%, removing their margin. This gives us the true implied probability.
-    Step 2 is then simple: if our model says the probability is higher than the true implied probability, and the difference is large enough to overcome the margin, we have a value bet.
-    The 20% threshold was chosen to ensure we only bet when we have a meaningful edge -- not just statistical noise.
+    Vig removal is essential. Without it we'd be comparing our model probability against an artificially inflated bookmaker probability.
+    The overround tells you the bookmaker's total margin across the whole market. Here it's 107.6% — meaning for every £107.60 bet proportionally, the bookmaker expects to pay out £100. Their edge is £7.60.
+    Step 1 divides each raw implied probability by the overround (107.6%), which normalises the market to sum to 100%. This removes the margin and gives us the true implied probability: 23.2% for Everton to win away.
+    Step 2 is then straightforward: our model gives Everton a 49.8% chance — more than double the market's 23.2%. The EV of +99% means for every £1 staked, we expect to return £1.99 long-run.
+    The 20% threshold ensures we only bet when we have a meaningful edge, not just noise.
   </aside>
 </section>
 
@@ -733,6 +735,58 @@ def predict_match(home, away, stats):
   </aside>
 </section>
 
+<!-- Slide: What Could Be Added to the Model -->
+<section>
+  <h2>What Could Be Added to the Model</h2>
+  <p style="font-size:0.7em; color:var(--muted);">Additional raw signals that could feed into the expected goals (&lambda;) calculation</p>
+  <table>
+    <thead>
+      <tr><th>Feature</th><th>Predictive Value</th><th>In Current API?</th><th>Cost</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>xG (Expected Goals)</td>
+        <td>High &mdash; strips out finishing luck</td>
+        <td>No &mdash; needs Understat package</td>
+        <td><span class="tag-free">Free</span></td>
+      </tr>
+      <tr style="background:rgba(74,222,128,0.08);">
+        <td><strong style="color:var(--green);">Shots on Target</strong></td>
+        <td><strong>High &mdash; proxy for xG</strong></td>
+        <td><strong style="color:var(--green);">YES &mdash; already downloaded,<br>just not saved</strong></td>
+        <td><span class="tag-free">Free (same key)</span></td>
+      </tr>
+      <tr>
+        <td>Total Shots</td>
+        <td>Medium</td>
+        <td><span style="color:var(--green);">Yes &mdash; same API response</span></td>
+        <td><span class="tag-free">Free (same key)</span></td>
+      </tr>
+      <tr>
+        <td>Possession %</td>
+        <td>Low-Medium</td>
+        <td>No &mdash; not at free tier</td>
+        <td><span class="tag-paid">~&euro;9/mo upgrade</span></td>
+      </tr>
+      <tr>
+        <td>Touches in Opp. Box</td>
+        <td>Medium-High</td>
+        <td>No &mdash; event-level data (Opta/StatsBomb)</td>
+        <td><span class="tag-enterprise">Enterprise</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="example-box" style="margin-top:0.7em;">
+    <strong style="color:var(--green);">Easiest win:</strong> Shots on target is already in the football-data.org match response &mdash; it&rsquo;s downloaded every week but not saved. One column added to <code>fetch_results()</code> unlocks it at zero cost. xG requires a second free source (Understat) but gives the biggest accuracy improvement.
+  </div>
+  <aside class="notes">
+    This slide answers a key question: what do we need to do to improve the model?
+    Shots on target is the lowest-hanging fruit. The data is already arriving in our API response -- we just discard it. Adding one column to the pipeline gives us a quality proxy for chance creation.
+    xG is the gold standard input for Poisson football models. It removes the noise of finishing luck. A striker who hits the post three times in a game creates the same goals as one who scores zero -- xG captures the difference.
+    Possession on its own is a weak predictor -- some of the best counter-attacking teams in the world have low possession but win regularly.
+  </aside>
+</section>
+
 <!-- Slide 12: High Impact Improvements -->
 <section>
   <h2>Planned Improvements: High Impact</h2>
@@ -829,12 +883,12 @@ def predict_match(home, away, stats):
     </div>
     <div>
       <div class="screenshot-box">
-        <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/11-commit-history.png"
-             alt="GitHub commit history"
+        <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/03-folder-structure.png"
+             alt="Repository folder structure"
              class="lightbox-trigger"
-             data-caption="GitHub commit history — complete build timeline from project scaffold to end of 2025/26 season, showing all pipeline, model, and dashboard development"
+             data-caption="Repository folder structure on GitHub — data/, models/, pipelines/, analysis/, ledger/, reports/ and all supporting module files"
              style="max-width:100%;max-height:360px;border-radius:6px;">
-        <p class="img-caption">GitHub commit history &mdash; full build timeline from scaffold to season end</p>
+        <p class="img-caption">Repo folder structure &mdash; data/, models/, pipelines/, analysis/, ledger/, reports/</p>
       </div>
     </div>
   </div>
