@@ -443,33 +443,61 @@
       </div>
     </div>
   </div>
-  <div class="example-box fragment" style="margin-top:0.4em; font-size:0.68em;">
-    <strong>Worked example &mdash; Tottenham (home) vs Everton (away)</strong>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5em; margin:0.3em 0;">
-      <div>
-        <span style="color:var(--muted);">team_stats.csv &rarr; <code>home_attack</code> column:</span><br>
-        <code>Tottenham home_attack = <strong style="color:var(--accent);">0.82</strong></code><br>
-        <span style="color:var(--muted); font-size:0.9em;">Tottenham score 18% fewer goals than the average home side (after time decay &amp; regression to mean applied)</span>
-      </div>
-      <div>
-        <span style="color:var(--muted);">team_stats.csv &rarr; <code>away_defence</code> column:</span><br>
-        <code>Everton away_defence = <strong style="color:var(--accent);">0.89</strong></code><br>
-        <span style="color:var(--muted); font-size:0.9em;">Everton concede 11% fewer away goals than average (lower = tighter defence away from home)</span>
-      </div>
-    </div>
-    <code>&lambda;<sub>home</sub> = 0.82 &times; 0.89 &times; 1.52 (league avg home goals &mdash; mean of all 20 teams&rsquo; avg_home_scored) = <strong>1.11</strong> expected Tottenham goals</code><br>
-    <div style="margin-top:0.3em;">
-      P(0) = (e<sup>&minus;1.11</sup> &times; 1.11<sup>0</sup>) / 0! = 0.330 &times; 1 / 1 = <strong>33.0%</strong> &nbsp;&middot;&nbsp;
-      P(1) = 0.330 &times; 1.11 / 1 = <strong>36.6%</strong> &nbsp;&middot;&nbsp;
-      P(2) = 0.330 &times; 1.23 / 2 = <strong>20.3%</strong>
-    </div>
-    <span style="color:var(--muted); font-size:0.9em;">&lambda;<sub>away</sub> computed independently for Everton using their away_attack &amp; Tottenham&rsquo;s home_defence &rarr; full 11&times;11 score matrix</span>
-  </div>
   <aside class="notes">
     Poisson is the right model for football because goals satisfy the core assumptions: they're rare (average ~2.5 per game), roughly independent of each other, and the rate is relatively stable within a game.
     The critical point for this project: goals are the ONLY raw data input right now. All the sophistication comes from how we process those goals, not from adding new data sources.
     The score matrix is the engine -- once we have it, we can calculate any market probability by summing the right cells.
-    The 0.82 home_attack means Tottenham score 18% fewer goals at home than the league average -- a below-average home attack that season. The 0.89 away_defence for Everton means they concede 11% fewer away goals than average -- a decent defensive record away from home. Combined with Everton's strong away attack and Tottenham's leaky home defence (1.28), the model gives Everton a high probability of winning away, consistent with the 49.8% model probability on the EV slide.
+    Next slide walks through a concrete λ calculation using real team_stats.csv values.
+  </aside>
+</section>
+
+<!-- Slide 5b: Worked Example -->
+<section>
+  <h2>Worked Example: &lambda; Calculation</h2>
+  <p style="font-size:0.7em; color:var(--muted); margin-bottom:0.5em;">Tottenham (home) vs Everton (away) &mdash; values read directly from <code>team_stats.csv</code></p>
+  <div class="cols-2" style="gap:0.8em;">
+    <div class="example-box" style="margin:0; font-size:0.78em;">
+      <span style="color:var(--muted);"><code>home_attack</code> column &rarr;</span><br>
+      <code style="font-size:1.1em;">Tottenham <strong style="color:var(--accent);">home_attack = 0.82</strong></code><br>
+      <span style="color:var(--muted);">Tottenham score 18% fewer home goals than the league average (after exponential time decay &amp; regression to mean)</span>
+    </div>
+    <div class="example-box" style="margin:0; font-size:0.78em;">
+      <span style="color:var(--muted);"><code>away_defence</code> column &rarr;</span><br>
+      <code style="font-size:1.1em;">Everton <strong style="color:var(--accent);">away_defence = 0.89</strong></code><br>
+      <span style="color:var(--muted);">Everton concede 11% fewer away goals than average &mdash; a tighter-than-average away defence</span>
+    </div>
+  </div>
+  <div class="formula-box" style="margin-top:0.6em; font-size:0.88em; text-align:center;">
+    &lambda;<sub>home</sub> = <strong>0.82</strong> &times; <strong>0.89</strong> &times; <strong>1.52</strong> (league avg home goals) = <strong style="color:var(--green);">1.11</strong> expected Tottenham goals
+  </div>
+  <div class="example-box" style="margin-top:0.6em;">
+    <strong>P(k) = (e<sup>&minus;&lambda;</sup> &times; &lambda;<sup>k</sup>) / k! &nbsp;&nbsp;with &lambda; = 1.11</strong>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.6em; margin-top:0.5em; text-align:center; font-size:0.85em;">
+      <div style="background:rgba(56,189,248,0.12); border-radius:6px; padding:0.5em 0.3em;">
+        <strong style="color:var(--accent);">P(0 goals)</strong><br>
+        e<sup>&minus;1.11</sup> &times; 1 / 1<br>
+        = 0.330 &times; 1<br>
+        = <strong style="color:var(--green);">33.0%</strong>
+      </div>
+      <div style="background:rgba(56,189,248,0.12); border-radius:6px; padding:0.5em 0.3em;">
+        <strong style="color:var(--accent);">P(1 goal)</strong><br>
+        0.330 &times; 1.11 / 1<br><br>
+        = <strong style="color:var(--green);">36.6%</strong>
+      </div>
+      <div style="background:rgba(56,189,248,0.12); border-radius:6px; padding:0.5em 0.3em;">
+        <strong style="color:var(--accent);">P(2 goals)</strong><br>
+        0.330 &times; 1.23 / 2<br><br>
+        = <strong style="color:var(--green);">20.3%</strong>
+      </div>
+    </div>
+  </div>
+  <p style="font-size:0.65em; color:var(--muted); margin-top:0.5em; text-align:center;">
+    &lambda;<sub>away</sub> computed independently: Everton away_attack &times; Tottenham home_defence &times; league avg away goals &rarr; full 11&times;11 score matrix
+  </p>
+  <aside class="notes">
+    The 0.82 home_attack means Tottenham score 18% fewer goals at home than the league average -- a below-average home attack that season. The 0.89 away_defence for Everton means they concede 11% fewer away goals than average -- a decent defensive record away from home.
+    λ = 0.82 × 0.89 × 1.52 = 1.11. With λ = 1.11, there's a 33% chance Tottenham score 0, 36.6% they score 1, 20.3% they score 2. The most likely outcome is 1 goal.
+    Combined with Everton's strong away attack and Tottenham's leaky home defence (1.28), the model gives Everton a high probability of winning away, consistent with the 49.8% model probability on the EV slide.
   </aside>
 </section>
 
