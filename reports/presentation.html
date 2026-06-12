@@ -497,7 +497,7 @@
   <aside class="notes">
     The 0.82 home_attack means Tottenham score 18% fewer goals at home than the league average -- a below-average home attack that season. The 0.89 away_defence for Everton means they concede 11% fewer away goals than average -- a decent defensive record away from home.
     λ = 0.82 × 0.89 × 1.52 = 1.11. With λ = 1.11, there's a 33% chance Tottenham score 0, 36.6% they score 1, 20.3% they score 2. The most likely outcome is 1 goal.
-    Combined with Everton's strong away attack and Tottenham's leaky home defence (1.28), the model gives Everton a high probability of winning away, consistent with the 49.8% model probability on the EV slide.
+    Combined with Everton's away attack (0.95) and Tottenham's leaky home defence (1.28), λ_away = 1.49 — and summing the upper-triangle cells of the score matrix gives Everton a 46% away win probability, shown on the next slide.
   </aside>
 </section>
 
@@ -614,6 +614,99 @@ def predict_match(home, away, stats):
   </aside>
 </section>
 
+<!-- Slide 7b: Score Matrix — Tottenham vs Everton -->
+<section>
+  <h2>Score Matrix: Tottenham vs Everton</h2>
+  <p style="font-size:0.65em; color:var(--muted); margin-bottom:0.3em;">Each cell = P(Tottenham score h) &times; P(Everton score a). Sum the <span style="color:var(--red);">red cells</span> to get Everton&rsquo;s model probability.</p>
+  <div class="cols-2" style="gap:0.8em; align-items:start;">
+    <div>
+      <div class="formula-box" style="font-size:0.72em; margin-bottom:0.4em;">
+        &lambda;<sub>away</sub> = Everton away_attack &times; Tottenham home_defence &times; league avg away<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = <strong>0.95</strong> &times; <strong>1.28</strong> &times; <strong>1.22</strong> = <strong style="color:var(--green);">1.49</strong> expected Everton goals
+      </div>
+      <table class="score-matrix" style="font-size:0.62em; width:100%;">
+        <thead>
+          <tr>
+            <th style="background:var(--bg); font-size:0.85em; color:var(--muted);">Tott &darr; / Evt &rarr;</th>
+            <th>0</th><th>1</th><th>2</th><th>3</th><th>4</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>0</th>
+            <td class="cell-draw">7.4%</td>
+            <td class="cell-away"><strong>11.1%</strong></td>
+            <td class="cell-away"><strong>8.2%</strong></td>
+            <td class="cell-away"><strong>4.1%</strong></td>
+            <td class="cell-away"><strong>1.5%</strong></td>
+          </tr>
+          <tr>
+            <th>1</th>
+            <td class="cell-home">8.2%</td>
+            <td class="cell-draw">12.3%</td>
+            <td class="cell-away"><strong>9.2%</strong></td>
+            <td class="cell-away"><strong>4.6%</strong></td>
+            <td class="cell-away"><strong>1.7%</strong></td>
+          </tr>
+          <tr>
+            <th>2</th>
+            <td class="cell-home">4.6%</td>
+            <td class="cell-home">6.8%</td>
+            <td class="cell-draw">5.1%</td>
+            <td class="cell-away"><strong>2.5%</strong></td>
+            <td class="cell-away"><strong>0.9%</strong></td>
+          </tr>
+          <tr>
+            <th>3</th>
+            <td class="cell-home">1.7%</td>
+            <td class="cell-home">2.5%</td>
+            <td class="cell-home">1.9%</td>
+            <td class="cell-draw">0.9%</td>
+            <td class="cell-away"><strong>0.3%</strong></td>
+          </tr>
+          <tr>
+            <th>4</th>
+            <td class="cell-home">0.5%</td>
+            <td class="cell-home">0.7%</td>
+            <td class="cell-home">0.5%</td>
+            <td class="cell-home">0.3%</td>
+            <td class="cell-draw">0.1%</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="font-size:0.5em; color:var(--muted); margin-top:0.25em;">Scores 0&ndash;4 shown. Full model uses 11&times;11. Each cell = P(home goals = row) &times; P(away goals = col).</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:0.5em;">
+      <div style="display:flex; gap:0.4em; font-size:0.58em; flex-wrap:wrap;">
+        <span style="background:rgba(248,113,113,0.15); border:1px solid rgba(248,113,113,0.5); padding:0.25em 0.5em; border-radius:4px;">&#9632; Away win (Everton &gt; Tott)</span>
+        <span style="background:rgba(251,191,36,0.15); border:1px solid rgba(251,191,36,0.5); padding:0.25em 0.5em; border-radius:4px;">&#9632; Draw</span>
+        <span style="background:rgba(74,222,128,0.15); border:1px solid rgba(74,222,128,0.5); padding:0.25em 0.5em; border-radius:4px;">&#9632; Home win</span>
+      </div>
+      <div class="example-box" style="font-size:0.7em;">
+        <strong>Summing red cells (away goals &gt; home goals):</strong><br>
+        <span style="color:var(--muted);">Visible 5&times;5 grid:</span> &nbsp;&nbsp;<strong>44.1%</strong><br>
+        <span style="color:var(--muted);">Scores 5+ (not shown):</span> <strong>+1.9%</strong><br>
+        <div style="border-top:1px solid var(--accent); margin:0.4em 0 0.3em; padding-top:0.3em;">
+          Full 11&times;11 total: <strong style="color:var(--green); font-size:1.2em;">46%</strong> Everton away win
+        </div>
+      </div>
+      <div class="example-box" style="font-size:0.65em;">
+        <span style="color:var(--muted);">Largest contributing scorelines:</span><br>
+        <strong>0&ndash;1</strong> (Tott nil, Everton 1) = <strong style="color:var(--red);">11.1%</strong><br>
+        <strong>1&ndash;2</strong> (Tott 1, Everton 2) &nbsp;= <strong style="color:var(--red);">&nbsp;9.2%</strong><br>
+        <strong>0&ndash;2</strong> (Tott nil, Everton 2) = <strong style="color:var(--red);">&nbsp;8.2%</strong>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    This slide shows exactly where the model probability comes from. λ_home = 1.11 (Tottenham expected goals) was built on the previous slide. λ_away = 0.95 × 1.28 × 1.22 = 1.49 uses Everton's away_attack and Tottenham's notably leaky home_defence (1.28 — they concede 28% more home goals than the league average).
+    The matrix is produced by np.outer(home_probs, away_probs) — each cell is P(Tottenham score h) × P(Everton score a). These are independent Poisson distributions.
+    To get the away win probability we sum every cell where the away column exceeds the home row — the upper triangle. In the visible 5×5 grid that's 44.1%, plus another 1.9% from higher-scoring outcomes, giving 46%.
+    The most likely single scoreline is 1-1 at 12.3%, but the most likely Everton win scoreline is 0-1 at 11.1% — roughly a 1-in-9 chance of that exact result.
+    This 46% model probability feeds directly into the EV calculation on the next two slides.
+  </aside>
+</section>
+
 <!-- Slide 8: EV and Vig Removal - Step 1 -->
 <section>
   <h2>Finding Value: EV and Vig Removal</h2>
@@ -650,16 +743,16 @@ def predict_match(home, away, stats):
     EV = (Model probability &times; Decimal odds) &minus; 1
   </div>
   <div class="example-box">
-    Model prob for Everton away: <strong>49.8%</strong> &nbsp;&middot;&nbsp; Bet365 decimal odds: <strong>4.00</strong><br>
-    EV = (0.498 &times; 4.00) &minus; 1 = <strong style="color:var(--green);">+99%</strong><br>
-    <span style="color:var(--muted);">Model sees 49.8% &mdash; market prices only 23.2% &rarr; clear value</span>
+    Model prob for Everton away: <strong>46%</strong> &nbsp;&middot;&nbsp; Bet365 decimal odds: <strong>4.00</strong><br>
+    EV = (0.46 &times; 4.00) &minus; 1 = <strong style="color:var(--green);">+84%</strong><br>
+    <span style="color:var(--muted);">Model sees 46% &mdash; market prices only 23.2% &rarr; clear value</span>
   </div>
   <p class="fragment" style="font-size:0.7em; color:var(--muted); margin-top:0.4em;">
     Only bets with EV &gt; 20% are surfaced &mdash; configurable via <code>MIN_EV_THRESHOLD</code> in config.py
   </p>
   <aside class="notes">
-    Step 2 is straightforward: our model gives Everton a 49.8% chance of winning away — more than double the market's vig-removed 23.2%.
-    The EV of +99% means for every £1 staked, we expect to return £1.99 long-run. This is an unusually large edge — in practice most value bets are in the 20-50% EV range.
+    Step 2 is straightforward: our model gives Everton a 46% chance of winning away — double the market's vig-removed 23.2%. The 46% came from summing the upper-triangle cells of the score matrix on the previous slide.
+    The EV of +84% means for every £1 staked, we expect to return £1.84 long-run. This is an unusually large edge — in practice most value bets are in the 20-50% EV range.
     The 20% EV threshold filters out marginal edges and model noise. Only bets where we have a meaningful, statistically significant edge are surfaced.
   </aside>
 </section>
@@ -684,10 +777,10 @@ def predict_match(home, away, stats):
     <div>
       <div class="example-box fragment" style="margin-top:1em;">
         <strong>GW38 example: Tottenham vs Everton away</strong><br><br>
-        Model prob: 49.8% &nbsp;&middot;&nbsp; Odds: 4.0 (3/1) &nbsp;&middot;&nbsp; EV: +99%<br><br>
-        Full Kelly = <strong>33.0%</strong> of bankroll<br>
-        Fractional (25%) = <strong>8.25%</strong><br>
-        Bankroll &pound;20 &rarr; Stake = <strong style="color:var(--green);">&pound;1.65</strong>
+        Model prob: 46% &nbsp;&middot;&nbsp; Odds: 4.0 (3/1) &nbsp;&middot;&nbsp; EV: +84%<br><br>
+        Full Kelly = <strong>28.0%</strong> of bankroll<br>
+        Fractional (25%) = <strong>7.0%</strong><br>
+        Bankroll &pound;20 &rarr; Stake = <strong style="color:var(--green);">&pound;1.40</strong>
       </div>
       <p class="fragment" style="font-size:0.65em; color:var(--muted); margin-top:0.5em;">
         Each bet&rsquo;s stake auto-calculated and shown in the Upcoming Bets tab of the dashboard
