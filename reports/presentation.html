@@ -431,14 +431,6 @@
         <li class="fragment">Build an 11&times;11 score matrix: every scoreline 0-0 to 10-10 with its probability</li>
         <li class="fragment">Sum cells to derive any market probability &mdash; home win, draw, over 2.5, BTTS, etc.</li>
       </ul>
-      <div class="example-box fragment" style="margin-top:0.5em; font-size:0.75em;">
-        <strong>Worked example &mdash; Tottenham (home) vs Everton (away)</strong><br>
-        <code style="font-size:0.88em;">home_attack(1.11) &times; away_defence(1.04) &times; avg(1.50) = &lambda;&nbsp;=&nbsp;1.73</code><br><br>
-        P(0) = (e<sup>&minus;1.73</sup> &times; 1.73<sup>0</sup>) / 0! = <strong>17.7%</strong><br>
-        P(1) = (e<sup>&minus;1.73</sup> &times; 1.73<sup>1</sup>) / 1! = <strong>30.6%</strong><br>
-        P(2) = (e<sup>&minus;1.73</sup> &times; 1.73<sup>2</sup>) / 2! = <strong>26.5%</strong><br>
-        <span style="color:var(--muted);">&lambda; computed independently for Everton &rarr; full 11&times;11 score matrix</span>
-      </div>
     </div>
     <div>
       <div class="screenshot-box">
@@ -451,10 +443,33 @@
       </div>
     </div>
   </div>
+  <div class="example-box fragment" style="margin-top:0.4em; font-size:0.68em;">
+    <strong>Worked example &mdash; Tottenham (home) vs Everton (away)</strong>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5em; margin:0.3em 0;">
+      <div>
+        <span style="color:var(--muted);">team_stats.csv &rarr; <code>home_attack</code> column:</span><br>
+        <code>Tottenham home_attack = <strong style="color:var(--accent);">1.11</strong></code><br>
+        <span style="color:var(--muted); font-size:0.9em;">Tottenham score 11% more goals than the average home side (after time decay &amp; regression to mean applied)</span>
+      </div>
+      <div>
+        <span style="color:var(--muted);">team_stats.csv &rarr; <code>away_defence</code> column:</span><br>
+        <code>Everton away_defence = <strong style="color:var(--accent);">1.04</strong></code><br>
+        <span style="color:var(--muted); font-size:0.9em;">Everton concede 4% more away goals than average (higher = leakier defence away from home)</span>
+      </div>
+    </div>
+    <code>&lambda;<sub>home</sub> = 1.11 &times; 1.04 &times; 1.50 (league avg home goals &mdash; mean of all 20 teams&rsquo; avg_home_scored) = <strong>1.73</strong> expected Tottenham goals</code><br>
+    <div style="margin-top:0.3em;">
+      P(0) = (e<sup>&minus;1.73</sup> &times; 1.73<sup>0</sup>) / 0! = 0.177 &times; 1 / 1 = <strong>17.7%</strong> &nbsp;&middot;&nbsp;
+      P(1) = 0.177 &times; 1.73 / 1 = <strong>30.6%</strong> &nbsp;&middot;&nbsp;
+      P(2) = 0.177 &times; 2.99 / 2 = <strong>26.5%</strong>
+    </div>
+    <span style="color:var(--muted); font-size:0.9em;">&lambda;<sub>away</sub> computed independently for Everton using their away_attack &amp; Tottenham&rsquo;s home_defence &rarr; full 11&times;11 score matrix</span>
+  </div>
   <aside class="notes">
     Poisson is the right model for football because goals satisfy the core assumptions: they're rare (average ~2.5 per game), roughly independent of each other, and the rate is relatively stable within a game.
     The critical point for this project: goals are the ONLY raw data input right now. All the sophistication comes from how we process those goals, not from adding new data sources.
     The score matrix is the engine -- once we have it, we can calculate any market probability by summing the right cells.
+    The 1.11 home_attack means Tottenham score 11% more goals at home than the league average. The 1.04 away_defence for Everton means they concede 4% more away goals than average -- Tottenham gets a slight boost from a slightly leaky defence.
   </aside>
 </section>
 
@@ -514,7 +529,7 @@
         <li class="fragment">The 11&times;11 matrix has a probability for every scoreline</li>
         <li class="fragment">Markets derived by summing the right cells:</li>
       </ul>
-      <table class="fragment" style="margin-top:0.5em; font-size:0.65em;">
+      <table class="fragment" style="margin-top:0.5em; font-size:0.52em;">
         <thead><tr><th>Market</th><th>Cells to sum</th></tr></thead>
         <tbody>
           <tr><td>Home win</td><td>Lower triangle (home &gt; away)</td></tr>
@@ -571,10 +586,10 @@ def predict_match(home, away, stats):
   </aside>
 </section>
 
-<!-- Slide 8: EV and Vig Removal -->
+<!-- Slide 8: EV and Vig Removal - Step 1 -->
 <section>
   <h2>Finding Value: EV and Vig Removal</h2>
-  <p style="font-size:0.7em; color:var(--muted); margin-bottom:0.3em;">Example: <strong>Tottenham vs Everton &mdash; GW38 away market</strong></p>
+  <p style="font-size:0.7em; color:var(--muted); margin-bottom:0.3em;">Example: <strong>Tottenham vs Everton &mdash; GW38 away market (Bet365)</strong></p>
   <h3>Step 1 &mdash; Remove bookmaker margin</h3>
   <div class="formula-box">
     Raw implied prob = 1 / decimal_odds &nbsp;&middot;&nbsp;
@@ -590,12 +605,24 @@ def predict_match(home, away, stats):
     Overround = 54.1 + 28.6 + 25.0 = <strong>107.6%</strong> &nbsp;&rarr;&nbsp; bookmaker margin = <strong>7.6%</strong><br>
     Vig-removed Everton away prob = 25.0 &divide; 107.6 = <strong style="color:var(--yellow);">23.2%</strong>
   </div>
-  <h3 style="margin-top:0.5em;">Step 2 &mdash; Calculate Expected Value</h3>
+  <aside class="notes">
+    Vig removal is essential. Without it we'd be comparing our model probability against an artificially inflated bookmaker probability.
+    The overround tells you the bookmaker's total margin across the whole market. Here it's 107.6% — meaning for every £107.60 bet proportionally, the bookmaker expects to pay out £100. Their edge is £7.60.
+    Step 1 divides each raw implied probability by the overround (107.6%), which normalises the market to sum to 100%. This removes the margin and gives us the true implied probability: 23.2% for Everton to win away.
+    These odds (1.85 / 3.50 / 4.00) were the best available on Bet365 for this market. The pipeline pulls from up to 8 bookmakers and takes the best odds for each outcome.
+  </aside>
+</section>
+
+<!-- Slide 8b: EV and Vig Removal - Step 2 -->
+<section>
+  <h2>Finding Value: EV and Vig Removal</h2>
+  <p style="font-size:0.7em; color:var(--muted); margin-bottom:0.4em;">Example: <strong>Tottenham vs Everton &mdash; GW38 away market (Bet365)</strong> &nbsp;&middot;&nbsp; Step 1 result: vig-removed Everton away prob = <strong style="color:var(--yellow);">23.2%</strong></p>
+  <h3>Step 2 &mdash; Calculate Expected Value</h3>
   <div class="formula-box">
     EV = (Model probability &times; Decimal odds) &minus; 1
   </div>
   <div class="example-box">
-    Model prob for Everton away: <strong>49.8%</strong> &nbsp;&middot;&nbsp; Bookmaker decimal odds: <strong>4.00</strong><br>
+    Model prob for Everton away: <strong>49.8%</strong> &nbsp;&middot;&nbsp; Bet365 decimal odds: <strong>4.00</strong><br>
     EV = (0.498 &times; 4.00) &minus; 1 = <strong style="color:var(--green);">+99%</strong><br>
     <span style="color:var(--muted);">Model sees 49.8% &mdash; market prices only 23.2% &rarr; clear value</span>
   </div>
@@ -603,11 +630,9 @@ def predict_match(home, away, stats):
     Only bets with EV &gt; 20% are surfaced &mdash; configurable via <code>MIN_EV_THRESHOLD</code> in config.py
   </p>
   <aside class="notes">
-    Vig removal is essential. Without it we'd be comparing our model probability against an artificially inflated bookmaker probability.
-    The overround tells you the bookmaker's total margin across the whole market. Here it's 107.6% — meaning for every £107.60 bet proportionally, the bookmaker expects to pay out £100. Their edge is £7.60.
-    Step 1 divides each raw implied probability by the overround (107.6%), which normalises the market to sum to 100%. This removes the margin and gives us the true implied probability: 23.2% for Everton to win away.
-    Step 2 is then straightforward: our model gives Everton a 49.8% chance — more than double the market's 23.2%. The EV of +99% means for every £1 staked, we expect to return £1.99 long-run.
-    The 20% threshold ensures we only bet when we have a meaningful edge, not just noise.
+    Step 2 is straightforward: our model gives Everton a 49.8% chance of winning away — more than double the market's vig-removed 23.2%.
+    The EV of +99% means for every £1 staked, we expect to return £1.99 long-run. This is an unusually large edge — in practice most value bets are in the 20-50% EV range.
+    The 20% EV threshold filters out marginal edges and model noise. Only bets where we have a meaningful, statistically significant edge are surfaced.
   </aside>
 </section>
 
@@ -657,11 +682,11 @@ def predict_match(home, away, stats):
       <tr><th>Cohort</th><th>Gameweek</th><th>Bets</th><th>Markets</th><th>W</th><th>L</th></tr>
     </thead>
     <tbody>
-      <tr><td>BC1</td><td>GW34</td><td>7</td><td>home, away, under_2_5</td><td>2</td><td>5</td></tr>
-      <tr><td>BC2</td><td>GW35</td><td>6</td><td>home, away, under_2_5</td><td>1</td><td>5</td></tr>
-      <tr><td>BC3</td><td>GW36</td><td>5</td><td>home, away, under_2_5</td><td>1</td><td>4</td></tr>
-      <tr><td>BC4</td><td>GW37</td><td>8</td><td>home, away, draw, under_2_5</td><td>4</td><td>4</td></tr>
-      <tr><td>BC5</td><td>GW38</td><td>7</td><td>home, away, draw, under_2_5</td><td>4</td><td>3</td></tr>
+      <tr><td>BC1</td><td>GW34</td><td>7</td><td>home, away, draw</td><td>2</td><td>5</td></tr>
+      <tr><td>BC2</td><td>GW35</td><td>6</td><td>home, away, draw</td><td>1</td><td>5</td></tr>
+      <tr><td>BC3</td><td>GW36</td><td>5</td><td>home, away, draw</td><td>1</td><td>4</td></tr>
+      <tr><td>BC4</td><td>GW37</td><td>8</td><td>home, away, draw, under 2.5</td><td>4</td><td>4</td></tr>
+      <tr><td>BC5</td><td>GW38</td><td>7</td><td>home, away, draw, under 2.5</td><td>4</td><td>3</td></tr>
       <tr class="highlight-row"><td><strong>Total</strong></td><td></td><td><strong>33</strong></td><td></td><td><strong>12</strong></td><td><strong>21</strong></td></tr>
     </tbody>
   </table>
@@ -892,8 +917,7 @@ def predict_match(home, away, stats):
       </div>
     </div>
   </div>
-  <br>
-  <p class="fragment" style="font-size:0.75em; color:var(--muted); text-align:center; border-top:1px solid var(--border); padding-top:0.6em;">
+  <p class="fragment" style="font-size:0.75em; color:var(--muted); text-align:center; border-top:1px solid var(--border); padding-top:0.3em; margin-top:0.3em;">
     All code open on GitHub &middot; samelgar141-netizen/football-value-bot
   </p>
   <aside class="notes">
