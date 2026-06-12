@@ -437,7 +437,7 @@
         <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/04-score-matrix.png"
              alt="Arsenal vs Man City score matrix"
              class="lightbox-trigger"
-             data-caption="Poisson score matrix example from README.md — Arsenal vs Man City 2024/25 worked example showing full 11×11 probability grid"
+             data-caption="Poisson score matrix example from README.md — Arsenal vs Man City 2024/25 worked example showing full 11&times;11 probability grid"
              style="max-width:100%;max-height:380px;border-radius:6px;">
         <p class="img-caption">README.md worked example &mdash; Arsenal vs Man City score matrix</p>
       </div>
@@ -448,20 +448,20 @@
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5em; margin:0.3em 0;">
       <div>
         <span style="color:var(--muted);">team_stats.csv &rarr; <code>home_attack</code> column:</span><br>
-        <code>Tottenham home_attack = <strong style="color:var(--accent);">1.11</strong></code><br>
-        <span style="color:var(--muted); font-size:0.9em;">Tottenham score 11% more goals than the average home side (after time decay &amp; regression to mean applied)</span>
+        <code>Tottenham home_attack = <strong style="color:var(--accent);">0.82</strong></code><br>
+        <span style="color:var(--muted); font-size:0.9em;">Tottenham score 18% fewer goals than the average home side (after time decay &amp; regression to mean applied)</span>
       </div>
       <div>
         <span style="color:var(--muted);">team_stats.csv &rarr; <code>away_defence</code> column:</span><br>
-        <code>Everton away_defence = <strong style="color:var(--accent);">1.04</strong></code><br>
-        <span style="color:var(--muted); font-size:0.9em;">Everton concede 4% more away goals than average (higher = leakier defence away from home)</span>
+        <code>Everton away_defence = <strong style="color:var(--accent);">0.89</strong></code><br>
+        <span style="color:var(--muted); font-size:0.9em;">Everton concede 11% fewer away goals than average (lower = tighter defence away from home)</span>
       </div>
     </div>
-    <code>&lambda;<sub>home</sub> = 1.11 &times; 1.04 &times; 1.50 (league avg home goals &mdash; mean of all 20 teams&rsquo; avg_home_scored) = <strong>1.73</strong> expected Tottenham goals</code><br>
+    <code>&lambda;<sub>home</sub> = 0.82 &times; 0.89 &times; 1.52 (league avg home goals &mdash; mean of all 20 teams&rsquo; avg_home_scored) = <strong>1.11</strong> expected Tottenham goals</code><br>
     <div style="margin-top:0.3em;">
-      P(0) = (e<sup>&minus;1.73</sup> &times; 1.73<sup>0</sup>) / 0! = 0.177 &times; 1 / 1 = <strong>17.7%</strong> &nbsp;&middot;&nbsp;
-      P(1) = 0.177 &times; 1.73 / 1 = <strong>30.6%</strong> &nbsp;&middot;&nbsp;
-      P(2) = 0.177 &times; 2.99 / 2 = <strong>26.5%</strong>
+      P(0) = (e<sup>&minus;1.11</sup> &times; 1.11<sup>0</sup>) / 0! = 0.330 &times; 1 / 1 = <strong>33.0%</strong> &nbsp;&middot;&nbsp;
+      P(1) = 0.330 &times; 1.11 / 1 = <strong>36.6%</strong> &nbsp;&middot;&nbsp;
+      P(2) = 0.330 &times; 1.23 / 2 = <strong>20.3%</strong>
     </div>
     <span style="color:var(--muted); font-size:0.9em;">&lambda;<sub>away</sub> computed independently for Everton using their away_attack &amp; Tottenham&rsquo;s home_defence &rarr; full 11&times;11 score matrix</span>
   </div>
@@ -469,7 +469,7 @@
     Poisson is the right model for football because goals satisfy the core assumptions: they're rare (average ~2.5 per game), roughly independent of each other, and the rate is relatively stable within a game.
     The critical point for this project: goals are the ONLY raw data input right now. All the sophistication comes from how we process those goals, not from adding new data sources.
     The score matrix is the engine -- once we have it, we can calculate any market probability by summing the right cells.
-    The 1.11 home_attack means Tottenham score 11% more goals at home than the league average. The 1.04 away_defence for Everton means they concede 4% more away goals than average -- Tottenham gets a slight boost from a slightly leaky defence.
+    The 0.82 home_attack means Tottenham score 18% fewer goals at home than the league average -- a below-average home attack that season. The 0.89 away_defence for Everton means they concede 11% fewer away goals than average -- a decent defensive record away from home. Combined with Everton's strong away attack and Tottenham's leaky home defence (1.28), the model gives Everton a high probability of winning away, consistent with the 49.8% model probability on the EV slide.
   </aside>
 </section>
 
@@ -573,7 +573,7 @@ def predict_match(home, away, stats):
         <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/04-score-matrix.png"
              alt="Arsenal vs Man City score matrix"
              class="lightbox-trigger"
-             data-caption="README.md worked example — Arsenal vs Man City 2024/25 score matrix showing the full 11×11 probability grid produced by np.outer(home_probs, away_probs)"
+             data-caption="README.md worked example — Arsenal vs Man City 2024/25 score matrix showing the full 11x11 probability grid produced by np.outer(home_probs, away_probs)"
              style="max-width:100%;max-height:190px;border-radius:6px;">
         <p class="img-caption">README.md &mdash; Arsenal vs Man City score matrix output</p>
       </div>
@@ -694,7 +694,7 @@ def predict_match(home, away, stats):
     <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/07-dashboard-settled.png"
          alt="Dashboard settled bets table"
          class="lightbox-trigger"
-         data-caption="Dashboard Settled Bets tab — all 33 bets across GW34–GW38 showing match results, bookmaker odds, model probability, EV, and individual P&L"
+         data-caption="Dashboard Settled Bets tab — all 33 bets across GW34-GW38 showing match results, bookmaker odds, model probability, EV, and individual P&L"
          style="max-width:100%;max-height:260px;border-radius:6px;">
     <p class="img-caption">Dashboard Settled Bets tab &mdash; all 33 bets with results, odds, model probability, and P&amp;L</p>
   </div>
@@ -739,7 +739,7 @@ def predict_match(home, away, stats):
       <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/08-bankroll-chart.png"
            alt="Bankroll over time chart"
            class="lightbox-trigger"
-           data-caption="Bankroll Over Time chart (Betting Cohort view) — starting from £20, rising to £25.29 over GW34–GW38 with £20 reference line"
+           data-caption="Bankroll Over Time chart (Betting Cohort view) — starting from £20, rising to £25.29 over GW34-GW38 with £20 reference line"
            style="max-width:100%;max-height:230px;border-radius:6px;">
       <p class="img-caption">Bankroll Over Time &mdash; £20 &rarr; £25.29 across five gameweeks</p>
     </div>
@@ -747,7 +747,7 @@ def predict_match(home, away, stats):
       <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/09-bar-chart.png"
            alt="Bets by cohort chart"
            class="lightbox-trigger"
-           data-caption="Bets by Cohort bar chart — wins and losses per betting cohort BC1–BC5, showing improving win rate in later gameweeks"
+           data-caption="Bets by Cohort bar chart — wins and losses per betting cohort BC1-BC5, showing improving win rate in later gameweeks"
            style="max-width:100%;max-height:230px;border-radius:6px;">
       <p class="img-caption">Bets by Cohort &mdash; wins and losses per gameweek (BC1&ndash;BC5)</p>
     </div>
