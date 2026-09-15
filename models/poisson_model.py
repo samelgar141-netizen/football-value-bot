@@ -38,21 +38,93 @@ def _apply_dixon_coles(score_matrix, exp_home, exp_away, rho=_DC_RHO):
     return m
 
 
+# ── Helpers ───────────────────────────────────────────────────────────────────
+
+def _normalise_name(name):
+    """Strip common suffixes so football-data.org and Understat names match."""
+    name = str(name).lower().strip()
+    for suffix in [' fc', ' afc', ' f.c.', ' a.f.c.']:
+        if name.endswith(suffix):
+            name = name[: -len(suffix)].strip()
+    return name
+
+
 # ── Core functions ────────────────────────────────────────────────────────────
 
-def compute_team_stats(results_df):
+def compute_team_stats(results_df, xg_df=None):
     df = results_df.copy()
     df = df.dropna(subset=['home_goals', 'away_goals'])
 
-    # exponential decay weights indexed to df
+    # Merge xG / SoT / shots from Understat via normalised names + date
+    if xg_df is not None:
+        xg = xg_df.copy()
+        df['_date_str']  = pd.to_datetime(df['date']).dt.date.astype(str)
+        df['_home_norm'] = df['home_team'].map(_normalise_name)
+        df['_away_norm'] = df['away_team'].map(_normalise_name)
+        xg['_date_str']  = pd.to_datetime(xg['date']).dt.date.astype(str)
+        xg['_home_norm'] = xg['home_team'].map(_normalise_name)
+        xg['_away_norm'] = xg['away_team'].map(_normalise_name)
+        xg_cols = ['_date_str', '_home_norm', '_away_norm',
+                   'xg_home', 'xg_away',
+                   'shots_on_target_home', 'shots_on_target_away',
+                   'shots_home', 'shots_away']
+        df = df.merge(xg[xg_cols], on=['_date_str', '_home_norm', '_away_norm'], how='left')
+        df = df.drop(columns=['_date_str', '_home_norm', '_away_norm'])
+    else:
+        for col in ['xg_home', 'xg_away',
+                    'shots_on_target_home', 'shots_on_target_away',
+                    'shots_home', 'shots_away']:
+            df[col] = np.nan
+
+    # Fall back to actual goals for any match where xG/SoT/shots is missing
+    df['xg_home']              = df['xg_home'].fillna(df['home_goals'])
+    df['xg_away']              = df['xg_away'].fillna(df['away_goals'])
+    df['shots_on_target_home'] = df['shots_on_target_home'].fillna(df['home_goals'])
+    df['shots_on_target_away'] = df['shots_on_target_away'].fillna(df['away_goals'])
+    df['shots_home']           = df['shots_home'].fillna(df['home_goals'])
+    df['shots_away']           = df['shots_away'].fillna(df['away_goals'])
+
+    # Exponential decay weights
     weights = pd.Series(_match_weights(df['date']), index=df.index)
 
-    # weighted league averages
-    avg_home_scored = np.average(df['home_goals'], weights=weights)
-    avg_away_scored = np.average(df['away_goals'], weights=weights)
+    # Weighted league averages (normalisation denominators)
+    avg_goals_home = np.average(df['home_goals'], weights=weights)
+    avg_goals_away = np.average(df['away_goals'], weights=weights)
+    avg_xg_home    = np.average(df['xg_home'],    weights=weights)
+    avg_xg_away    = np.average(df['xg_away'],    weights=weights)
+    avg_sot_home   = np.average(df['shots_on_target_home'], weights=weights)
+    avg_sot_away   = np.average(df['shots_on_target_away'], weights=weights)
+    avg_shots_home = np.average(df['shots_home'], weights=weights)
+    avg_shots_away = np.average(df['shots_away'], weights=weights)
 
-    if avg_home_scored == 0 or avg_away_scored == 0:
+    if avg_goals_home == 0 or avg_goals_away == 0:
         raise ValueError("compute_team_stats: league goal averages are zero — check results data.")
+
+    # Per-match blended signals (each term normalised → average team ≈ 1.0)
+    # Attack: 35% goals + 35% xG + 20% SoT + 10% total shots
+    df['attack_signal_home'] = (
+        (df['home_goals'] / avg_goals_home)              * 0.35 +
+        (df['xg_home']    / avg_xg_home)                 * 0.35 +
+        (df['shots_on_target_home'] / avg_sot_home)      * 0.20 +
+        (df['shots_home'] / avg_shots_home)              * 0.10
+    )
+    df['attack_signal_away'] = (
+        (df['away_goals'] / avg_goals_away)              * 0.35 +
+        (df['xg_away']    / avg_xg_away)                 * 0.35 +
+        (df['shots_on_target_away'] / avg_sot_away)      * 0.20 +
+        (df['shots_away'] / avg_shots_away)              * 0.10
+    )
+    # Defence: 40% goals + 40% xG + 20% SoT conceded (no shots conceded — shots is attack proxy)
+    df['defence_signal_home'] = (
+        (df['away_goals'] / avg_goals_away)              * 0.40 +
+        (df['xg_away']    / avg_xg_away)                 * 0.40 +
+        (df['shots_on_target_away'] / avg_sot_away)      * 0.20
+    )
+    df['defence_signal_away'] = (
+        (df['home_goals'] / avg_goals_home)              * 0.40 +
+        (df['xg_home']    / avg_xg_home)                 * 0.40 +
+        (df['shots_on_target_home'] / avg_sot_home)      * 0.20
+    )
 
     teams = sorted(set(df['home_team'].unique()) | set(df['away_team'].unique()))
     rows = []
@@ -66,20 +138,25 @@ def compute_team_stats(results_df):
 
         hw = weights[home_games.index]
         aw = weights[away_games.index]
+        n_home = len(home_games)
+        n_away = len(away_games)
 
+        # Decay-weighted average of the per-match blended signal, then Bayesian shrinkage
+        raw_home_attack  = np.average(home_games['attack_signal_home'],  weights=hw)
+        raw_home_defence = np.average(home_games['defence_signal_home'], weights=hw)
+        raw_away_attack  = np.average(away_games['attack_signal_away'],  weights=aw)
+        raw_away_defence = np.average(away_games['defence_signal_away'], weights=aw)
+
+        home_attack  = _regress_to_mean(raw_home_attack,  n_home)
+        home_defence = _regress_to_mean(raw_home_defence, n_home)
+        away_attack  = _regress_to_mean(raw_away_attack,  n_away)
+        away_defence = _regress_to_mean(raw_away_defence, n_away)
+
+        # Raw goal averages — used as λ scale factor in predict_match
         avg_h_scored   = np.average(home_games['home_goals'], weights=hw)
         avg_h_conceded = np.average(home_games['away_goals'], weights=hw)
         avg_a_scored   = np.average(away_games['away_goals'], weights=aw)
         avg_a_conceded = np.average(away_games['home_goals'], weights=aw)
-
-        n_home = len(home_games)
-        n_away = len(away_games)
-
-        # raw ratings then shrink toward league average
-        home_attack  = _regress_to_mean(avg_h_scored   / avg_home_scored, n_home)
-        home_defence = _regress_to_mean(avg_h_conceded / avg_away_scored, n_home)
-        away_attack  = _regress_to_mean(avg_a_scored   / avg_away_scored, n_away)
-        away_defence = _regress_to_mean(avg_a_conceded / avg_home_scored, n_away)
 
         rows.append({
             'team':              team,

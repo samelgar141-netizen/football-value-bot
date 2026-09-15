@@ -33,7 +33,8 @@
     .reveal h2 { font-size: 1.6em; border-bottom: 1px solid var(--border); padding-bottom: 0.2em; margin-bottom: 0.6em; }
     .reveal h3 { font-size: 1.15em; color: var(--yellow); }
 
-    .reveal p, .reveal li { font-size: 0.82em; line-height: 1.6; }
+    .reveal p { font-size: 0.82em; line-height: 1.6; }
+    .reveal li { font-size: 20px; line-height: 1.6; }
     .reveal ul { list-style: none; padding: 0; }
     .reveal ul li::before { content: "\25B8 "; color: var(--accent); }
 
@@ -42,35 +43,102 @@
     .screenshot-box {
       border: 2px dashed var(--border);
       border-radius: 8px;
-      padding: 0.5em;
+      padding: 0.5em 0.8em 0.4em;
       background: var(--surface);
       margin: 0.6em auto;
-      max-width: 640px;
       text-align: center;
     }
     .screenshot-box img {
       max-width: 100%;
-      max-height: 280px;
+      max-height: 360px;
       border-radius: 6px;
       display: block;
       margin: 0 auto;
+      cursor: zoom-in;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+    .screenshot-box img:hover {
+      opacity: 0.9;
+      transform: scale(1.01);
+    }
+
+    .reveal .img-caption {
+      font-size: 0.28em;
+      color: var(--muted);
+      margin: 0.15em 0 0;
+      font-style: italic;
+      line-height: 1.3;
+    }
+
+    /* Lightbox overlay */
+    #lightbox-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.93);
+      z-index: 99999;
+      cursor: zoom-out;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    #lightbox-overlay.active { display: flex; }
+    #lightbox-overlay img {
+      max-width: 92vw;
+      max-height: 84vh;
+      border-radius: 8px;
+      box-shadow: 0 8px 60px rgba(0, 0, 0, 0.8);
+      object-fit: contain;
+      cursor: default;
+    }
+    #lightbox-caption {
+      color: var(--text);
+      font-size: 0.85em;
+      margin-top: 0.9em;
+      text-align: center;
+      max-width: 80vw;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      opacity: 0.85;
+    }
+    #lightbox-close {
+      position: fixed;
+      top: 1.2rem;
+      right: 1.6rem;
+      color: #fff;
+      font-size: 2em;
+      line-height: 1;
+      cursor: pointer;
+      background: none;
+      border: none;
+      opacity: 0.7;
+      transition: opacity 0.15s;
+    }
+    #lightbox-close:hover { opacity: 1; }
+    #lightbox-hint {
+      position: fixed;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--muted);
+      font-size: 0.72em;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
     }
 
     .stat-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 0.7em;
-      margin-top: 0.8em;
+      gap: 0.4em;
+      margin-top: 0.5em;
     }
     .stat-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 0.7em 0.5em;
+      padding: 0.4em 0.4em;
       text-align: center;
     }
-    .stat-card .val { font-size: 1.6em; font-weight: 700; color: var(--green); }
-    .stat-card .lbl { font-size: 0.6em; color: var(--muted); margin-top: 0.2em; }
+    .stat-card .val { font-size: 1.2em; font-weight: 700; color: var(--green); }
+    .stat-card .lbl { font-size: 0.55em; color: var(--muted); margin-top: 0.15em; }
 
     .reveal table {
       font-size: 0.68em;
@@ -115,6 +183,42 @@
       display: block;
     }
 
+    .flow-chart { margin: 0.7em 0; }
+    .flow-row { display: flex; align-items: stretch; gap: 0; }
+    .flow-step-fc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.45em 0.3em;
+      font-size: 0.6em;
+      text-align: center;
+      flex: 1;
+      min-width: 0;
+    }
+    .flow-step-fc .num {
+      font-size: 1.4em;
+      font-weight: 700;
+      color: var(--accent);
+      display: block;
+      line-height: 1.2;
+    }
+    .flow-arrow-fc {
+      color: var(--accent);
+      font-size: 1.4em;
+      padding: 0 0.12em;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .flow-bend-fc {
+      text-align: right;
+      color: var(--accent);
+      font-size: 1.6em;
+      line-height: 1.0;
+      margin: 0.1em 0;
+      padding-right: 0.15em;
+    }
+
     .score-matrix {
       border-collapse: collapse;
       font-size: 0.6em;
@@ -126,9 +230,9 @@
       border: 1px solid var(--border);
     }
     .score-matrix th { background: var(--surface); color: var(--accent); }
-    .cell-home { background: rgba(74,222,128,0.15); }
-    .cell-draw { background: rgba(251,191,36,0.15); }
-    .cell-away { background: rgba(248,113,113,0.15); }
+    .cell-home { background: rgba(74,222,128,0.15) !important; }
+    .cell-draw { background: rgba(251,191,36,0.15) !important; }
+    .cell-away { background: rgba(248,113,113,0.15) !important; }
 
     .cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1em; align-items: start; }
     .cols-65-35 { display: grid; grid-template-columns: 65% 35%; gap: 1em; align-items: start; }
@@ -192,9 +296,14 @@
   <p class="subtitle">A statistical approach to identifying positive expected value<br>in Premier League betting markets</p>
   <br>
   <div class="screenshot-box">
-    <img src="screenshots/01-github-repo.png" alt="GitHub repo main page" style="max-width:100%;max-height:280px;border-radius:6px;">
+    <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/01-github-repo.png"
+         alt="GitHub repo main page"
+         class="lightbox-trigger"
+         data-caption="GitHub repository — project file structure showing all modules: pipelines/, models/, analysis/, ledger/, reports/"
+         style="max-width:100%;max-height:380px;border-radius:6px;">
+    <p class="img-caption">GitHub repo main page &mdash; full project structure visible in file tree</p>
   </div>
-  <p style="font-size:0.55em; color:var(--muted); margin-top:0.8em;">Season 2025/26 &middot; Premier League &middot; Python</p>
+  <p style="font-size:0.55em; color:var(--muted); margin-top:0.6em;">Season 2025/26 &middot; Premier League &middot; Python</p>
   <aside class="notes">
     Welcome. This presentation walks through a fully automated football value betting pipeline built in Python.
     We'll cover the problem we're solving, the statistical model, how we find value in the market, and the results from the 2025/26 season.
@@ -211,6 +320,7 @@
         <li class="fragment">Bookmakers build a systematic margin (vig) into every market &mdash; typically <strong>5&ndash;8%</strong></li>
         <li class="fragment">Traditional bettors rely on gut feel, form guides, or tipsters &mdash; largely random outcomes</li>
         <li class="fragment">The gap: if a bookmaker prices a home win at 2/1 (33% implied) but the true probability is <strong>45%</strong>, that&rsquo;s a mispricing worth exploiting repeatedly</li>
+        <li class="fragment">Bookmakers also shift odds based on <strong>volume of money placed</strong> &mdash; not just probability changes. Heavy one-sided betting moves the line, creating mispricings independent of the true probability</li>
         <li class="fragment" style="color: var(--green);">Over a large sample, positive expected value (EV) compounds into profit</li>
       </ul>
       <div class="example-box fragment" style="margin-top:0.8em;">
@@ -220,7 +330,12 @@
     </div>
     <div>
       <div class="screenshot-box">
-        <img src="screenshots/06-value-bets.png" alt="value_bets_latest.csv" style="max-width:100%;max-height:280px;border-radius:6px;">
+        <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/06-value-bets.png"
+             alt="value_bets_latest.csv showing EV column"
+             class="lightbox-trigger"
+             data-caption="value_bets_latest.csv — GW38 value bets ranked by EV, showing model probability, bookmaker odds, vig-adjusted implied probability, and Kelly stake"
+             style="max-width:100%;max-height:360px;border-radius:6px;">
+        <p class="img-caption">value_bets_latest.csv &mdash; GW38 bets with model probability, EV, and bookmaker columns</p>
       </div>
     </div>
   </div>
@@ -247,7 +362,12 @@
     </div>
     <div>
       <div class="screenshot-box">
-        <img src="screenshots/02-pipeline-output.png" alt="Pipeline terminal output" style="max-width:100%;max-height:280px;border-radius:6px;">
+        <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/02-pipeline-output.png"
+             alt="Pipeline terminal output"
+             class="lightbox-trigger"
+             data-caption="Terminal output from python run_weekly.py — all 9 pipeline steps completing successfully in approximately 15 seconds"
+             style="max-width:100%;max-height:360px;border-radius:6px;">
+        <p class="img-caption">Terminal output from <code>python run_weekly.py</code> &mdash; all 9 steps completing in ~15 seconds</p>
       </div>
     </div>
   </div>
@@ -262,32 +382,44 @@
 <!-- Slide 4: Weekly Pipeline -->
 <section>
   <h2>The Weekly Pipeline</h2>
-  <div class="pipeline-grid">
-    <div class="pipeline-step"><span class="num">1</span>Fetch match results<br><span style="color:var(--muted);">football-data.org</span></div>
-    <div class="pipeline-step"><span class="num">2</span>Auto-settle pending bets<br><span style="color:var(--muted);">against finished results</span></div>
-    <div class="pipeline-step"><span class="num">3</span>Fetch upcoming fixtures<br><span style="color:var(--muted);">next 14 days</span></div>
-    <div class="pipeline-step"><span class="num">4</span>Fetch bookmaker odds<br><span style="color:var(--muted);">best price across 8 bookmakers</span></div>
-    <div class="pipeline-step"><span class="num">5</span>Compute team ratings<br><span style="color:var(--muted);">attack &amp; defence strengths</span></div>
-    <div class="pipeline-step"><span class="num">6</span>Predict all fixtures<br><span style="color:var(--muted);">score matrix per match</span></div>
-    <div class="pipeline-step"><span class="num">7</span>Find value bets<br><span style="color:var(--muted);">EV &gt; 20% threshold</span></div>
-    <div class="pipeline-step"><span class="num">8</span>Generate CSV report<br><span style="color:var(--muted);">ranked by EV</span></div>
-    <div class="pipeline-step"><span class="num">9</span>HTML dashboard<br><span style="color:var(--muted);">push to GitHub</span></div>
-  </div>
-  <div class="screenshot-box" style="margin-top:0.5em;">
-    <img src="screenshots/03-folder-structure.png" alt="Repo folder structure" style="max-width:100%;max-height:200px;border-radius:6px;">
+  <div class="flow-chart">
+    <div class="flow-row">
+      <div class="flow-step-fc"><span class="num">1</span>Fetch results<br><span style="color:var(--muted);">football-data.org</span></div>
+      <span class="flow-arrow-fc">&rarr;</span>
+      <div class="flow-step-fc"><span class="num">2</span>Auto-settle bets<br><span style="color:var(--muted);">against results</span></div>
+      <span class="flow-arrow-fc">&rarr;</span>
+      <div class="flow-step-fc"><span class="num">3</span>Fetch fixtures<br><span style="color:var(--muted);">next 14 days</span></div>
+      <span class="flow-arrow-fc">&rarr;</span>
+      <div class="flow-step-fc"><span class="num">4</span>Fetch odds<br><span style="color:var(--muted);">8 bookmakers</span></div>
+      <span class="flow-arrow-fc">&rarr;</span>
+      <div class="flow-step-fc"><span class="num">5</span>Compute ratings<br><span style="color:var(--muted);">attack &amp; defence</span></div>
+    </div>
+    <div class="flow-bend-fc">&#x2193;</div>
+    <div class="flow-row">
+      <div class="flow-step-fc"><span class="num">10</span>Log bets placed<br><span style="color:var(--muted);">ledger.py</span></div>
+      <span class="flow-arrow-fc">&larr;</span>
+      <div class="flow-step-fc"><span class="num">9</span>HTML dashboard<br><span style="color:var(--muted);">push to GitHub</span></div>
+      <span class="flow-arrow-fc">&larr;</span>
+      <div class="flow-step-fc"><span class="num">8</span>Generate CSV<br><span style="color:var(--muted);">ranked by EV</span></div>
+      <span class="flow-arrow-fc">&larr;</span>
+      <div class="flow-step-fc"><span class="num">7</span>Find value bets<br><span style="color:var(--muted);">EV &gt; 20%</span></div>
+      <span class="flow-arrow-fc">&larr;</span>
+      <div class="flow-step-fc"><span class="num">6</span>Predict fixtures<br><span style="color:var(--muted);">score matrix</span></div>
+    </div>
   </div>
   <aside class="notes">
-    The pipeline is a linear sequence of 9 steps. Each step writes a CSV that the next step reads.
+    The pipeline is a linear sequence of 10 steps. Each step writes a CSV that the next step reads.
     Step 2 is an important automation: bets placed last week are automatically marked as won or lost
     by comparing them against the real results from football-data.org.
-    The 20% EV threshold in step 7 is configurable in config.py.
+    Step 10 is manual: after reviewing the value bets report, you log which bets you placed using ledger.py at the command prompt.
+    The 20% EV threshold in step 7 is configurable in config.py. The entire pipeline runs in ~15 seconds.
   </aside>
 </section>
 
 <!-- Slide 5: Why Poisson? -->
 <section>
   <h2>Why Poisson?</h2>
-  <div class="cols-65-35">
+  <div class="cols-2">
     <div>
       <ul>
         <li class="fragment">Football goals are rare, independent events &mdash; a textbook Poisson process</li>
@@ -301,25 +433,13 @@
       </ul>
     </div>
     <div>
-      <p style="font-size:0.65em; color:var(--accent); margin-bottom:0.3em;">Score matrix (Arsenal vs Chelsea)</p>
-      <table class="score-matrix">
-        <thead>
-          <tr><th></th><th>0</th><th>1</th><th>2</th><th>3+</th></tr>
-        </thead>
-        <tbody>
-          <tr><th>0</th><td class="cell-away">7.2%</td><td class="cell-away">9.1%</td><td class="cell-away">5.7%</td><td class="cell-away">2.4%</td></tr>
-          <tr><th>1</th><td class="cell-home">10.8%</td><td class="cell-draw">13.6%</td><td class="cell-away">8.6%</td><td class="cell-away">3.6%</td></tr>
-          <tr><th>2</th><td class="cell-home">8.1%</td><td class="cell-home">10.2%</td><td class="cell-draw">6.4%</td><td class="cell-away">2.7%</td></tr>
-          <tr><th>3+</th><td class="cell-home">4.1%</td><td class="cell-home">5.1%</td><td class="cell-home">3.2%</td><td class="cell-draw">1.3%</td></tr>
-        </tbody>
-      </table>
-      <p style="font-size:0.5em; color:var(--muted); margin-top:0.3em;">
-        <span style="color:var(--green);">&#9632;</span> Home win &nbsp;
-        <span style="color:var(--yellow);">&#9632;</span> Draw &nbsp;
-        <span style="color:var(--red);">&#9632;</span> Away win
-      </p>
-      <div class="screenshot-box" style="margin-top:0.4em;">
-        <img src="screenshots/04-score-matrix.png" alt="Score matrix from README" style="max-width:100%;max-height:160px;border-radius:6px;">
+      <div class="screenshot-box">
+        <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/04-score-matrix.png"
+             alt="Arsenal vs Man City score matrix"
+             class="lightbox-trigger"
+             data-caption="Poisson score matrix example from README.md — Arsenal vs Man City 2024/25 worked example showing full 11&times;11 probability grid"
+             style="max-width:100%;max-height:380px;border-radius:6px;">
+        <p class="img-caption">README.md worked example &mdash; Arsenal vs Man City score matrix</p>
       </div>
     </div>
   </div>
@@ -327,6 +447,57 @@
     Poisson is the right model for football because goals satisfy the core assumptions: they're rare (average ~2.5 per game), roughly independent of each other, and the rate is relatively stable within a game.
     The critical point for this project: goals are the ONLY raw data input right now. All the sophistication comes from how we process those goals, not from adding new data sources.
     The score matrix is the engine -- once we have it, we can calculate any market probability by summing the right cells.
+    Next slide walks through a concrete λ calculation using real team_stats.csv values.
+  </aside>
+</section>
+
+<!-- Slide 5b: Worked Example -->
+<section>
+  <h2>Worked Example: &lambda; Calculation</h2>
+  <p style="font-size:0.7em; color:var(--muted); margin-bottom:0.5em;">Tottenham (home) vs Everton (away) &mdash; values read directly from <code>team_stats.csv</code></p>
+  <div class="cols-2" style="gap:0.8em;">
+    <div class="example-box" style="margin:0; font-size:0.78em;">
+      <span style="color:var(--muted);"><code>home_attack</code> column &rarr;</span><br>
+      <code style="font-size:1.1em;">Tottenham <strong style="color:var(--accent);">home_attack = 0.82</strong></code><br>
+      <span style="color:var(--muted);">Tottenham score 18% fewer home goals than the league average (after exponential time decay &amp; regression to mean)</span>
+    </div>
+    <div class="example-box" style="margin:0; font-size:0.78em;">
+      <span style="color:var(--muted);"><code>away_defence</code> column &rarr;</span><br>
+      <code style="font-size:1.1em;">Everton <strong style="color:var(--accent);">away_defence = 0.89</strong></code><br>
+      <span style="color:var(--muted);">Everton concede 11% fewer away goals than average &mdash; a tighter-than-average away defence</span>
+    </div>
+  </div>
+  <div class="formula-box" style="margin-top:0.6em; font-size:0.88em; text-align:center;">
+    &lambda;<sub>home</sub> = <strong>0.82</strong> &times; <strong>0.89</strong> &times; <strong>1.52</strong> (league avg home goals) = <strong style="color:var(--green);">1.11</strong> expected Tottenham goals
+  </div>
+  <div class="example-box" style="margin-top:0.6em;">
+    <strong>P(k) = (e<sup>&minus;&lambda;</sup> &times; &lambda;<sup>k</sup>) / k! &nbsp;&nbsp;with &lambda; = 1.11</strong>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.6em; margin-top:0.5em; text-align:center; font-size:0.85em;">
+      <div style="background:rgba(56,189,248,0.12); border-radius:6px; padding:0.5em 0.3em;">
+        <strong style="color:var(--accent);">P(0 goals)</strong><br>
+        e<sup>&minus;1.11</sup> &times; 1 / 1<br>
+        = 0.330 &times; 1<br>
+        = <strong style="color:var(--green);">33.0%</strong>
+      </div>
+      <div style="background:rgba(56,189,248,0.12); border-radius:6px; padding:0.5em 0.3em;">
+        <strong style="color:var(--accent);">P(1 goal)</strong><br>
+        0.330 &times; 1.11 / 1<br><br>
+        = <strong style="color:var(--green);">36.6%</strong>
+      </div>
+      <div style="background:rgba(56,189,248,0.12); border-radius:6px; padding:0.5em 0.3em;">
+        <strong style="color:var(--accent);">P(2 goals)</strong><br>
+        0.330 &times; 1.23 / 2<br><br>
+        = <strong style="color:var(--green);">20.3%</strong>
+      </div>
+    </div>
+  </div>
+  <p style="font-size:0.65em; color:var(--muted); margin-top:0.5em; text-align:center;">
+    &lambda;<sub>away</sub> computed independently: Everton away_attack &times; Tottenham home_defence &times; league avg away goals &rarr; full 11&times;11 score matrix
+  </p>
+  <aside class="notes">
+    The 0.82 home_attack means Tottenham score 18% fewer goals at home than the league average -- a below-average home attack that season. The 0.89 away_defence for Everton means they concede 11% fewer away goals than average -- a decent defensive record away from home.
+    λ = 0.82 × 0.89 × 1.52 = 1.11. With λ = 1.11, there's a 33% chance Tottenham score 0, 36.6% they score 1, 20.3% they score 2. The most likely outcome is 1 goal.
+    Combined with Everton's away attack (1.06) and Tottenham's home defence (1.27), λ_away = 1.64 — and summing the upper-triangle cells of the score matrix gives Everton a 49.8% away win probability, shown on the next slide.
   </aside>
 </section>
 
@@ -361,8 +532,13 @@
       </tr>
     </tbody>
   </table>
-  <div class="screenshot-box" style="margin-top:0.6em;">
-    <img src="screenshots/05-team-stats.png" alt="team_stats.csv on GitHub" style="max-width:100%;max-height:200px;border-radius:6px;">
+  <div class="screenshot-box" style="margin-top:0.5em;">
+    <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/05-team-stats.png"
+         alt="team_stats.csv on GitHub"
+         class="lightbox-trigger"
+         data-caption="data/processed/team_stats.csv on GitHub — computed home/away attack and defence strength ratings for all 20 Premier League teams"
+         style="max-width:100%;max-height:280px;border-radius:6px;">
+    <p class="img-caption">data/processed/team_stats.csv &mdash; attack &amp; defence ratings for all 20 PL teams</p>
   </div>
   <aside class="notes">
     The model is deliberately conservative. We're using only goals data, but we apply four layers of statistical sophistication.
@@ -372,7 +548,347 @@
   </aside>
 </section>
 
-<!-- Slide 6b: What Could Be Added -->
+<!-- Slide 7: Score Matrix to Markets -->
+<section>
+  <h2>From Score Matrix to Markets</h2>
+  <div class="cols-2">
+    <div>
+      <ul>
+        <li class="fragment">The 11&times;11 matrix has a probability for every scoreline</li>
+        <li class="fragment">Markets derived by summing the right cells:</li>
+      </ul>
+      <table class="fragment" style="margin-top:0.5em; font-size:0.52em;">
+        <thead><tr><th>Market</th><th>Cells to sum</th></tr></thead>
+        <tbody>
+          <tr><td>Home win</td><td>Lower triangle (home &gt; away)</td></tr>
+          <tr><td>Draw</td><td>Diagonal (home = away)</td></tr>
+          <tr><td>Away win</td><td>Upper triangle (away &gt; home)</td></tr>
+          <tr><td>Over 2.5</td><td>All cells where total &gt; 2</td></tr>
+          <tr><td>Under 2.5</td><td>All cells where total &le; 2</td></tr>
+          <tr><td>BTTS Yes</td><td>All cells where both &ge; 1</td></tr>
+        </tbody>
+      </table>
+      <p class="fragment" style="font-size:0.7em; color:var(--green); margin-top:0.6em;">
+        10 fixtures &times; 6 markets = <strong>60 betting opportunities</strong> evaluated each week
+      </p>
+    </div>
+    <div>
+      <pre class="fragment"><code class="language-python" data-trim>
+def predict_match(home, away, stats):
+    lambda_home = (
+        stats.loc[home, 'home_attack']
+        * stats.loc[away, 'away_defence']
+        * league_avg_home
+    )
+    lambda_away = (
+        stats.loc[away, 'away_attack']
+        * stats.loc[home, 'home_defence']
+        * league_avg_away
+    )
+
+    home_probs = poisson.pmf(range(11), lambda_home)
+    away_probs = poisson.pmf(range(11), lambda_away)
+
+    # 11x11 score matrix
+    matrix = np.outer(home_probs, away_probs)
+
+    # Dixon-Coles correction on low scores
+    matrix = _dixon_coles(matrix, lambda_home, lambda_away)
+
+    return matrix
+      </code></pre>
+      <div class="screenshot-box" style="margin-top:0.5em;">
+        <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/04-score-matrix.png"
+             alt="Arsenal vs Man City score matrix"
+             class="lightbox-trigger"
+             data-caption="README.md worked example — Arsenal vs Man City 2024/25 score matrix showing the full 11x11 probability grid produced by np.outer(home_probs, away_probs)"
+             style="max-width:100%;max-height:190px;border-radius:6px;">
+        <p class="img-caption">README.md &mdash; Arsenal vs Man City score matrix output</p>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    The np.outer call is the heart of the model. It takes two probability distributions -- home goals and away goals -- and produces a joint distribution over all possible scorelines.
+    This works because Poisson assumes independence between the two teams' scoring. The Dixon-Coles correction partially relaxes this assumption for low-scoring games.
+    From this single matrix, we get all six market probabilities. Summing the right cells is all it takes.
+  </aside>
+</section>
+
+<!-- Slide 7b: Score Matrix — Tottenham vs Everton -->
+<section>
+  <h2>Score Matrix: Tottenham vs Everton</h2>
+  <p style="font-size:0.65em; color:var(--muted); margin-bottom:0.3em;">Each cell = P(Tottenham score h) &times; P(Everton score a). Sum the <span style="color:var(--red);">red cells</span> to get Everton&rsquo;s model probability.</p>
+  <div class="cols-2" style="gap:0.8em; align-items:start;">
+    <div>
+      <div class="formula-box" style="font-size:0.72em; margin-bottom:0.4em;">
+        &lambda;<sub>away</sub> = Everton away_attack &times; Tottenham home_defence &times; league avg away<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = <strong>1.06</strong> &times; <strong>1.27</strong> &times; <strong>1.22</strong> = <strong style="color:var(--green);">1.64</strong> expected Everton goals
+      </div>
+      <table class="score-matrix" style="font-size:0.62em; width:100%;">
+        <thead>
+          <tr>
+            <th style="background:var(--bg); font-size:0.85em; color:var(--muted);">Tott &darr; / Evt &rarr;</th>
+            <th>0</th><th>1</th><th>2</th><th>3</th><th>4</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>0</th>
+            <td class="cell-draw">6.4%</td>
+            <td class="cell-away"><strong>10.5%</strong></td>
+            <td class="cell-away"><strong>8.6%</strong></td>
+            <td class="cell-away"><strong>4.7%</strong></td>
+            <td class="cell-away"><strong>1.9%</strong></td>
+          </tr>
+          <tr>
+            <th>1</th>
+            <td class="cell-home">7.1%</td>
+            <td class="cell-draw">11.6%</td>
+            <td class="cell-away"><strong>9.5%</strong></td>
+            <td class="cell-away"><strong>5.2%</strong></td>
+            <td class="cell-away"><strong>2.1%</strong></td>
+          </tr>
+          <tr>
+            <th>2</th>
+            <td class="cell-home">3.9%</td>
+            <td class="cell-home">6.5%</td>
+            <td class="cell-draw">5.3%</td>
+            <td class="cell-away"><strong>2.9%</strong></td>
+            <td class="cell-away"><strong>1.2%</strong></td>
+          </tr>
+          <tr>
+            <th>3</th>
+            <td class="cell-home">1.5%</td>
+            <td class="cell-home">2.4%</td>
+            <td class="cell-home">2.0%</td>
+            <td class="cell-draw">1.1%</td>
+            <td class="cell-away"><strong>0.4%</strong></td>
+          </tr>
+          <tr>
+            <th>4</th>
+            <td class="cell-home">0.4%</td>
+            <td class="cell-home">0.7%</td>
+            <td class="cell-home">0.5%</td>
+            <td class="cell-home">0.3%</td>
+            <td class="cell-draw">0.1%</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="font-size:0.5em; color:var(--muted); margin-top:0.25em;">Scores 0&ndash;4 shown. Full model uses 11&times;11. Each cell = P(home goals = row) &times; P(away goals = col).</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:0.5em;">
+      <div style="display:flex; gap:0.4em; font-size:0.58em; flex-wrap:wrap;">
+        <span style="background:rgba(248,113,113,0.15); border:1px solid rgba(248,113,113,0.5); padding:0.25em 0.5em; border-radius:4px;">&#9632; Away win (Everton &gt; Tott)</span>
+        <span style="background:rgba(251,191,36,0.15); border:1px solid rgba(251,191,36,0.5); padding:0.25em 0.5em; border-radius:4px;">&#9632; Draw</span>
+        <span style="background:rgba(74,222,128,0.15); border:1px solid rgba(74,222,128,0.5); padding:0.25em 0.5em; border-radius:4px;">&#9632; Home win</span>
+      </div>
+      <div class="example-box" style="font-size:0.7em;">
+        <strong>Summing red cells (away goals &gt; home goals):</strong><br>
+        <span style="color:var(--muted);">Visible 5&times;5 grid:</span> &nbsp;&nbsp;<strong>47.2%</strong><br>
+        <span style="color:var(--muted);">Scores 5+ (not shown):</span> <strong>+2.6%</strong><br>
+        <div style="border-top:1px solid var(--accent); margin:0.4em 0 0.3em; padding-top:0.3em;">
+          Full 11&times;11 total: <strong style="color:var(--green); font-size:1.2em;">49.8%</strong> Everton away win
+        </div>
+      </div>
+      <div class="example-box" style="font-size:0.65em;">
+        <span style="color:var(--muted);">Largest contributing scorelines:</span><br>
+        <strong>0&ndash;1</strong> (Tott nil, Everton 1) = <strong style="color:var(--red);">10.5%</strong><br>
+        <strong>1&ndash;2</strong> (Tott 1, Everton 2) &nbsp;= <strong style="color:var(--red);">&nbsp;9.5%</strong><br>
+        <strong>0&ndash;2</strong> (Tott nil, Everton 2) = <strong style="color:var(--red);">&nbsp;8.6%</strong>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    This slide shows exactly where the model probability comes from. λ_home = 1.11 (Tottenham expected goals) was built on the previous slide. λ_away = 1.06 × 1.27 × 1.22 = 1.64 uses Everton's away_attack (1.06 — 6% above average) and Tottenham's home_defence (1.27 — leaking 27% more than the league average at home). These are the pre-GW38 team_stats values the model used when it made its predictions.
+    The matrix is produced by np.outer(home_probs, away_probs) — each cell is P(Tottenham score h) × P(Everton score a). These are independent Poisson distributions.
+    To get the away win probability we sum every cell where the away column exceeds the home row — the upper triangle. In the visible 5×5 grid that's 47.2%, plus another 2.6% from higher-scoring outcomes, giving 49.8%.
+    The most likely single scoreline is 1-1 at 11.6%, but the most likely Everton win scoreline is 0-1 at 10.5% — roughly a 1-in-10 chance of that exact result.
+    This 49.8% model probability feeds directly into the EV calculation on the next two slides.
+  </aside>
+</section>
+
+<!-- Slide 8: EV and Vig Removal - Step 1 -->
+<section>
+  <h2>Finding Value: EV and Vig Removal</h2>
+  <p style="font-size:0.7em; color:var(--muted); margin-bottom:0.3em;">Example: <strong>Tottenham vs Everton &mdash; GW38 away market (Bet365)</strong></p>
+  <h3>Step 1 &mdash; Remove bookmaker margin</h3>
+  <div class="formula-box">
+    Raw implied prob = 1 / decimal_odds &nbsp;&middot;&nbsp;
+    True prob = raw_prob &divide; overround<br>
+    <span style="font-size:0.82em; color:var(--muted);">Overround = sum of all raw implied probs in the market &mdash; always &gt; 100%, the bookmaker&rsquo;s built-in margin</span>
+  </div>
+  <div class="example-box">
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.4em; text-align:center; margin-bottom:0.5em;">
+      <div><span style="color:var(--muted); font-size:0.85em;">Tottenham (home)</span><br>odds: <strong>1.85</strong><br>raw: 1/1.85 = 54.1%</div>
+      <div><span style="color:var(--muted); font-size:0.85em;">Draw</span><br>odds: <strong>3.50</strong><br>raw: 1/3.50 = 28.6%</div>
+      <div><span style="color:var(--muted); font-size:0.85em;">Everton (away)</span><br>odds: <strong>4.00</strong><br>raw: 1/4.00 = 25.0%</div>
+    </div>
+    Overround = 54.1 + 28.6 + 25.0 = <strong>107.6%</strong> &nbsp;&rarr;&nbsp; bookmaker margin = <strong>7.6%</strong><br>
+    Vig-removed Everton away prob = 25.0 &divide; 107.6 = <strong style="color:var(--yellow);">23.2%</strong>
+  </div>
+  <aside class="notes">
+    Vig removal is essential. Without it we'd be comparing our model probability against an artificially inflated bookmaker probability.
+    The overround tells you the bookmaker's total margin across the whole market. Here it's 107.6% — meaning for every £107.60 bet proportionally, the bookmaker expects to pay out £100. Their edge is £7.60.
+    Step 1 divides each raw implied probability by the overround (107.6%), which normalises the market to sum to 100%. This removes the margin and gives us the true implied probability: 23.2% for Everton to win away.
+    These odds (1.85 / 3.50 / 4.00) were the best available on Bet365 for this market. The pipeline pulls from up to 8 bookmakers and takes the best odds for each outcome.
+  </aside>
+</section>
+
+<!-- Slide 8b: EV and Vig Removal - Step 2 -->
+<section>
+  <h2>Finding Value: EV and Vig Removal</h2>
+  <p style="font-size:0.7em; color:var(--muted); margin-bottom:0.4em;">Example: <strong>Tottenham vs Everton &mdash; GW38 away market (Bet365)</strong> &nbsp;&middot;&nbsp; Step 1 result: vig-removed Everton away prob = <strong style="color:var(--yellow);">23.2%</strong></p>
+  <h3>Step 2 &mdash; Calculate Expected Value</h3>
+  <div class="formula-box">
+    EV = (Model probability &times; Decimal odds) &minus; 1
+  </div>
+  <div class="example-box">
+    Model prob for Everton away: <strong>49.8%</strong> &nbsp;&middot;&nbsp; Bet365 decimal odds: <strong>4.00</strong><br>
+    EV = (0.498 &times; 4.00) &minus; 1 = <strong style="color:var(--green);">+99%</strong><br>
+    <span style="color:var(--muted);">Model sees 49.8% &mdash; market prices only 23.2% &rarr; clear value</span>
+  </div>
+  <p class="fragment" style="font-size:0.7em; color:var(--muted); margin-top:0.4em;">
+    Only bets with EV &gt; 20% are surfaced &mdash; configurable via <code>MIN_EV_THRESHOLD</code> in config.py
+  </p>
+  <aside class="notes">
+    Step 2 is straightforward: our model gives Everton a 49.8% chance of winning away — more than double the market's vig-removed 23.2%. The 49.8% came from summing the upper-triangle cells of the score matrix on the previous slide.
+    The EV of +99% means for every £1 staked, we expect to return £1.99 long-run. This is an unusually large edge — in practice most value bets are in the 20-50% EV range.
+    The 20% EV threshold filters out marginal edges and model noise. Only bets where we have a meaningful, statistically significant edge are surfaced.
+  </aside>
+</section>
+
+<!-- Slide 9: Kelly Criterion -->
+<section>
+  <h2>Stake Sizing: Kelly Criterion</h2>
+  <div class="cols-2">
+    <div>
+      <ul>
+        <li class="fragment">Kelly: mathematically optimal fraction of bankroll for maximum long-run growth</li>
+      </ul>
+      <div class="formula-box fragment">
+        f = (b&times;p &minus; q) / b<br>
+        <span style="font-size:0.85em; color:var(--muted);">b = odds&minus;1 &nbsp;&middot;&nbsp; p = model prob &nbsp;&middot;&nbsp; q = 1&minus;p</span>
+      </div>
+      <ul>
+        <li class="fragment"><strong>Problem:</strong> Full Kelly is aggressive &mdash; large drawdowns</li>
+        <li class="fragment"><strong>Our approach:</strong> 25% of full Kelly (fractional Kelly)</li>
+      </ul>
+      <div class="example-box fragment" style="font-size:0.65em; margin-top:0.5em;">
+        <strong>Tottenham vs Everton &mdash; Kelly worked example:</strong><br>
+        b = 4.0 &minus; 1 = <strong>3.0</strong> &nbsp;&middot;&nbsp; p = <strong>0.498</strong> &nbsp;&middot;&nbsp; q = 1 &minus; 0.498 = <strong>0.502</strong><br>
+        f = (3.0 &times; 0.498 &minus; 0.502) &divide; 3.0<br>
+        &nbsp;&nbsp;= (1.494 &minus; 0.502) &divide; 3.0<br>
+        &nbsp;&nbsp;= 0.992 &divide; 3.0 = <strong style="color:var(--green);">0.33 &rarr; full Kelly = 33%</strong>
+      </div>
+    </div>
+    <div>
+      <div class="example-box fragment" style="margin-top:1em;">
+        <strong>GW38 example: Tottenham vs Everton away</strong><br><br>
+        Model prob: 49.8% &nbsp;&middot;&nbsp; Odds: 4.0 (3/1) &nbsp;&middot;&nbsp; EV: +99%<br><br>
+        Full Kelly = <strong>33.0%</strong> of bankroll<br>
+        Fractional (25%) = <strong>8.25%</strong><br>
+        Bankroll &pound;20 &rarr; Stake = <strong style="color:var(--green);">&pound;1.65</strong>
+      </div>
+      <p class="fragment" style="font-size:0.65em; color:var(--muted); margin-top:0.5em;">
+        Each bet&rsquo;s stake auto-calculated and shown in the Upcoming Bets tab of the dashboard
+      </p>
+    </div>
+  </div>
+  <aside class="notes">
+    Kelly gives you the exact fraction of your bankroll to bet on any given opportunity to maximise long-run wealth.
+    But full Kelly is aggressive -- a string of losses early can wipe out a large percentage of the bankroll. Fractional Kelly at 25% gives up some theoretical return in exchange for a much smoother bankroll curve.
+    In practice the stakes are small because we're working with a £20 starting bankroll to test the model -- the system scales linearly with bankroll size.
+  </aside>
+</section>
+
+<!-- Slide 10: Season Execution -->
+<section>
+  <h2>Season 2025/26: Execution</h2>
+  <p style="font-size:0.7em; color:var(--muted);">5 Betting Cohorts (BC1&ndash;BC5) &mdash; one per gameweek</p>
+  <table class="cohort-table">
+    <thead>
+      <tr><th>Cohort</th><th>Gameweek</th><th>Bets</th><th>Markets</th><th>W</th><th>L</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>BC1</td><td>GW34</td><td>7</td><td>home, away, draw</td><td>2</td><td>5</td></tr>
+      <tr><td>BC2</td><td>GW35</td><td>6</td><td>home, away, draw</td><td>1</td><td>5</td></tr>
+      <tr><td>BC3</td><td>GW36</td><td>5</td><td>home, away, draw</td><td>1</td><td>4</td></tr>
+      <tr><td>BC4</td><td>GW37</td><td>8</td><td>home, away, draw, under 2.5</td><td>4</td><td>4</td></tr>
+      <tr><td>BC5</td><td>GW38</td><td>7</td><td>home, away, draw, under 2.5</td><td>4</td><td>3</td></tr>
+      <tr class="highlight-row"><td><strong>Total</strong></td><td></td><td><strong>33</strong></td><td></td><td><strong>12</strong></td><td><strong>21</strong></td></tr>
+    </tbody>
+  </table>
+  <div class="screenshot-box" style="margin-top:0.5em;">
+    <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/07-dashboard-settled.png"
+         alt="Dashboard settled bets table"
+         class="lightbox-trigger"
+         data-caption="Dashboard Settled Bets tab — all 33 bets across GW34-GW38 showing match results, bookmaker odds, model probability, EV, and individual P&L"
+         style="max-width:100%;max-height:260px;border-radius:6px;">
+    <p class="img-caption">Dashboard Settled Bets tab &mdash; all 33 bets with results, odds, model probability, and P&amp;L</p>
+  </div>
+  <aside class="notes">
+    We ran 5 betting cohorts in the final 5 gameweeks of the 2025/26 season. This was a proof-of-concept test -- deliberately small stakes, real bets, real results.
+    Notice BC5 (GW38, the final gameweek) was the best performing cohort -- 4 wins from 7 bets.
+    The record of 12W/21L looks poor on surface, but it's not about win rate -- it's about EV. A 36% win rate on bets with average odds of 2.5 is actually very close to break-even, and our EV margin pushed us into profit.
+  </aside>
+</section>
+
+<!-- Slide 11: End of Season Results -->
+<section>
+  <h2>End of Season Results</h2>
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="val">&pound;25.29</div>
+      <div class="lbl">Final Bankroll</div>
+    </div>
+    <div class="stat-card">
+      <div class="val" style="color:var(--green);">+&pound;5.29</div>
+      <div class="lbl">Total P&amp;L</div>
+    </div>
+    <div class="stat-card">
+      <div class="val" style="color:var(--green);">+26.5%</div>
+      <div class="lbl">ROI on Capital</div>
+    </div>
+    <div class="stat-card">
+      <div class="val" style="color:var(--accent);">33</div>
+      <div class="lbl">Total Bets Placed</div>
+    </div>
+    <div class="stat-card">
+      <div class="val" style="color:var(--yellow);">12W / 21L</div>
+      <div class="lbl">Record</div>
+    </div>
+    <div class="stat-card">
+      <div class="val" style="color:var(--green);">BC1</div>
+      <div class="lbl">Best Cohort</div>
+    </div>
+  </div>
+  <div class="cols-2" style="margin-top:0.5em;">
+    <div class="screenshot-box">
+      <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/08-bankroll-chart.png"
+           alt="Bankroll over time chart"
+           class="lightbox-trigger"
+           data-caption="Bankroll Over Time chart (Betting Cohort view) — starting from £20, rising to £25.29 over GW34-GW38 with £20 reference line"
+           style="max-width:100%;max-height:230px;border-radius:6px;">
+      <p class="img-caption">Bankroll Over Time &mdash; £20 &rarr; £25.29 across five gameweeks</p>
+    </div>
+    <div class="screenshot-box">
+      <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/09-bar-chart.png"
+           alt="Bets by cohort chart"
+           class="lightbox-trigger"
+           data-caption="Bets by Cohort bar chart — wins and losses per betting cohort BC1-BC5, showing improving win rate in later gameweeks"
+           style="max-width:100%;max-height:230px;border-radius:6px;">
+      <p class="img-caption">Bets by Cohort &mdash; wins and losses per gameweek (BC1&ndash;BC5)</p>
+    </div>
+  </div>
+  <aside class="notes">
+    Starting bankroll was £20. We finished at £25.29 -- a £5.29 profit and 26.5% return on capital over the final 5 weeks of the season.
+    The best single bet was from BC1: Chelsea 1-3 Nottingham Forest, backing the Forest away win at good odds.
+    This is a small sample -- 33 bets is not statistically significant. But the positive EV threshold approach is sound, and this result is consistent with what you'd expect from a +EV strategy over a short run.
+    The real test will be running it over a full season from gameweek 1.
+  </aside>
+</section>
+
+<!-- Slide: What Could Be Added to the Model -->
 <section>
   <h2>What Could Be Added to the Model</h2>
   <p style="font-size:0.7em; color:var(--muted);">Additional raw signals that could feed into the expected goals (&lambda;) calculation</p>
@@ -421,203 +937,6 @@
     Shots on target is the lowest-hanging fruit. The data is already arriving in our API response -- we just discard it. Adding one column to the pipeline gives us a quality proxy for chance creation.
     xG is the gold standard input for Poisson football models. It removes the noise of finishing luck. A striker who hits the post three times in a game creates the same goals as one who scores zero -- xG captures the difference.
     Possession on its own is a weak predictor -- some of the best counter-attacking teams in the world have low possession but win regularly.
-  </aside>
-</section>
-
-<!-- Slide 7: Score Matrix to Markets -->
-<section>
-  <h2>From Score Matrix to Markets</h2>
-  <div class="cols-2">
-    <div>
-      <ul>
-        <li class="fragment">The 11&times;11 matrix has a probability for every scoreline</li>
-        <li class="fragment">Markets derived by summing the right cells:</li>
-      </ul>
-      <table class="fragment" style="margin-top:0.5em; font-size:0.65em;">
-        <thead><tr><th>Market</th><th>Cells to sum</th></tr></thead>
-        <tbody>
-          <tr><td>Home win</td><td>Lower triangle (home &gt; away)</td></tr>
-          <tr><td>Draw</td><td>Diagonal (home = away)</td></tr>
-          <tr><td>Away win</td><td>Upper triangle (away &gt; home)</td></tr>
-          <tr><td>Over 2.5</td><td>All cells where total &gt; 2</td></tr>
-          <tr><td>Under 2.5</td><td>All cells where total &le; 2</td></tr>
-          <tr><td>BTTS Yes</td><td>All cells where both &ge; 1</td></tr>
-        </tbody>
-      </table>
-      <p class="fragment" style="font-size:0.7em; color:var(--green); margin-top:0.6em;">
-        10 fixtures &times; 6 markets = <strong>60 betting opportunities</strong> evaluated each week
-      </p>
-    </div>
-    <div>
-      <pre class="fragment"><code class="language-python" data-trim>
-def predict_match(home, away, stats):
-    lambda_home = (
-        stats.loc[home, 'home_attack']
-        * stats.loc[away, 'away_defence']
-        * league_avg_home
-    )
-    lambda_away = (
-        stats.loc[away, 'away_attack']
-        * stats.loc[home, 'home_defence']
-        * league_avg_away
-    )
-
-    home_probs = poisson.pmf(range(11), lambda_home)
-    away_probs = poisson.pmf(range(11), lambda_away)
-
-    # 11x11 score matrix
-    matrix = np.outer(home_probs, away_probs)
-
-    # Dixon-Coles correction on low scores
-    matrix = _dixon_coles(matrix, lambda_home, lambda_away)
-
-    return matrix
-      </code></pre>
-    </div>
-  </div>
-  <aside class="notes">
-    The np.outer call is the heart of the model. It takes two probability distributions -- home goals and away goals -- and produces a joint distribution over all possible scorelines.
-    This works because Poisson assumes independence between the two teams' scoring. The Dixon-Coles correction partially relaxes this assumption for low-scoring games.
-    From this single matrix, we get all six market probabilities. Summing the right cells is all it takes.
-  </aside>
-</section>
-
-<!-- Slide 8: EV and Vig Removal -->
-<section>
-  <h2>Finding Value: EV and Vig Removal</h2>
-  <h3>Step 1 &mdash; Remove bookmaker margin</h3>
-  <div class="formula-box">
-    Raw implied prob = 1 / decimal_odds<br>
-    True prob = raw_prob / (sum of all raw probs in market)
-  </div>
-  <div class="example-box">
-    1X2 market odds: 2.30 / 3.40 / 3.20 &nbsp;&rarr;&nbsp; overround = 107.3%<br>
-    True home prob = (1/2.30) / 1.073 = <strong>40.5%</strong> (not 43.5%)
-  </div>
-  <h3 style="margin-top:0.7em;">Step 2 &mdash; Calculate Expected Value</h3>
-  <div class="formula-box">
-    EV = (Model probability &times; Decimal odds) &minus; 1
-  </div>
-  <div class="example-box">
-    Model: 60% home win &nbsp;&middot;&nbsp; Bookmaker: 2.10 &nbsp;&rarr;&nbsp; EV = (0.60 &times; 2.10) &minus; 1 = <strong style="color:var(--green);">+26%</strong>
-  </div>
-  <p class="fragment" style="font-size:0.72em; color:var(--muted); margin-top:0.5em;">
-    Only bets with EV &gt; 20% are surfaced &mdash; configurable via <code>MIN_EV_THRESHOLD</code> in config.py
-  </p>
-  <aside class="notes">
-    Vig removal is essential. Without it we'd be comparing our model probability against an artificially inflated bookmaker probability, which understates our edge.
-    Step 1 normalises the bookmaker's prices to sum to exactly 100%, removing their margin. This gives us the true implied probability.
-    Step 2 is then simple: if our model says the probability is higher than the true implied probability, and the difference is large enough to overcome the margin, we have a value bet.
-    The 20% threshold was chosen to ensure we only bet when we have a meaningful edge -- not just statistical noise.
-  </aside>
-</section>
-
-<!-- Slide 9: Kelly Criterion -->
-<section>
-  <h2>Stake Sizing: Kelly Criterion</h2>
-  <div class="cols-2">
-    <div>
-      <ul>
-        <li class="fragment">Kelly: mathematically optimal fraction of bankroll for maximum long-run growth</li>
-      </ul>
-      <div class="formula-box fragment">
-        f = (b&times;p &minus; q) / b<br>
-        <span style="font-size:0.85em; color:var(--muted);">b = odds&minus;1 &nbsp;&middot;&nbsp; p = model prob &nbsp;&middot;&nbsp; q = 1&minus;p</span>
-      </div>
-      <ul>
-        <li class="fragment"><strong>Problem:</strong> Full Kelly is aggressive &mdash; large drawdowns</li>
-        <li class="fragment"><strong>Our approach:</strong> 25% of full Kelly (fractional Kelly)</li>
-      </ul>
-    </div>
-    <div>
-      <div class="example-box fragment" style="margin-top:1em;">
-        <strong>GW38 example: Tottenham vs Everton away</strong><br><br>
-        Model prob: 49.8% &nbsp;&middot;&nbsp; Odds: 4.0 (3/1) &nbsp;&middot;&nbsp; EV: +99%<br><br>
-        Full Kelly = <strong>33.0%</strong> of bankroll<br>
-        Fractional (25%) = <strong>8.25%</strong><br>
-        Bankroll &pound;20 &rarr; Stake = <strong style="color:var(--green);">&pound;1.65</strong>
-      </div>
-      <p class="fragment" style="font-size:0.65em; color:var(--muted); margin-top:0.5em;">
-        Each bet&rsquo;s stake auto-calculated and shown in the Upcoming Bets tab of the dashboard
-      </p>
-    </div>
-  </div>
-  <aside class="notes">
-    Kelly gives you the exact fraction of your bankroll to bet on any given opportunity to maximise long-run wealth.
-    But full Kelly is aggressive -- a string of losses early can wipe out a large percentage of the bankroll. Fractional Kelly at 25% gives up some theoretical return in exchange for a much smoother bankroll curve.
-    In practice the stakes are small because we're working with a £20 starting bankroll to test the model -- the system scales linearly with bankroll size.
-  </aside>
-</section>
-
-<!-- Slide 10: Season Execution -->
-<section>
-  <h2>Season 2025/26: Execution</h2>
-  <p style="font-size:0.7em; color:var(--muted);">5 Betting Cohorts (BC1&ndash;BC5) &mdash; one per gameweek</p>
-  <table class="cohort-table">
-    <thead>
-      <tr><th>Cohort</th><th>Gameweek</th><th>Bets</th><th>Markets</th><th>W</th><th>L</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>BC1</td><td>GW34</td><td>7</td><td>home, away, under_2_5</td><td>2</td><td>5</td></tr>
-      <tr><td>BC2</td><td>GW35</td><td>6</td><td>home, away, under_2_5</td><td>1</td><td>5</td></tr>
-      <tr><td>BC3</td><td>GW36</td><td>5</td><td>home, away, under_2_5</td><td>1</td><td>4</td></tr>
-      <tr><td>BC4</td><td>GW37</td><td>8</td><td>home, away, draw, under_2_5</td><td>4</td><td>4</td></tr>
-      <tr><td>BC5</td><td>GW38</td><td>7</td><td>home, away, draw, under_2_5</td><td>4</td><td>3</td></tr>
-      <tr class="highlight-row"><td><strong>Total</strong></td><td></td><td><strong>33</strong></td><td></td><td><strong>12</strong></td><td><strong>21</strong></td></tr>
-    </tbody>
-  </table>
-  <div class="screenshot-box" style="margin-top:0.7em;">
-    <img src="screenshots/07-dashboard-settled.png" alt="Dashboard settled bets table" style="max-width:100%;max-height:200px;border-radius:6px;">
-  </div>
-  <aside class="notes">
-    We ran 5 betting cohorts in the final 5 gameweeks of the 2025/26 season. This was a proof-of-concept test -- deliberately small stakes, real bets, real results.
-    Notice BC5 (GW38, the final gameweek) was the best performing cohort -- 4 wins from 7 bets.
-    The record of 12W/21L looks poor on surface, but it's not about win rate -- it's about EV. A 36% win rate on bets with average odds of 2.5 is actually very close to break-even, and our EV margin pushed us into profit.
-  </aside>
-</section>
-
-<!-- Slide 11: End of Season Results -->
-<section>
-  <h2>End of Season Results</h2>
-  <div class="stat-grid">
-    <div class="stat-card">
-      <div class="val">&pound;25.29</div>
-      <div class="lbl">Final Bankroll</div>
-    </div>
-    <div class="stat-card">
-      <div class="val" style="color:var(--green);">+&pound;5.29</div>
-      <div class="lbl">Total P&amp;L</div>
-    </div>
-    <div class="stat-card">
-      <div class="val" style="color:var(--green);">+26.5%</div>
-      <div class="lbl">ROI on Capital</div>
-    </div>
-    <div class="stat-card">
-      <div class="val" style="color:var(--accent);">33</div>
-      <div class="lbl">Total Bets Placed</div>
-    </div>
-    <div class="stat-card">
-      <div class="val" style="color:var(--yellow);">12W / 21L</div>
-      <div class="lbl">Record</div>
-    </div>
-    <div class="stat-card">
-      <div class="val" style="color:var(--green);">BC1</div>
-      <div class="lbl">Best Cohort</div>
-    </div>
-  </div>
-  <div class="cols-2" style="margin-top:0.6em;">
-    <div class="screenshot-box">
-      <img src="screenshots/08-bankroll-chart.png" alt="Bankroll over time chart" style="max-width:100%;max-height:190px;border-radius:6px;">
-    </div>
-    <div class="screenshot-box">
-      <img src="screenshots/09-bar-chart.png" alt="Bets by cohort chart" style="max-width:100%;max-height:190px;border-radius:6px;">
-    </div>
-  </div>
-  <aside class="notes">
-    Starting bankroll was £20. We finished at £25.29 -- a £5.29 profit and 26.5% return on capital over the final 5 weeks of the season.
-    The best single bet was from BC1: Chelsea 1-3 Nottingham Forest, backing the Forest away win at good odds.
-    This is a small sample -- 33 bets is not statistically significant. But the positive EV threshold approach is sound, and this result is consistent with what you'd expect from a +EV strategy over a short run.
-    The real test will be running it over a full season from gameweek 1.
   </aside>
 </section>
 
@@ -686,8 +1005,13 @@ def predict_match(home, away, stats):
       </ul>
     </div>
   </div>
-  <div class="screenshot-box" style="margin-top:0.7em;">
-    <img src="screenshots/10-improvements.png" alt="NEXT_STEP_IMPROVEMENTS.md" style="max-width:100%;max-height:200px;border-radius:6px;">
+  <div class="screenshot-box" style="margin-top:0.6em;">
+    <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/10-improvements.png"
+         alt="NEXT_STEP_IMPROVEMENTS.md"
+         class="lightbox-trigger"
+         data-caption="NEXT_STEP_IMPROVEMENTS.md on GitHub — full roadmap of planned model enhancements ranked by predictive impact, data availability, and cost"
+         style="max-width:100%;max-height:280px;border-radius:6px;">
+    <p class="img-caption">NEXT_STEP_IMPROVEMENTS.md &mdash; full model improvement roadmap ranked by impact and cost</p>
   </div>
   <aside class="notes">
     Elo ratings solve the cold-start problem -- early in the season we have few data points, so attack/defence ratings are noisy. Elo from previous seasons gives a prior that decays as new evidence arrives.
@@ -712,12 +1036,16 @@ def predict_match(home, away, stats):
     </div>
     <div>
       <div class="screenshot-box">
-        <img src="screenshots/11-commit-history.png" alt="GitHub commit history" style="max-width:100%;max-height:280px;border-radius:6px;">
+        <img src="https://raw.githubusercontent.com/samelgar141-netizen/football-value-bot/main/reports/screenshots/03-folder-structure.png"
+             alt="Repository folder structure"
+             class="lightbox-trigger"
+             data-caption="Repository folder structure on GitHub — data/, models/, pipelines/, analysis/, ledger/, reports/ and all supporting module files"
+             style="max-width:100%;max-height:360px;border-radius:6px;">
+        <p class="img-caption">Repo folder structure &mdash; data/, models/, pipelines/, analysis/, ledger/, reports/</p>
       </div>
     </div>
   </div>
-  <br>
-  <p class="fragment" style="font-size:0.75em; color:var(--muted); text-align:center; border-top:1px solid var(--border); padding-top:0.6em;">
+  <p class="fragment" style="font-size:0.75em; color:var(--muted); text-align:center; border-top:1px solid var(--border); padding-top:0.3em; margin-top:0.3em;">
     All code open on GitHub &middot; samelgar141-netizen/football-value-bot
   </p>
   <aside class="notes">
@@ -729,6 +1057,14 @@ def predict_match(home, away, stats):
 </section>
 
 </div>
+</div>
+
+<!-- Lightbox overlay -->
+<div id="lightbox-overlay">
+  <button id="lightbox-close" onclick="document.getElementById('lightbox-overlay').classList.remove('active')" aria-label="Close">&times;</button>
+  <img id="lightbox-img" src="" alt="" onclick="event.stopPropagation()">
+  <p id="lightbox-caption"></p>
+  <p id="lightbox-hint">Click anywhere to close &nbsp;&middot;&nbsp; Esc to close</p>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.0/dist/reveal.js"></script>
@@ -745,6 +1081,31 @@ def predict_match(home, away, stats):
     margin: 0.04,
     plugins: [ RevealNotes, RevealHighlight ],
   });
+
+  // Lightbox
+  (function () {
+    var overlay = document.getElementById('lightbox-overlay');
+    var overlayImg = document.getElementById('lightbox-img');
+    var overlayCaption = document.getElementById('lightbox-caption');
+
+    document.querySelectorAll('.lightbox-trigger').forEach(function (img) {
+      img.addEventListener('click', function (e) {
+        e.stopPropagation();
+        overlayImg.src = this.src;
+        overlayImg.alt = this.alt;
+        overlayCaption.textContent = this.dataset.caption || this.alt;
+        overlay.classList.add('active');
+      });
+    });
+
+    overlay.addEventListener('click', function () {
+      overlay.classList.remove('active');
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') overlay.classList.remove('active');
+    });
+  })();
 </script>
 </body>
 </html>
