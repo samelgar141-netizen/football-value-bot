@@ -1,7 +1,7 @@
 from pathlib import Path
 
 LEAGUE_ID = 'PL'
-SEASON = '2526'
+SEASON = '2627'
 
 BANKROLL = 20
 MIN_EV_THRESHOLD = 0.20

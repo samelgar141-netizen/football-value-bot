@@ -45,6 +45,19 @@ def main():
         results_df = pd.read_csv(config.RAW_DIR / f'results_{config.SEASON}.csv')
         print(f"[fetch_results] using cached CSV ({len(results_df)} rows)")
 
+    # ── Step 2b: fetch xG / shots from Understat ──────────────────────────
+    from pipelines.fetch_xg import fetch_xg_data
+    xg_df = _step("fetch_xg_data", fetch_xg_data)
+    if xg_df is None:
+        cached_xg = config.RAW_DIR / f'xg_data_{config.SEASON}.csv'
+        if cached_xg.exists():
+            xg_df = pd.read_csv(cached_xg)
+            print(f"[fetch_xg_data] using cached CSV ({len(xg_df)} rows)")
+        else:
+            print("[fetch_xg_data] WARNING — proceeding without xG data (goals-only ratings)")
+    if xg_df is not None:
+        print(f"  xG rows: {len(xg_df)}")
+
     print()
 
     # ── Step 2.5: auto-settle unsettled bets ──────────────────────────────
@@ -85,7 +98,7 @@ def main():
     from models.poisson_model import compute_team_stats
     stats_df = None
     if results_df is not None:
-        stats_df = _step("compute_team_stats", compute_team_stats, results_df)
+        stats_df = _step("compute_team_stats", compute_team_stats, results_df, xg_df=xg_df)
         if stats_df is not None:
             print(f"  Teams modelled: {len(stats_df)}")
     else:
