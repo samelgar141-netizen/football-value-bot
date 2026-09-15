@@ -6,6 +6,17 @@ import understat
 
 import config
 
+_MAX_CONCURRENT = 5  # cap parallel requests to Understat to avoid rate limiting
+
+
+async def _fetch_match_shots(u, match_id, semaphore):
+    async with semaphore:
+        try:
+            return await u.get_match_shots(match_id)
+        except Exception as e:
+            print(f"  fetch_xg: shots unavailable for match {match_id} — {e}")
+            return {'h': [], 'a': []}
+
 
 async def _fetch_async():
     async with aiohttp.ClientSession() as session:
@@ -13,19 +24,31 @@ async def _fetch_async():
         season_year = int('20' + config.SEASON[:2])
         matches = await u.get_league_results("EPL", season_year)
 
+        # Fetch per-match shot data concurrently (get_league_results only returns xG)
+        semaphore = asyncio.Semaphore(_MAX_CONCURRENT)
+        shots_list = await asyncio.gather(
+            *[_fetch_match_shots(u, m['id'], semaphore) for m in matches]
+        )
+
     rows = []
-    for m in matches:
+    for m, shots_data in zip(matches, shots_list):
         try:
+            shots_h = shots_data.get('h', [])
+            shots_a = shots_data.get('a', [])
+
+            # Shots on target = goals + saved shots (posts/blocks excluded per standard definition)
+            sot_results = {'Goal', 'SavedShot'}
+
             rows.append({
                 'date':                   m['datetime'],
                 'home_team':              m['h']['title'],
                 'away_team':              m['a']['title'],
                 'xg_home':                float(m['xG']['h']),
                 'xg_away':                float(m['xG']['a']),
-                'shots_home':             int(m['h'].get('shot', 0)),
-                'shots_away':             int(m['a'].get('shot', 0)),
-                'shots_on_target_home':   int(m['h'].get('shotsOnTarget', 0)),
-                'shots_on_target_away':   int(m['a'].get('shotsOnTarget', 0)),
+                'shots_home':             len(shots_h),
+                'shots_away':             len(shots_a),
+                'shots_on_target_home':   sum(1 for s in shots_h if s.get('result') in sot_results),
+                'shots_on_target_away':   sum(1 for s in shots_a if s.get('result') in sot_results),
             })
         except (KeyError, ValueError, TypeError) as e:
             print(f"  fetch_xg: skipping match {m.get('id', '?')} — {e}")
@@ -67,4 +90,10 @@ def _validate_xg(df, path):
         raise ValueError(
             f"xg_data_{config.SEASON}.csv: {null_xg} rows have null xG values."
         )
-    print(f"\nNo null xG values. Validation passed.")
+    zero_shots = (df_check['shots_home'] == 0).all() and (df_check['shots_away'] == 0).all()
+    if zero_shots:
+        print(f"  WARNING: all shot counts are 0 — per-match shot fetch may have failed.")
+    else:
+        avg_shots = df_check[['shots_home', 'shots_away']].mean().mean()
+        print(f"  Avg shots per team per match: {avg_shots:.1f}")
+    print(f"\nValidation passed.")
