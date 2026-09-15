@@ -1,11 +1,15 @@
 date,home_team,away_team,market,model_prob,model_prob_pct,odds_prob_pct,fractional_odds,ev,kelly_stake_gbp,bookmaker
-2026-09-20 13:00:00+00:00,Manchester City,Sunderland,away,0.2806,28.1,10.5,17/2,1.6659,0.98,William Hill
-2026-09-19 14:00:00+00:00,Newcastle United,Hull City,away,0.4084,40.8,19.0,17/4,1.1441,1.35,Sky Bet
-2026-09-19 14:00:00+00:00,Brighton and Hove Albion,Arsenal,home,0.4294,42.9,21.1,15/4,1.0397,1.39,Paddy Power
-2026-09-20 13:00:00+00:00,Manchester City,Sunderland,draw,0.2792,27.9,17.4,19/4,0.6053,0.64,William Hill
-2026-09-19 14:00:00+00:00,Everton,Ipswich Town,away,0.3363,33.6,23.1,333/100,0.4562,0.68,Paddy Power
-2026-09-19 16:30:00+00:00,Nottingham Forest,Coventry City,away,0.2703,27.0,20.0,4/1,0.3513,0.44,William Hill
-2026-09-20 15:30:00+00:00,Fulham,Manchester United,home,0.3973,39.7,29.4,12/5,0.3508,0.73,William Hill
-2026-09-18 19:00:00+00:00,Brentford,Chelsea,home,0.4593,45.9,34.7,47/25,0.3228,0.86,Sky Bet
-2026-09-19 16:30:00+00:00,Nottingham Forest,Coventry City,under_2_5,0.6129,61.3,50.0,1/1,0.2258,1.13,William Hill
-2026-09-20 13:00:00+00:00,Leeds United,Crystal Palace,away,0.2732,27.3,22.7,17/5,0.2022,0.3,Paddy Power
+2026-09-20 13:00:00+00:00,Manchester City,Sunderland,away,0.2992,29.9,10.0,9/1,1.9925,1.11,William Hill
+2026-09-19 14:00:00+00:00,Newcastle United,Hull City,away,0.3887,38.9,19.0,17/4,1.0404,1.22,Sky Bet
+2026-09-19 14:00:00+00:00,Brighton and Hove Albion,Arsenal,home,0.3852,38.5,21.1,15/4,0.8295,1.11,Paddy Power
+2026-09-20 13:00:00+00:00,Manchester City,Sunderland,draw,0.2873,28.7,17.4,19/4,0.6521,0.69,William Hill
+2026-09-20 15:30:00+00:00,Fulham,Manchester United,home,0.4263,42.6,29.4,12/5,0.4495,0.94,William Hill
+2026-09-19 16:30:00+00:00,Nottingham Forest,Coventry City,away,0.2748,27.5,20.0,4/1,0.3742,0.47,William Hill
+2026-09-20 13:00:00+00:00,Leeds United,Crystal Palace,away,0.2983,29.8,22.7,17/5,0.3124,0.46,Paddy Power
+2026-09-18 19:00:00+00:00,Brentford,Chelsea,home,0.4494,44.9,34.7,47/25,0.2942,0.78,Sky Bet
+2026-09-19 16:30:00+00:00,Nottingham Forest,Coventry City,under_2_5,0.6322,63.2,50.0,1/1,0.2645,1.32,William Hill
+2026-09-19 14:00:00+00:00,Everton,Ipswich Town,away,0.2917,29.2,23.1,333/100,0.263,0.39,Paddy Power
+2026-09-20 13:00:00+00:00,Manchester City,Sunderland,under_2_5,0.5218,52.2,41.7,7/5,0.2522,0.9,William Hill
+2026-09-19 11:30:00+00:00,Tottenham Hotspur,Aston Villa,under_2_5,0.6151,61.5,50.0,1/1,0.2301,1.15,Paddy Power
+2026-09-19 16:30:00+00:00,Nottingham Forest,Coventry City,draw,0.3173,31.7,26.0,57/20,0.2215,0.39,William Hill
+2026-09-19 14:00:00+00:00,Everton,Ipswich Town,over_2_5,0.6715,67.2,55.6,4/5,0.2088,1.3,Paddy Power
