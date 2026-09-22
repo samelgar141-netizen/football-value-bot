@@ -153,8 +153,7 @@ def main():
     print()
 
     # ── Step 9: commit and push report to GitHub ──────────────────────────
-    if report_path:
-        _push_report(report_path, html_path)
+    _push_report(report_path, html_path)
     print()
 
     # ── Summary ───────────────────────────────────────────────────────────
@@ -172,14 +171,15 @@ def main():
     print()
 
 
-def _push_report(report_path, html_path=None):
+def _push_report(report_path=None, html_path=None):
     print("[git] committing and pushing all generated files…")
     run_date = datetime.now(timezone.utc).strftime('%Y-%m-%d')
     files_to_commit = [
-        str(report_path),
         str(config.PROCESSED_DIR / 'team_stats.csv'),
         str(config.LEDGER_DIR / 'bets.csv'),
     ]
+    if report_path:
+        files_to_commit.append(str(report_path))
     if html_path:
         files_to_commit.append(str(html_path))
     try:
