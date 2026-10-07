@@ -1,1 +1,7 @@
 date,home_team,away_team,market,model_prob,model_prob_pct,odds_prob_pct,fractional_odds,ev,kelly_stake_gbp,bookmaker
+2026-10-10 11:30:00+00:00,Arsenal,Leeds United,away,0.2629,26.3,12.5,7/1,1.1029,0.79,William Hill
+2026-10-11 13:00:00+00:00,Hull City,Everton,home,0.3988,39.9,26.7,11/4,0.4954,0.9,Paddy Power
+2026-10-10 14:00:00+00:00,Chelsea,Bournemouth,away,0.3201,32.0,22.2,7/2,0.4403,0.63,William Hill
+2026-10-10 11:30:00+00:00,Arsenal,Leeds United,draw,0.2825,28.2,20.0,4/1,0.4127,0.52,William Hill
+2026-10-11 13:00:00+00:00,Crystal Palace,Nottingham Forest,over_2_5,0.6711,67.1,51.3,19/20,0.3087,1.62,Sky Bet
+2026-10-11 13:00:00+00:00,Crystal Palace,Nottingham Forest,away,0.4901,49.0,38.0,163/100,0.289,0.89,Sky Bet

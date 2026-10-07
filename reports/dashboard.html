@@ -66,7 +66,7 @@
 </head>
 <body>
 <h1>Football Value Bot</h1>
-<p class="subtitle">Generated 01 October 2026 &nbsp;|&nbsp; Starting bankroll: £20 &nbsp;|&nbsp; EV threshold: 20%</p>
+<p class="subtitle">Generated 07 October 2026 &nbsp;|&nbsp; Starting bankroll: £20 &nbsp;|&nbsp; EV threshold: 20%</p>
 
 <div class="tab-nav">
   <button class="tab-btn active" onclick="showTab('pl')">P&amp;L Dashboard</button>
@@ -864,7 +864,79 @@
 
   <section>
     <h2>Value Bets this Gameweek</h2>
-    <p class="no-bets">No upcoming value bets found. Run python run_weekly.py to refresh.</p>
+    <table><thead><tr><th>Date</th><th>Fixture</th><th>Market</th><th>Odds (UK)</th><th>Odds Prob %</th><th>Model %</th><th>EV</th><th>Kelly £</th><th>Bookmaker</th><th>Place?</th></tr></thead><tbody>
+        <tr id="prow-0">
+            <td>2026-10-10</td>
+            <td>Arsenal v Leeds United</td>
+            <td>AWAY</td>
+            <td>7/1</td>
+            <td>12.5%</td>
+            <td>26.3%</td>
+            <td>110%</td>
+            <td>£0.79</td>
+            <td>William Hill</td>
+            <td><button class="bet-btn" data-idx="0" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-1">
+            <td>2026-10-11</td>
+            <td>Hull City v Everton</td>
+            <td>HOME</td>
+            <td>11/4</td>
+            <td>26.7%</td>
+            <td>39.9%</td>
+            <td>50%</td>
+            <td>£0.90</td>
+            <td>Paddy Power</td>
+            <td><button class="bet-btn" data-idx="1" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-2">
+            <td>2026-10-10</td>
+            <td>Chelsea v Bournemouth</td>
+            <td>AWAY</td>
+            <td>7/2</td>
+            <td>22.2%</td>
+            <td>32.0%</td>
+            <td>44%</td>
+            <td>£0.63</td>
+            <td>William Hill</td>
+            <td><button class="bet-btn" data-idx="2" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-3">
+            <td>2026-10-10</td>
+            <td>Arsenal v Leeds United</td>
+            <td>DRAW</td>
+            <td>4/1</td>
+            <td>20.0%</td>
+            <td>28.2%</td>
+            <td>41%</td>
+            <td>£0.52</td>
+            <td>William Hill</td>
+            <td><button class="bet-btn" data-idx="3" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-4">
+            <td>2026-10-11</td>
+            <td>Crystal Palace v Nottingham Forest</td>
+            <td>OVER_2_5</td>
+            <td>19/20</td>
+            <td>51.3%</td>
+            <td>67.1%</td>
+            <td>31%</td>
+            <td>£1.62</td>
+            <td>Sky Bet</td>
+            <td><button class="bet-btn" data-idx="4" onclick="toggleBet(this)">No</button></td>
+        </tr>
+        <tr id="prow-5">
+            <td>2026-10-11</td>
+            <td>Crystal Palace v Nottingham Forest</td>
+            <td>AWAY</td>
+            <td>163/100</td>
+            <td>38.0%</td>
+            <td>49.0%</td>
+            <td>29%</td>
+            <td>£0.89</td>
+            <td>Sky Bet</td>
+            <td><button class="bet-btn" data-idx="5" onclick="toggleBet(this)">No</button></td>
+        </tr></tbody></table>
   </section>
 
 </div>
@@ -998,7 +1070,7 @@ function setBarAxis(mode) {
 }
 
 // ── Prospective bets ─────────────────────────────────────────────────────
-const prospectiveBets = [];
+const prospectiveBets = [{"date": "2026-10-10", "home_team": "Arsenal", "away_team": "Leeds United", "market": "away", "odds": 8.0, "odds_prob_pct": 12.5, "fractional_odds": "7/1", "model_prob": 0.2629, "ev": 1.1029, "kelly": 0.79, "bookmaker": "William Hill"}, {"date": "2026-10-11", "home_team": "Hull City", "away_team": "Everton", "market": "home", "odds": 3.75, "odds_prob_pct": 26.7, "fractional_odds": "11/4", "model_prob": 0.3988, "ev": 0.4954, "kelly": 0.9, "bookmaker": "Paddy Power"}, {"date": "2026-10-10", "home_team": "Chelsea", "away_team": "Bournemouth", "market": "away", "odds": 4.5, "odds_prob_pct": 22.2, "fractional_odds": "7/2", "model_prob": 0.3201, "ev": 0.4403, "kelly": 0.63, "bookmaker": "William Hill"}, {"date": "2026-10-10", "home_team": "Arsenal", "away_team": "Leeds United", "market": "draw", "odds": 5.0, "odds_prob_pct": 20.0, "fractional_odds": "4/1", "model_prob": 0.2825, "ev": 0.4127, "kelly": 0.52, "bookmaker": "William Hill"}, {"date": "2026-10-11", "home_team": "Crystal Palace", "away_team": "Nottingham Forest", "market": "over_2_5", "odds": 1.95, "odds_prob_pct": 51.3, "fractional_odds": "19/20", "model_prob": 0.6711, "ev": 0.3087, "kelly": 1.62, "bookmaker": "Sky Bet"}, {"date": "2026-10-11", "home_team": "Crystal Palace", "away_team": "Nottingham Forest", "market": "away", "odds": 2.63, "odds_prob_pct": 38.0, "fractional_odds": "163/100", "model_prob": 0.4901, "ev": 0.289, "kelly": 0.89, "bookmaker": "Sky Bet"}];
 const selected = new Set();
 
 function toggleBet(btn) {
