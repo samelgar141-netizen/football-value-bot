@@ -1,10 +1,7 @@
 date,home_team,away_team,market,model_prob,model_prob_pct,odds_prob_pct,fractional_odds,ev,kelly_stake_gbp,bookmaker
-2026-10-17 14:00:00+00:00,Manchester City,Ipswich Town,away,0.2494,24.9,10.0,9/1,1.4938,0.83,William Hill
-2026-10-18 15:30:00+00:00,Nottingham Forest,Arsenal,home,0.3526,35.3,17.4,19/4,1.0272,1.08,Betway
-2026-10-19 19:00:00+00:00,Tottenham Hotspur,Coventry City,away,0.308,30.8,15.4,11/2,1.0018,0.91,William Hill
-2026-10-17 14:00:00+00:00,Manchester City,Ipswich Town,draw,0.2361,23.6,14.3,6/1,0.6529,0.54,William Hill
-2026-10-17 11:30:00+00:00,Everton,Chelsea,home,0.5165,51.6,31.2,11/5,0.6527,1.48,Paddy Power
-2026-10-17 14:00:00+00:00,Fulham,Hull City,away,0.3364,33.6,21.1,15/4,0.598,0.8,William Hill
-2026-10-19 19:00:00+00:00,Tottenham Hotspur,Coventry City,draw,0.3079,30.8,22.2,7/2,0.3855,0.55,William Hill
-2026-10-19 19:00:00+00:00,Tottenham Hotspur,Coventry City,under_2_5,0.5922,59.2,43.5,13/10,0.362,1.39,William Hill
-2026-10-18 15:30:00+00:00,Nottingham Forest,Arsenal,draw,0.3176,31.8,26.0,57/20,0.2227,0.39,Betway
+2026-10-24 14:00:00+00:00,Arsenal,Everton,away,0.2309,23.1,11.8,15/2,0.9625,0.64,William Hill
+2026-10-25 14:00:00+00:00,Hull City,Brentford,home,0.4376,43.8,23.0,67/20,0.9037,1.35,Unibet
+2026-10-25 14:00:00+00:00,Liverpool,Brighton and Hove Albion,away,0.4596,46.0,32.3,21/10,0.4248,1.01,Unibet
+2026-10-24 11:30:00+00:00,Aston Villa,Manchester City,home,0.295,29.5,22.2,7/2,0.3273,0.47,Paddy Power
+2026-10-25 14:00:00+00:00,Crystal Palace,Newcastle United,home,0.4515,45.2,35.7,9/5,0.2643,0.73,William Hill
+2026-10-24 14:00:00+00:00,Arsenal,Everton,draw,0.2708,27.1,21.7,18/5,0.2458,0.34,William Hill
