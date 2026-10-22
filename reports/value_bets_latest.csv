@@ -1,7 +1,8 @@
 date,home_team,away_team,market,model_prob,model_prob_pct,odds_prob_pct,fractional_odds,ev,kelly_stake_gbp,bookmaker
-2026-10-24 14:00:00+00:00,Arsenal,Everton,away,0.2309,23.1,11.8,15/2,0.9625,0.64,William Hill
-2026-10-25 14:00:00+00:00,Hull City,Brentford,home,0.4376,43.8,23.0,67/20,0.9037,1.35,Unibet
-2026-10-25 14:00:00+00:00,Liverpool,Brighton and Hove Albion,away,0.4596,46.0,32.3,21/10,0.4248,1.01,Unibet
-2026-10-24 11:30:00+00:00,Aston Villa,Manchester City,home,0.295,29.5,22.2,7/2,0.3273,0.47,Paddy Power
-2026-10-25 14:00:00+00:00,Crystal Palace,Newcastle United,home,0.4515,45.2,35.7,9/5,0.2643,0.73,William Hill
-2026-10-24 14:00:00+00:00,Arsenal,Everton,draw,0.2708,27.1,21.7,18/5,0.2458,0.34,William Hill
+2026-10-25 14:00:00+00:00,Hull City,Brentford,home,0.4376,43.8,21.1,15/4,1.0787,1.44,Paddy Power
+2026-10-24 14:00:00+00:00,Arsenal,Everton,away,0.2309,23.1,12.5,7/1,0.847,0.61,Betway
+2026-10-25 14:00:00+00:00,Liverpool,Brighton and Hove Albion,away,0.4596,46.0,32.3,21/10,0.4248,1.01,William Hill
+2026-10-24 11:30:00+00:00,Aston Villa,Manchester City,home,0.295,29.5,21.1,15/4,0.401,0.53,Paddy Power
+2026-10-25 14:00:00+00:00,Crystal Palace,Newcastle United,home,0.4515,45.2,34.5,19/10,0.3095,0.81,Betway
+2026-10-24 14:00:00+00:00,Coventry City,Fulham,home,0.3938,39.4,31.2,11/5,0.2601,0.59,Paddy Power
+2026-10-24 14:00:00+00:00,Arsenal,Everton,draw,0.2708,27.1,22.2,7/2,0.2188,0.31,Betway
