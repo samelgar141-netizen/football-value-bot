@@ -1,8 +1,8 @@
 date,home_team,away_team,market,model_prob,model_prob_pct,odds_prob_pct,fractional_odds,ev,kelly_stake_gbp,bookmaker
-2026-10-25 14:00:00+00:00,Hull City,Brentford,home,0.4376,43.8,21.1,15/4,1.0787,1.44,Paddy Power
-2026-10-24 14:00:00+00:00,Arsenal,Everton,away,0.2309,23.1,12.5,7/1,0.847,0.61,Betway
-2026-10-25 14:00:00+00:00,Liverpool,Brighton and Hove Albion,away,0.4596,46.0,32.3,21/10,0.4248,1.01,William Hill
-2026-10-24 11:30:00+00:00,Aston Villa,Manchester City,home,0.295,29.5,21.1,15/4,0.401,0.53,Paddy Power
-2026-10-25 14:00:00+00:00,Crystal Palace,Newcastle United,home,0.4515,45.2,34.5,19/10,0.3095,0.81,Betway
-2026-10-24 14:00:00+00:00,Coventry City,Fulham,home,0.3938,39.4,31.2,11/5,0.2601,0.59,Paddy Power
-2026-10-24 14:00:00+00:00,Arsenal,Everton,draw,0.2708,27.1,22.2,7/2,0.2188,0.31,Betway
+2026-10-31 15:00:00+00:00,Manchester City,Brighton and Hove Albion,away,0.3502,35.0,21.1,15/4,0.6636,0.88,William Hill
+2026-10-31 17:30:00+00:00,Tottenham Hotspur,Crystal Palace,away,0.2573,25.7,18.2,9/2,0.415,0.46,William Hill
+2026-10-31 15:00:00+00:00,Hull City,Ipswich Town,home,0.4806,48.1,38.2,81/50,0.2591,0.8,William Hill
+2026-10-31 12:30:00+00:00,Chelsea,Manchester United,away,0.2949,29.5,23.8,16/5,0.2386,0.37,William Hill
+2026-10-31 15:00:00+00:00,Bournemouth,Leeds United,under_2_5,0.6695,67.0,54.1,17/20,0.2386,1.4,Betway
+2026-11-01 16:30:00+00:00,Liverpool,Arsenal,home,0.4021,40.2,33.3,2/1,0.2063,0.52,William Hill
+2026-10-31 17:30:00+00:00,Tottenham Hotspur,Crystal Palace,draw,0.2675,26.8,22.2,7/2,0.2039,0.29,William Hill
