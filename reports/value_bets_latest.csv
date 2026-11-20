@@ -1,13 +1,13 @@
 date,home_team,away_team,market,model_prob,model_prob_pct,odds_prob_pct,fractional_odds,ev,kelly_stake_gbp,bookmaker
-2026-11-22 14:00:00+00:00,Hull City,Brighton and Hove Albion,home,0.3314,33.1,16.7,5/1,0.9882,0.99,Unibet
-2026-11-21 12:30:00+00:00,Manchester City,Fulham,away,0.2636,26.4,13.3,13/2,0.977,0.75,Unibet
-2026-11-21 17:30:00+00:00,Newcastle United,Arsenal,home,0.306,30.6,18.2,9/2,0.6831,0.76,Paddy Power
-2026-11-22 16:30:00+00:00,Liverpool,Manchester United,under_2_5,0.6011,60.1,40.0,3/2,0.5026,1.68,Paddy Power
-2026-11-21 15:00:00+00:00,Tottenham Hotspur,Ipswich Town,away,0.2715,27.2,18.2,9/2,0.4931,0.55,William Hill
-2026-11-21 12:30:00+00:00,Manchester City,Fulham,draw,0.2886,28.9,20.0,4/1,0.443,0.55,Unibet
-2026-11-21 12:30:00+00:00,Manchester City,Fulham,under_2_5,0.5428,54.3,40.0,3/2,0.3569,1.19,Unibet
-2026-11-21 17:30:00+00:00,Newcastle United,Arsenal,draw,0.3173,31.7,23.8,16/5,0.3328,0.52,Paddy Power
-2026-11-21 17:30:00+00:00,Newcastle United,Arsenal,under_2_5,0.6235,62.4,47.6,11/10,0.3094,1.41,Paddy Power
-2026-11-21 15:00:00+00:00,Coventry City,Crystal Palace,home,0.5304,53.0,42.0,69/50,0.2624,0.95,Paddy Power
-2026-11-22 16:30:00+00:00,Liverpool,Manchester United,draw,0.3089,30.9,25.0,3/1,0.2357,0.39,Paddy Power
-2026-11-22 14:00:00+00:00,Hull City,Brighton and Hove Albion,draw,0.2757,27.6,22.7,17/5,0.2132,0.31,Unibet
+2026-11-22 14:00:00+00:00,Hull City,Brighton and Hove Albion,home,0.3314,33.1,15.4,11/2,1.1539,1.05,Paddy Power
+2026-11-21 12:30:00+00:00,Manchester City,Fulham,away,0.2636,26.4,13.3,13/2,0.977,0.75,William Hill
+2026-11-21 17:30:00+00:00,Newcastle United,Arsenal,home,0.306,30.6,18.2,9/2,0.6831,0.76,Betway
+2026-11-21 15:00:00+00:00,Tottenham Hotspur,Ipswich Town,away,0.2715,27.2,17.4,19/4,0.561,0.59,William Hill
+2026-11-21 12:30:00+00:00,Manchester City,Fulham,draw,0.2886,28.9,19.0,17/4,0.5151,0.61,William Hill
+2026-11-22 16:30:00+00:00,Liverpool,Manchester United,under_2_5,0.6011,60.1,40.0,3/2,0.5026,1.68,Betway
+2026-11-21 12:30:00+00:00,Manchester City,Fulham,under_2_5,0.5428,54.3,40.0,3/2,0.3569,1.19,William Hill
+2026-11-21 17:30:00+00:00,Newcastle United,Arsenal,draw,0.3173,31.7,23.8,16/5,0.3328,0.52,Betway
+2026-11-21 17:30:00+00:00,Newcastle United,Arsenal,under_2_5,0.6235,62.4,47.6,11/10,0.3094,1.41,Betway
+2026-11-22 16:30:00+00:00,Liverpool,Manchester United,draw,0.3089,30.9,23.8,16/5,0.2975,0.46,Betway
+2026-11-21 15:00:00+00:00,Coventry City,Crystal Palace,home,0.5304,53.0,41.7,7/5,0.273,0.98,Betway
+2026-11-22 14:00:00+00:00,Hull City,Brighton and Hove Albion,draw,0.2757,27.6,22.2,7/2,0.2408,0.34,Paddy Power
